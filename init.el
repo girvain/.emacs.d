@@ -678,10 +678,10 @@
 ;; MAC KEY SWITCH
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (setq ns-command-modifier 'meta)
-;; (setq mac-option-modifier 'control)
-;; (setq ns-function-modifier 'control)
-(setq ns-command-modifier 'control)
+(setq ns-command-modifier 'meta)
+(setq mac-option-modifier 'control)
+(setq ns-function-modifier 'control)
+;;(setq ns-command-modifier 'control)
 
 
 
