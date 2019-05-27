@@ -16,3 +16,17 @@
 
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yasnippet-snippets yasnippet emmet-mode which-key web-mode web-beautify use-package try org-bullets magit js2-mode highlight-indent-guides git-timemachine git-gutter flycheck doom-themes counsel company-tern cmake-mode beacon))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

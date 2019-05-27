@@ -364,10 +364,13 @@
   )
 ;; Company:1 ends here
 
+;; [[file:~/.emacs.d/myinit.org::*emmet][emmet:1]]
+(use-package emmet-mode
+  :ensure t
+  :config)
+;; emmet:1 ends here
+
 ;; [[file:~/.emacs.d/myinit.org::*web%20mode][web mode:1]]
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; web-mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package web-mode
   :ensure t
     :config
@@ -395,9 +398,6 @@
 ;; web mode:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Web%20beautify][Web beautify:1]]
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; web beautify
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package web-beautify
   :ensure t
   :config
@@ -418,9 +418,6 @@
 ;; Web beautify:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*JavaScript][JavaScript:1]]
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; javascript
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package js2-mode
   :ensure t
   :config
@@ -491,9 +488,6 @@
 ;; Ivy:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*IBuffer][IBuffer:1]]
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; IBuffer
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "C-x C-b") 'ibuffer)
  (setq ibuffer-saved-filter-groups
 	(quote (("default"
@@ -529,11 +523,6 @@
 ;; IBuffer:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Swiper,%20Ivy%20and%20Counsel][Swiper, Ivy and Counsel:1]]
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Swiper, Ivy and Counsel
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
 (use-package counsel
 :ensure t
   :bind
@@ -570,10 +559,17 @@
     ))
 ;; Swiper, Ivy and Counsel:1 ends here
 
+;; [[file:~/.emacs.d/myinit.org::*Yasnippet][Yasnippet:1]]
+(use-package yasnippet
+  :ensure t
+  :init
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :ensure t)
+;; Yasnippet:1 ends here
+
 ;; [[file:~/.emacs.d/myinit.org::*Magit][Magit:1]]
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; MAGIT
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package magit
     :ensure t
     :init
