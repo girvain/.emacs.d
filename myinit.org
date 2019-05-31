@@ -120,6 +120,11 @@
 
 #+END_SRC
 
+* Rainbow Delimiters
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package rainbow-delimiters
+:ensure t)
+#+END_SRC
 * Try
 #+BEGIN_SRC emacs-lisp
 
