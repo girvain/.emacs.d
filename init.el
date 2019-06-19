@@ -23,7 +23,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (rainbow-demimiters rainbow-delimiters neotree treemacs-projectile treemacs multi-term counsel-projectile projectile pug-mode yasnippet-snippets yasnippet emmet-mode which-key web-mode web-beautify use-package try org-bullets magit js2-mode highlight-indent-guides git-timemachine git-gutter flycheck doom-themes counsel company-tern cmake-mode beacon))))
+    (evil-escape evil-collection evil rainbow-demimiters rainbow-delimiters neotree treemacs-projectile treemacs multi-term counsel-projectile projectile pug-mode yasnippet-snippets yasnippet emmet-mode which-key web-mode web-beautify use-package try org-bullets magit js2-mode highlight-indent-guides git-timemachine git-gutter flycheck doom-themes counsel company-tern cmake-mode beacon))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

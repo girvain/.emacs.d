@@ -902,3 +902,32 @@
 #+END_SRC
 
 
+* Evil mode
+#+BEGIN_SRC emacs-lisp
+
+(add-to-list 'load-path "~/.emacs.d/evil")
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration nil)
+  :config
+  (evil-mode 1))
+
+;; this is a collection of evil key bindings lots of packages.
+;; use the (evil-collection-init ...) to enable the keys for a package/mode
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+;;  (evil-collection-init 'neotree)
+  (evil-collection-init 'dired)
+;;  (evil-collection-init 'rtags)
+  (evil-collection-init 'ivy)
+)
+(use-package evil-escape
+  :ensure t
+  :config
+  (evil-escape-mode 1)
+  (setq-default evil-escape-key-sequence "jk")
+  (setq-default evil-escape-delay 0.5))
+#+END_SRC
