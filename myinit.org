@@ -7,7 +7,7 @@
 #+END_SRC
 
 * interface tweaks
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
@@ -53,7 +53,7 @@
 (global-set-key (kbd "C-;") 'prev-window)
 
 ;; enable line numbers for all programing modes
-(add-hook 'prog-mode-hook 'linum-mode)
+;;(add-hook 'prog-mode-hook 'linum-mode)
 
 ; Highlights the current cursor line
 (global-hl-line-mode t)
@@ -80,7 +80,7 @@
 #+END_SRC
 
 * Themes
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 (use-package doom-themes
   :ensure t
@@ -114,7 +114,7 @@
 
 #+END_SRC
 * Fonts
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
 
 ;;(set-frame-font "Monaco 13") ;; this is a mac font that needds installed on linux:
 
@@ -902,32 +902,3 @@
 #+END_SRC
 
 
-* Evil mode
-#+BEGIN_SRC emacs-lisp
-
-(add-to-list 'load-path "~/.emacs.d/evil")
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-integration nil)
-  :config
-  (evil-mode 1))
-
-;; this is a collection of evil key bindings lots of packages.
-;; use the (evil-collection-init ...) to enable the keys for a package/mode
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-;;  (evil-collection-init 'neotree)
-  (evil-collection-init 'dired)
-;;  (evil-collection-init 'rtags)
-  (evil-collection-init 'ivy)
-)
-(use-package evil-escape
-  :ensure t
-  :config
-  (evil-escape-mode 1)
-  (setq-default evil-escape-key-sequence "jk")
-  (setq-default evil-escape-delay 0.5))
-#+END_SRC
