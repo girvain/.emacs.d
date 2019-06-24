@@ -123,7 +123,11 @@
 * Rainbow Delimiters
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package rainbow-delimiters
-:ensure t)
+:ensure t
+:config
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'rjsx-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'js2-mode-hook 'rainbow-delimiters-mode))
 #+END_SRC
 * Try
 #+BEGIN_SRC emacs-lisp
@@ -346,26 +350,26 @@
   (add-hook 'js2-mode 'flycheck-mode)
   )
 
-;; ;; ;; Color mode line for errors.
-;; (use-package flycheck-color-mode-line
-;;   :ensure t
-;;   :after flycheck
-;;   :config '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
-;;   )
+;; Color mode line for errors.
+ (use-package flycheck-color-mode-line
+   :ensure t
+   :after flycheck
+   :config '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
+   )
 
-;; ;; Show pos-tip popups for errors.
-;; (use-package flycheck-pos-tip
-;;   :ensure t
-;;   :after flycheck
-;;   :config (flycheck-pos-tip-mode)
-;;   )
+;; Show pos-tip popups for errors.
+ (use-package flycheck-pos-tip
+   :ensure t
+   :after flycheck
+   :config (flycheck-pos-tip-mode)
+   )
 
 ;; Flycheck-plantuml/
-;; (use-package flycheck-plantuml
-;;   :after flycheck
-;;   :ensure t
-;;   :config (flycheck-plantuml-setup)
-;;   )
+ (use-package flycheck-plantuml
+   :after flycheck
+   :ensure t
+   :config (flycheck-plantuml-setup)
+   )
 #+END_SRC
 
 * irony
@@ -569,7 +573,7 @@
 (flycheck-add-mode 'javascript-eslint 'web-mode)
 
 ;; customize flycheck temp file prefix
-(setq-default flycheck-temp-prefix ".flycheck")
+;;(setq-default flycheck-temp-prefix ".flycheck")
 
 ;; disable json-jsonlist checking for json files
 (setq-default flycheck-disabled-checkers
@@ -602,6 +606,14 @@
 (define-key tern-mode-keymap (kbd "M-.") nil)
 (define-key tern-mode-keymap (kbd "M-,") nil)
 )
+
+;; rjsx
+  (use-package rjsx-mode
+  :ensure t
+  :config
+  )
+
+
 #+END_SRC
 * Pug mode
   #+BEGIN_SRC emacs-lisp :tangle yes
