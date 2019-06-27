@@ -20,6 +20,20 @@
 ;;(setq ns-function-modifier 'control)
 (setq ns-command-modifier 'control)
 
+;; check OS type and remap keys accordingly
+(cond
+ ((string-equal system-type "windows-nt") ; Microsoft Windows
+  (progn
+    (message "Microsoft Windows")))
+ ((string-equal system-type "darwin") ; Mac OS X
+  (progn
+    (message "Mac OS X")))
+ ((string-equal system-type "gnu/linux") ; linux
+  (progn
+    (message "Linux")
+    (setq ns-control-modifier 'meta)
+    (setq ns-alternate-modifier 'control)))
+
 ;; show trailing spaces
 (setq-default show-trailing-whitespace t)
 
@@ -901,4 +915,27 @@
   ;;          :color blue))
 #+END_SRC
 
+* undo-tree
+#+BEGIN_SRC emacs-lisp
+(use-package undo-tree
+  :ensure t
+  :config
+  (progn
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t)))
+#+END_SRC
 
+* dashboard
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package dashboard
+ :ensure t
+ :config
+(setq dashboard-banner-logo-title "I'm Batman")
+(setq dashboard-startup-banner 'logo)
+
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-set-footer nil)
+ (dashboard-setup-startup-hook))
+#+END_SRC

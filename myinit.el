@@ -5,10 +5,24 @@
 (global-set-key (kbd "<f5>") 'revert-buffer)
 
 ;; mac key remap
+;;(if (eq system-type 'darwin)
 ;;(setq ns-command-modifier 'meta)
 ;;(setq mac-option-modifier 'control)
 ;;(setq ns-function-modifier 'control)
 (setq ns-command-modifier 'control)
+;;)
+
+;; check OS type
+(cond
+ ((string-equal system-type "windows-nt") ; Microsoft Windows
+  (progn
+    (message "Microsoft Windows")))
+ ((string-equal system-type "darwin") ; Mac OS X
+  (progn
+    (message "Mac OS X")))
+ ((string-equal system-type "gnu/linux") ; linux
+  (progn
+    (message "Linux"))))
 
 ;; show trailing spaces
 (setq-default show-trailing-whitespace t)
@@ -758,3 +772,26 @@
 ;;                 (git-gutter:clear))
 ;;          :color blue))
 ;; Magit:1 ends here
+
+;; [[file:~/.emacs.d/myinit.org::*undo-tree][undo-tree:1]]
+(use-package undo-tree
+  :ensure t
+  :config
+  (progn
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t)))
+;; undo-tree:1 ends here
+
+;; [[file:~/.emacs.d/myinit.org::*dashboard][dashboard:1]]
+(use-package dashboard
+ :ensure t
+ :config
+(setq dashboard-banner-logo-title "I'm Batman")
+(setq dashboard-startup-banner 'logo)
+
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-set-footer nil)
+ (dashboard-setup-startup-hook))
+;; dashboard:1 ends here
