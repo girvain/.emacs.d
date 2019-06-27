@@ -20,20 +20,6 @@
 ;;(setq ns-function-modifier 'control)
 (setq ns-command-modifier 'control)
 
-;; check OS type and remap keys accordingly
-(cond
- ((string-equal system-type "windows-nt") ; Microsoft Windows
-  (progn
-    (message "Microsoft Windows")))
- ((string-equal system-type "darwin") ; Mac OS X
-  (progn
-    (message "Mac OS X")))
- ((string-equal system-type "gnu/linux") ; linux
-  (progn
-    (message "Linux")
-    (setq ns-control-modifier 'meta)
-    (setq ns-alternate-modifier 'control)))
-
 ;; show trailing spaces
 (setq-default show-trailing-whitespace t)
 

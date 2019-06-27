@@ -13,24 +13,10 @@
 (global-set-key (kbd "<f5>") 'revert-buffer)
 
 ;; mac key remap
-;;(if (eq system-type 'darwin)
 ;;(setq ns-command-modifier 'meta)
 ;;(setq mac-option-modifier 'control)
 ;;(setq ns-function-modifier 'control)
 (setq ns-command-modifier 'control)
-;;)
-
-;; check OS type
-(cond
- ((string-equal system-type "windows-nt") ; Microsoft Windows
-  (progn
-    (message "Microsoft Windows")))
- ((string-equal system-type "darwin") ; Mac OS X
-  (progn
-    (message "Mac OS X")))
- ((string-equal system-type "gnu/linux") ; linux
-  (progn
-    (message "Linux"))))
 
 ;; show trailing spaces
 (setq-default show-trailing-whitespace t)
@@ -90,6 +76,13 @@
 ;; disable line wrapping
 (set-default 'truncate-lines t)
 
+;; Auto refresh buffers
+(global-auto-revert-mode 1)
+
+;; Also auto refresh dired, but be quiet about it
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
+
 ;; interface\ tweaks:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Themes][Themes:1]]
@@ -146,16 +139,16 @@
 ;; [[file:~/.emacs.d/myinit.org::*Try][Try:1]]
 
 (use-package try
-    :ensure t)
+        :ensure t)
 
 ;; Try:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Which%20key][Which\ key:1]]
 
 (use-package which-key
-    :ensure t
-    :config
-    (which-key-mode))
+        :ensure t
+        :config
+        (which-key-mode))
 
 ;; Which\ key:1 ends here
 
@@ -427,13 +420,13 @@
 (use-package web-mode
   :ensure t
     :config
-    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
-;;  (setq web-mode-engines-alist
-;;        '(("django"    . "\\.html\\'")))
-;;  (setq web-mode-ac-sources-alist
-;;        '(("css" . (ac-source-css-property))
-;;          ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
+        (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+        (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+;;      (setq web-mode-engines-alist
+;;                '(("django"    . "\\.html\\'")))
+;;      (setq web-mode-ac-sources-alist
+;;            '(("css" . (ac-source-css-property))
+;;              ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
 ;;             ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
      (setq web-mode-enable-auto-closing t) ;)
      (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
@@ -566,31 +559,31 @@
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
  (setq ibuffer-saved-filter-groups
-    (quote (("default"
-         ("dired" (mode . dired-mode))
-         ("org" (name . "^.*org$"))
-           ("IRC" (or (mode . circe-channel-mode) (mode . circe-server-mode)))
-         ("web" (or (mode . web-mode) (mode . js2-mode)))
-         ("shell" (or (mode . eshell-mode) (mode . shell-mode)))
-         ("mu4e" (or
+        (quote (("default"
+                 ("dired" (mode . dired-mode))
+                 ("org" (name . "^.*org$"))
+               ("IRC" (or (mode . circe-channel-mode) (mode . circe-server-mode)))
+                 ("web" (or (mode . web-mode) (mode . js2-mode)))
+                 ("shell" (or (mode . eshell-mode) (mode . shell-mode)))
+                 ("mu4e" (or
 
                 (mode . mu4e-compose-mode)
                 (name . "\*mu4e\*")
                 ))
-         ("programming" (or
-                 (mode . python-mode)
-                 (mode . c++-mode)))
-         ("emacs" (or
-               (name . "^\\*scratch\\*$")
-               (name . "^\\*Messages\\*$")))
-         ))))
+                 ("programming" (or
+                                 (mode . python-mode)
+                                 (mode . c++-mode)))
+                 ("emacs" (or
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*Messages\\*$")))
+                 ))))
  (add-hook 'ibuffer-mode-hook
-        (lambda ()
-          (ibuffer-auto-mode 1)
-          (ibuffer-switch-to-saved-filter-groups "default")))
+            (lambda ()
+              (ibuffer-auto-mode 1)
+              (ibuffer-switch-to-saved-filter-groups "default")))
 
  ;; don't show these
-                      ;(add-to-list 'ibuffer-never-show-predicates "zowie")
+                                          ;(add-to-list 'ibuffer-never-show-predicates "zowie")
  ;; Don't show filter groups if there are no buffers in that group
  (setq ibuffer-show-empty-filter-groups nil)
 
@@ -624,10 +617,10 @@
   (use-package swiper
   :ensure t
   :bind (("C-s" . swiper)
-     ("C-r" . swiper)
-     ("C-c C-r" . ivy-resume)
-     ("M-x" . counsel-M-x)
-     ("C-x C-f" . counsel-find-file))
+         ("C-r" . swiper)
+         ("C-c C-r" . ivy-resume)
+         ("M-x" . counsel-M-x)
+         ("C-x C-f" . counsel-find-file))
   :config
   (progn
     (ivy-mode 1)
@@ -843,6 +836,7 @@
 ;; Magit:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*undo-tree][undo-tree:1]]
+
 (use-package undo-tree
   :ensure t
   :config
@@ -850,9 +844,11 @@
     (global-undo-tree-mode)
     (setq undo-tree-visualizer-timestamps t)
     (setq undo-tree-visualizer-diff t)))
+
 ;; undo-tree:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*dashboard][dashboard:1]]
+
 (use-package dashboard
  :ensure t
  :config
@@ -863,4 +859,5 @@
 (setq dashboard-set-file-icons t)
 (setq dashboard-set-footer nil)
  (dashboard-setup-startup-hook))
+
 ;; dashboard:1 ends here
