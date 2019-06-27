@@ -1,4 +1,12 @@
-;; [[file:~/.emacs.d/myinit.org::*interface%20tweaks][interface tweaks:1]]
+
+;; [[file:~/.emacs.d/myinit.org::*repos][repos:1]]
+
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+
+;; repos:1 ends here
+
+;; [[file:~/.emacs.d/myinit.org::*interface%20tweaks][interface\ tweaks:1]]
+
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -81,9 +89,11 @@
 
 ;; disable line wrapping
 (set-default 'truncate-lines t)
-;; interface tweaks:1 ends here
+
+;; interface\ tweaks:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Themes][Themes:1]]
+
 (use-package doom-themes
   :ensure t
   :config
@@ -113,37 +123,53 @@
 ;; (use-package monokai-theme
 ;;   :ensure t
 ;;   :config (load-theme 'monokai t))
+
 ;; Themes:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Fonts][Fonts:1]]
+
 ;;(set-frame-font "Monaco 13") ;; this is a mac font that needds installed on linux:
+
 ;; Fonts:1 ends here
 
-;; [[file:~/.emacs.d/myinit.org::*Rainbow%20Delimiters][Rainbow Delimiters:1]]
+;; [[file:~/.emacs.d/myinit.org::*Rainbow%20Delimiters][Rainbow\ Delimiters:1]]
+
 (use-package rainbow-delimiters
-:ensure t)
-;; Rainbow Delimiters:1 ends here
+:ensure t
+:config
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'rjsx-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'js2-mode-hook 'rainbow-delimiters-mode))
+
+;; Rainbow\ Delimiters:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Try][Try:1]]
+
 (use-package try
-	:ensure t)
+    :ensure t)
+
 ;; Try:1 ends here
 
-;; [[file:~/.emacs.d/myinit.org::*Which%20key][Which key:1]]
-(use-package which-key
-	:ensure t
-	:config
-	(which-key-mode))
-;; Which key:1 ends here
+;; [[file:~/.emacs.d/myinit.org::*Which%20key][Which\ key:1]]
 
-;; [[file:~/.emacs.d/myinit.org::*Org%20Bullets][Org Bullets:1]]
+(use-package which-key
+    :ensure t
+    :config
+    (which-key-mode))
+
+;; Which\ key:1 ends here
+
+;; [[file:~/.emacs.d/myinit.org::*Org%20Bullets][Org\ Bullets:1]]
+
 (use-package org-bullets
   :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-;; Org Bullets:1 ends here
+
+;; Org\ Bullets:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*beacon][beacon:1]]
+
 ; flashes the cursor's line when you scroll
 (use-package beacon
   :ensure t
@@ -151,18 +177,22 @@
   (beacon-mode 1)
   ; (setq beacon-color "#666600")
   )
+
 ;; beacon:1 ends here
 
-;; [[file:~/.emacs.d/myinit.org::*Highlight%20indent%20guides][Highlight indent guides:1]]
+;; [[file:~/.emacs.d/myinit.org::*Highlight%20indent%20guides][Highlight\ indent\ guides:1]]
+
 ;; indentation lines
 (use-package highlight-indent-guides
   :ensure t
   :config
   (setq highlight-indent-guides-method 'character)
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
-;; Highlight indent guides:1 ends here
 
-;; [[file:~/.emacs.d/myinit.org::*C++][C++:1]]
+;; Highlight\ indent\ guides:1 ends here
+
+;; [[file:~/.emacs.d/myinit.org::*C%2B%2B][C++:1]]
+
 ;; C++
 (use-package c++-mode
   :after rtags
@@ -322,9 +352,11 @@
 ;;   ;; invoke cmake-ide setup
 ;;   (cmake-ide-setup)
 ;;   )
+
 ;; C++:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*flycheck][flycheck:1]]
+
 (use-package flycheck
   :ensure t
   :config
@@ -336,29 +368,31 @@
   (add-hook 'js2-mode 'flycheck-mode)
   )
 
-;; ;; ;; Color mode line for errors.
-;; (use-package flycheck-color-mode-line
-;;   :ensure t
-;;   :after flycheck
-;;   :config '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
-;;   )
+;; Color mode line for errors.
+ (use-package flycheck-color-mode-line
+   :ensure t
+   :after flycheck
+   :config '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
+   )
 
-;; ;; Show pos-tip popups for errors.
-;; (use-package flycheck-pos-tip
-;;   :ensure t
-;;   :after flycheck
-;;   :config (flycheck-pos-tip-mode)
-;;   )
+;; Show pos-tip popups for errors.
+ (use-package flycheck-pos-tip
+   :ensure t
+   :after flycheck
+   :config (flycheck-pos-tip-mode)
+   )
 
 ;; Flycheck-plantuml/
-;; (use-package flycheck-plantuml
-;;   :after flycheck
-;;   :ensure t
-;;   :config (flycheck-plantuml-setup)
-;;   )
+ (use-package flycheck-plantuml
+   :after flycheck
+   :ensure t
+   :config (flycheck-plantuml-setup)
+   )
+
 ;; flycheck:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Company][Company:1]]
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Company Mode (Code Completion package)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -377,25 +411,29 @@
   (add-hook 'c++-mode-hook 'company-mode)
   (add-hook 'emacs-lisp-mode-hook 'company-mode)
   )
+
 ;; Company:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*emmet][emmet:1]]
+
 (use-package emmet-mode
   :ensure t
   :config)
+
 ;; emmet:1 ends here
 
-;; [[file:~/.emacs.d/myinit.org::*web%20mode][web mode:1]]
+;; [[file:~/.emacs.d/myinit.org::*web%20mode][web\ mode:1]]
+
 (use-package web-mode
   :ensure t
     :config
-	(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-	(add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
-;; 	(setq web-mode-engines-alist
-;; 		  '(("django"    . "\\.html\\'")))
-;; 	(setq web-mode-ac-sources-alist
-;; 	      '(("css" . (ac-source-css-property))
-;; 	        ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
+    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+;;  (setq web-mode-engines-alist
+;;        '(("django"    . "\\.html\\'")))
+;;  (setq web-mode-ac-sources-alist
+;;        '(("css" . (ac-source-css-property))
+;;          ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
 ;;             ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
      (setq web-mode-enable-auto-closing t) ;)
      (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
@@ -410,9 +448,11 @@
 (setq tab-width 2)
 (add-hook 'web-mode-hook  'emmet-mode)
 )
-;; web mode:1 ends here
 
-;; [[file:~/.emacs.d/myinit.org::*Web%20beautify][Web beautify:1]]
+;; web\ mode:1 ends here
+
+;; [[file:~/.emacs.d/myinit.org::*Web%20beautify][Web\ beautify:1]]
+
 (use-package web-beautify
   :ensure t
   :config
@@ -430,9 +470,11 @@
 (eval-after-load 'css-mode
   '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
   )
-;; Web beautify:1 ends here
+
+;; Web\ beautify:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*JavaScript][JavaScript:1]]
+
 (use-package js2-mode
   :ensure t
   :config
@@ -455,7 +497,7 @@
 (flycheck-add-mode 'javascript-eslint 'web-mode)
 
 ;; customize flycheck temp file prefix
-(setq-default flycheck-temp-prefix ".flycheck")
+;;(setq-default flycheck-temp-prefix ".flycheck")
 
 ;; disable json-jsonlist checking for json files
 (setq-default flycheck-disabled-checkers
@@ -488,16 +530,26 @@
 (define-key tern-mode-keymap (kbd "M-.") nil)
 (define-key tern-mode-keymap (kbd "M-,") nil)
 )
+
+;; rjsx
+  (use-package rjsx-mode
+  :ensure t
+  :config
+  )
+
 ;; JavaScript:1 ends here
 
-;; [[file:~/.emacs.d/myinit.org::*Pug%20mode][Pug mode:1]]
+;; [[file:~/.emacs.d/myinit.org::*Pug%20mode][Pug\ mode:1]]
+
 (use-package pug-mode
 :ensure t
 :config
 )
-;; Pug mode:1 ends here
+
+;; Pug\ mode:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Ivy][Ivy:1]]
+
 (use-package ivy
   :ensure t
   :config
@@ -507,44 +559,48 @@
   ;; Ivy integration with rtags.
   ;;(setq rtags-display-result-backend 'ivy)
   )
+
 ;; Ivy:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*IBuffer][IBuffer:1]]
+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
  (setq ibuffer-saved-filter-groups
-	(quote (("default"
-		 ("dired" (mode . dired-mode))
-		 ("org" (name . "^.*org$"))
-	       ("IRC" (or (mode . circe-channel-mode) (mode . circe-server-mode)))
-		 ("web" (or (mode . web-mode) (mode . js2-mode)))
-		 ("shell" (or (mode . eshell-mode) (mode . shell-mode)))
-		 ("mu4e" (or
+    (quote (("default"
+         ("dired" (mode . dired-mode))
+         ("org" (name . "^.*org$"))
+           ("IRC" (or (mode . circe-channel-mode) (mode . circe-server-mode)))
+         ("web" (or (mode . web-mode) (mode . js2-mode)))
+         ("shell" (or (mode . eshell-mode) (mode . shell-mode)))
+         ("mu4e" (or
 
                 (mode . mu4e-compose-mode)
                 (name . "\*mu4e\*")
                 ))
-		 ("programming" (or
-				 (mode . python-mode)
-				 (mode . c++-mode)))
-		 ("emacs" (or
-			   (name . "^\\*scratch\\*$")
-			   (name . "^\\*Messages\\*$")))
-		 ))))
+         ("programming" (or
+                 (mode . python-mode)
+                 (mode . c++-mode)))
+         ("emacs" (or
+               (name . "^\\*scratch\\*$")
+               (name . "^\\*Messages\\*$")))
+         ))))
  (add-hook 'ibuffer-mode-hook
-	    (lambda ()
-	      (ibuffer-auto-mode 1)
-	      (ibuffer-switch-to-saved-filter-groups "default")))
+        (lambda ()
+          (ibuffer-auto-mode 1)
+          (ibuffer-switch-to-saved-filter-groups "default")))
 
  ;; don't show these
-					  ;(add-to-list 'ibuffer-never-show-predicates "zowie")
+                      ;(add-to-list 'ibuffer-never-show-predicates "zowie")
  ;; Don't show filter groups if there are no buffers in that group
  (setq ibuffer-show-empty-filter-groups nil)
 
  ;; Don't ask for confirmation to delete marked buffers
  (setq ibuffer-expert t)
+
 ;; IBuffer:1 ends here
 
-;; [[file:~/.emacs.d/myinit.org::*Swiper,%20Ivy%20and%20Counsel][Swiper, Ivy and Counsel:1]]
+;; [[file:~/.emacs.d/myinit.org::*Swiper,%20Ivy%20and%20Counsel][Swiper\,\ Ivy\ and\ Counsel:1]]
+
 (use-package counsel
 :ensure t
   :bind
@@ -568,10 +624,10 @@
   (use-package swiper
   :ensure t
   :bind (("C-s" . swiper)
-	 ("C-r" . swiper)
-	 ("C-c C-r" . ivy-resume)
-	 ("M-x" . counsel-M-x)
-	 ("C-x C-f" . counsel-find-file))
+     ("C-r" . swiper)
+     ("C-c C-r" . ivy-resume)
+     ("M-x" . counsel-M-x)
+     ("C-x C-f" . counsel-find-file))
   :config
   (progn
     (ivy-mode 1)
@@ -579,9 +635,11 @@
     (setq ivy-display-style 'fancy)
     (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
     ))
-;; Swiper, Ivy and Counsel:1 ends here
+
+;; Swiper\,\ Ivy\ and\ Counsel:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Yasnippet][Yasnippet:1]]
+
 (use-package yasnippet
   :ensure t
   :init
@@ -589,9 +647,11 @@
 
 (use-package yasnippet-snippets
   :ensure t)
+
 ;; Yasnippet:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Projectile][Projectile:1]]
+
 (use-package projectile
   :ensure t
   :config
@@ -605,9 +665,11 @@
 ;;  (counsel-projectile-on)
   (counsel-projectile-mode 1)
   )
+
 ;; Projectile:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*multi-term][multi-term:1]]
+
 (use-package multi-term
   :ensure t
   :config
@@ -661,9 +723,11 @@
 
 ;; Bind launch multi-term to C-`, the same as VSCode
 (global-set-key (kbd "C-`") (kbd "M-x multi-term RET"))
+
 ;; multi-term:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Treemacs][Treemacs:1]]
+
 (use-package treemacs
   :ensure t
   :defer t
@@ -713,17 +777,21 @@
 (use-package treemacs-projectile
   :after treemacs projectile
   :ensure t)
+
 ;; Treemacs:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*neotree][neotree:1]]
+
 (use-package neotree
   :ensure t
   :config
   ;;(neotree-projectile-action )
   )
+
 ;; neotree:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Magit][Magit:1]]
+
 (use-package magit
     :ensure t
     :init
@@ -771,6 +839,7 @@
 ;;                 (sit-for 0.1)
 ;;                 (git-gutter:clear))
 ;;          :color blue))
+
 ;; Magit:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*undo-tree][undo-tree:1]]
