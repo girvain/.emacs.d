@@ -346,37 +346,37 @@
 
 * flycheck
 #+BEGIN_SRC emacs-lisp
-(use-package flycheck
-  :ensure t
-  :config
-  :init
-  ;; set to have global completion or on specific modes.
-  ;;(global-flycheck-mode)
-  (add-hook 'c++-mode-hook 'flycheck-mode)
-  (add-hook 'emacs-lisp-mode-hook 'flycheck-mode)
-  (add-hook 'js2-mode 'flycheck-mode)
-  )
+  (use-package flycheck
+    :ensure t
+    :config
+    :init
+    ;; set to have global completion or on specific modes.
+    ;;(global-flycheck-mode)
+    (add-hook 'c++-mode-hook 'flycheck-mode)
+    (add-hook 'emacs-lisp-mode-hook 'flycheck-mode)
+    (add-hook 'js2-mode 'flycheck-mode)
+    )
 
-;; Color mode line for errors.
- (use-package flycheck-color-mode-line
-   :ensure t
-   :after flycheck
-   :config '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
-   )
+  ;; Color mode line for errors.
+   (use-package flycheck-color-mode-line
+     :ensure t
+     :after flycheck
+     :config '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
+     )
 
-;; Show pos-tip popups for errors.
- (use-package flycheck-pos-tip
-   :ensure t
-   :after flycheck
-   :config (flycheck-pos-tip-mode)
-   )
+  ;; Show pos-tip popups for errors.
+   ;; (use-package flycheck-pos-tip
+   ;;   :ensure t
+   ;;   :after flycheck
+   ;;   :config (flycheck-pos-tip-mode)
+   ;;   )
 
-;; Flycheck-plantuml/
- (use-package flycheck-plantuml
-   :after flycheck
-   :ensure t
-   :config (flycheck-plantuml-setup)
-   )
+  ;; Flycheck-plantuml/
+   ;; (use-package flycheck-plantuml
+   ;;   :after flycheck
+   ;;   :ensure t
+   ;;   :config (flycheck-plantuml-setup)
+   ;;   )
 #+END_SRC
 
 * irony
@@ -447,16 +447,16 @@
 (use-package company
   :ensure t
   :config
-  (setq company-idle-delay 0)
+  ;;(setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1)
   (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
   (define-key company-active-map (kbd "M-p") nil)
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous))
-  ;;  (global-company-mode t)
-  (add-hook 'c++-mode-hook 'company-mode)
-  (add-hook 'emacs-lisp-mode-hook 'company-mode)
+  (global-company-mode t)
+  ;;(add-hook 'c++-mode-hook 'company-mode)
+  ;;(add-hook 'emacs-lisp-mode-hook 'company-mode)
   )
 #+END_SRC
 
@@ -577,7 +577,7 @@
       '(javascript-jshint)))
 
   ;; use eslint with web-mode for jsx files
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
+;;  (flycheck-add-mode 'javascript-eslint 'web-mode)
 
   ;; customize flycheck temp file prefix
   ;;(setq-default flycheck-temp-prefix ".flycheck")
@@ -635,7 +635,11 @@
 
         ;;(use-package typescript-mode :ensure t)
 
-        (use-package lsp-ui :ensure t)
+        (use-package lsp-ui 
+        :ensure t
+        :config
+        (lsp-ui-doc-mode
+        ))
 
         (use-package js2-mode :ensure t)
 
@@ -648,8 +652,6 @@
         ;; sudo npm i -g typescript-language-server; sudo npm i -g typescript
 
         ;; sudo npm i -g javascript-typescript-langserver
-
-
 
         (use-package lsp-mode
         :ensure t
@@ -667,19 +669,16 @@
 
         (add-hook 'web-mode 'lsp))
 
-
-
         (use-package company-lsp
         :ensure t
         :config
         (push 'company-lsp company-backends)
         (setq company-lsp-enable-recompletion t
-        ;;company-lsp-enable-snippet t
-        ;;company-lsp-cache-candidates t
-        ;;company-lsp-async t)
-        ))
+        company-lsp-enable-snippet t
+        company-lsp-cache-candidates t
+        company-lsp-async t)
+        )
 
-        
 
         (setq lsp-language-id-configuration '((java-mode . "java")
 

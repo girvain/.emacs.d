@@ -341,18 +341,18 @@
    )
 
 ;; Show pos-tip popups for errors.
- (use-package flycheck-pos-tip
-   :ensure t
-   :after flycheck
-   :config (flycheck-pos-tip-mode)
-   )
+ ;; (use-package flycheck-pos-tip
+ ;;   :ensure t
+ ;;   :after flycheck
+ ;;   :config (flycheck-pos-tip-mode)
+ ;;   )
 
 ;; Flycheck-plantuml/
- (use-package flycheck-plantuml
-   :after flycheck
-   :ensure t
-   :config (flycheck-plantuml-setup)
-   )
+ ;; (use-package flycheck-plantuml
+ ;;   :after flycheck
+ ;;   :ensure t
+ ;;   :config (flycheck-plantuml-setup)
+ ;;   )
 ;; flycheck:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Company][Company:1]]
@@ -363,16 +363,16 @@
 (use-package company
   :ensure t
   :config
-  (setq company-idle-delay 0)
+  ;;(setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1)
   (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
   (define-key company-active-map (kbd "M-p") nil)
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous))
-  ;;  (global-company-mode t)
-  (add-hook 'c++-mode-hook 'company-mode)
-  (add-hook 'emacs-lisp-mode-hook 'company-mode)
+  (global-company-mode t)
+  ;;(add-hook 'c++-mode-hook 'company-mode)
+  ;;(add-hook 'emacs-lisp-mode-hook 'company-mode)
   )
 ;; Company:1 ends here
 
@@ -431,66 +431,66 @@
 
 ;; [[file:~/.emacs.d/myinit.org::*JavaScript][JavaScript:1]]
 (use-package js2-mode
-  :ensure t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+    :ensure t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
-;; turn on flychecking globally
-(add-hook 'after-init-hook #'global-flycheck-mode)
+  ;; turn on flychecking globally
+  (add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; turn off js2 syntax hilighting
-  (setq js2-strict-missing-semi-warning nil)
-  (setq js2-mode-show-parse-errors nil)
-  (setq js2-mode-show-strict-warnings nil)
+  ;; turn off js2 syntax hilighting
+    (setq js2-strict-missing-semi-warning nil)
+    (setq js2-mode-show-parse-errors nil)
+    (setq js2-mode-show-strict-warnings nil)
 
-;; disable jshint since we prefer eslint checking
-(setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(javascript-jshint)))
+  ;; disable jshint since we prefer eslint checking
+  (setq-default flycheck-disabled-checkers
+    (append flycheck-disabled-checkers
+      '(javascript-jshint)))
 
-;; use eslint with web-mode for jsx files
-(flycheck-add-mode 'javascript-eslint 'web-mode)
+  ;; use eslint with web-mode for jsx files
+;;  (flycheck-add-mode 'javascript-eslint 'web-mode)
 
-;; customize flycheck temp file prefix
-;;(setq-default flycheck-temp-prefix ".flycheck")
+  ;; customize flycheck temp file prefix
+  ;;(setq-default flycheck-temp-prefix ".flycheck")
 
-;; disable json-jsonlist checking for json files
-(setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(json-jsonlist)))
+  ;; disable json-jsonlist checking for json files
+  (setq-default flycheck-disabled-checkers
+    (append flycheck-disabled-checkers
+      '(json-jsonlist)))
 
-  )
+    )
 
 
-;; Better imenu
-;;(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+  ;; Better imenu
+  ;;(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
 
-;; (use-package company-tern
-;;   :ensure t
-;;   :config
-;;   (add-to-list 'company-backends 'company-tern)
-;;   (add-hook 'js2-mode-hook (lambda ()
-;;                              (flycheck-mode)
-;;                              (setq js2-basic-offset 2)
-;;                              (tern-mode)
+  ;; (use-package company-tern
+  ;;   :ensure t
+  ;;   :config
+  ;;   (add-to-list 'company-backends 'company-tern)
+  ;;   (add-hook 'js2-mode-hook (lambda ()
+  ;;                              (flycheck-mode)
+  ;;                              (setq js2-basic-offset 2)
+  ;;                              (tern-mode)
 
-;;                              ;; disable jshint since we prefer eslint checking
-;;                              (setq-default flycheck-disabled-checkers
-;;                                            (append flycheck-disabled-checkers
-;;                                                    '(javascript-jshint)))
+  ;;                              ;; disable jshint since we prefer eslint checking
+  ;;                              (setq-default flycheck-disabled-checkers
+  ;;                                            (append flycheck-disabled-checkers
+  ;;                                                    '(javascript-jshint)))
 
-;;                              (company-mode)))
+  ;;                              (company-mode)))
 
-;; ;; Disable completion keybindings, as we use xref-js2 instead
-;; (define-key tern-mode-keymap (kbd "M-.") nil)
-;; (define-key tern-mode-keymap (kbd "M-,") nil)
-;; )
-
-;; rjsx
-  ;; (use-package rjsx-mode
-  ;; :ensure t
-  ;; :config
+  ;; ;; Disable completion keybindings, as we use xref-js2 instead
+  ;; (define-key tern-mode-keymap (kbd "M-.") nil)
+  ;; (define-key tern-mode-keymap (kbd "M-,") nil)
   ;; )
+
+  ;; rjsx
+    ;; (use-package rjsx-mode
+    ;; :ensure t
+    ;; :config
+    ;; )
 ;; JavaScript:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*lsp-mode][lsp-mode:1]]
@@ -505,7 +505,11 @@
 
     ;;(use-package typescript-mode :ensure t)
 
-    (use-package lsp-ui :ensure t)
+    (use-package lsp-ui 
+    :ensure t
+    :config
+    (lsp-ui-doc-mode
+    ))
 
     (use-package js2-mode :ensure t)
 
@@ -518,8 +522,6 @@
     ;; sudo npm i -g typescript-language-server; sudo npm i -g typescript
 
     ;; sudo npm i -g javascript-typescript-langserver
-
-
 
     (use-package lsp-mode
     :ensure t
@@ -537,18 +539,15 @@
 
     (add-hook 'web-mode 'lsp))
 
-
-
     (use-package company-lsp
     :ensure t
     :config
     (push 'company-lsp company-backends)
     (setq company-lsp-enable-recompletion t
-    ;;company-lsp-enable-snippet t
-    ;;company-lsp-cache-candidates t
-    ;;company-lsp-async t)
-    ))
-
+    company-lsp-enable-snippet t
+    company-lsp-cache-candidates t
+    company-lsp-async t)
+    )
 
 
     (setq lsp-language-id-configuration '((java-mode . "java")
