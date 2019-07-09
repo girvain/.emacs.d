@@ -18,7 +18,7 @@
 ;;(setq ns-command-modifier 'meta)
 ;;(setq mac-option-modifier 'control)
 ;;(setq ns-function-modifier 'control)
-(setq ns-command-modifier 'control)
+(setq meta-command-modifier 'control)
 
 ;; show trailing spaces
 (setq-default show-trailing-whitespace t)
@@ -538,28 +538,37 @@
 )
 #+END_SRC
 
-* Web beautify
+* Web beautify (commented out)
 #+BEGIN_SRC emacs-lisp
 
-(use-package web-beautify
-  :ensure t
-  :config
-  (eval-after-load 'js2-mode
-    '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
-  (eval-after-load 'json-mode
-  '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
+  ;; (use-package web-beautify
+  ;;   :ensure t
+  ;;   :config
+  ;;   (eval-after-load 'js2-mode
+  ;;     '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
+  ;;   (eval-after-load 'json-mode
+  ;;   '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
 
-(eval-after-load 'sgml-mode
-  '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
+  ;; (eval-after-load 'sgml-mode
+  ;;   '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
 
-(eval-after-load 'web-mode
-  '(define-key web-mode-map (kbd "C-c b") 'web-beautify-html))
+  ;; (eval-after-load 'web-mode
+  ;;   '(define-key web-mode-map (kbd "C-c b") 'web-beautify-html))
 
-(eval-after-load 'css-mode
-  '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
-  )
+  ;; (eval-after-load 'css-mode
+  ;;   '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
+  ;;   )
 #+END_SRC
 
+* Prettier-js
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package prettier-js
+:ensure t
+:config
+(add-hook 'js2-mode-hook 'prettier-js-mode)
+(add-hook 'web-mode-hook 'prettier-js-mode)
+)
+#+END_SRC
 * JavaScript
 #+BEGIN_SRC emacs-lisp
 

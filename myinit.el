@@ -8,7 +8,10 @@
 ;;(setq ns-command-modifier 'meta)
 ;;(setq mac-option-modifier 'control)
 ;;(setq ns-function-modifier 'control)
-(setq ns-command-modifier 'control)
+(setq meta-command-modifier 'control)
+
+;; linux remaps to emulate mac keyboard
+(setq meta-alternate-modifier 'control)
 
 ;; show trailing spaces
 (setq-default show-trailing-whitespace t)
@@ -414,25 +417,34 @@
 )
 ;; web mode:1 ends here
 
-;; [[file:~/.emacs.d/myinit.org::*Web%20beautify][Web beautify:1]]
-(use-package web-beautify
-  :ensure t
-  :config
-  (eval-after-load 'js2-mode
-    '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
-  (eval-after-load 'json-mode
-  '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
+;; [[file:~/.emacs.d/myinit.org::*Web%20beautify%20(commented%20out)][Web beautify (commented out):1]]
+;; (use-package web-beautify
+;;   :ensure t
+;;   :config
+;;   (eval-after-load 'js2-mode
+;;     '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
+;;   (eval-after-load 'json-mode
+;;   '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
 
-(eval-after-load 'sgml-mode
-  '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
+;; (eval-after-load 'sgml-mode
+;;   '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
 
-(eval-after-load 'web-mode
-  '(define-key web-mode-map (kbd "C-c b") 'web-beautify-html))
+;; (eval-after-load 'web-mode
+;;   '(define-key web-mode-map (kbd "C-c b") 'web-beautify-html))
 
-(eval-after-load 'css-mode
-  '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
-  )
-;; Web beautify:1 ends here
+;; (eval-after-load 'css-mode
+;;   '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
+;;   )
+;; Web beautify (commented out):1 ends here
+
+;; [[file:~/.emacs.d/myinit.org::*Prettier-js][Prettier-js:1]]
+(use-package prettier-js
+:ensure t
+:config
+(add-hook 'js2-mode-hook 'prettier-js-mode)
+(add-hook 'web-mode-hook 'prettier-js-mode)
+)
+;; Prettier-js:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*JavaScript][JavaScript:1]]
 (use-package js2-mode
