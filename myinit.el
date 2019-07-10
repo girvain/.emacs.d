@@ -476,7 +476,7 @@
 (use-package company
   :ensure t
   :config
-  (setq company-idle-delay 0)
+  (setq company-idle-delay 0.2)
   (setq company-minimum-prefix-length 1)
   (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
@@ -553,67 +553,217 @@
 
 ;; [[file:~/.emacs.d/myinit.org::*JavaScript][JavaScript:1]]
 (use-package js2-mode
-  :ensure t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+    :ensure t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
-;; turn on flychecking globally
-;;(add-hook 'after-init-hook #'global-flycheck-mode)
+  ;; turn on flychecking globally
+  ;;(add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; turn off js2 syntax hilighting
-  (setq js2-strict-missing-semi-warning nil)
-  (setq js2-mode-show-parse-errors nil)
-  (setq js2-mode-show-strict-warnings nil)
+  ;; turn off js2 syntax hilighting
+    (setq js2-strict-missing-semi-warning nil)
+    (setq js2-mode-show-parse-errors nil)
+    (setq js2-mode-show-strict-warnings nil)
 
-;; disable jshint since we prefer eslint checking
-(setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(javascript-jshint)))
+  ;; disable jshint since we prefer eslint checking
+  (setq-default flycheck-disabled-checkers
+    (append flycheck-disabled-checkers
+      '(javascript-jshint)))
 
-;; use eslint with web-mode for jsx files
-(flycheck-add-mode 'javascript-eslint 'web-mode)
+  ;; use eslint with web-mode for jsx files
+;;  (flycheck-add-mode 'javascript-eslint 'web-mode)
 
-;; customize flycheck temp file prefix
-;;(setq-default flycheck-temp-prefix ".flycheck")
+  ;; customize flycheck temp file prefix
+  ;;(setq-default flycheck-temp-prefix ".flycheck")
 
-;; disable json-jsonlist checking for json files
-(setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(json-jsonlist)))
+  ;; disable json-jsonlist checking for json files
+  (setq-default flycheck-disabled-checkers
+    (append flycheck-disabled-checkers
+      '(json-jsonlist)))
 
-  )
+    )
 
 
-;; Better imenu
-;;(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+  ;; Better imenu
+  ;;(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
 
-(use-package company-tern
-  :ensure t
-  :config
-  (add-to-list 'company-backends 'company-tern)
-  (add-hook 'js2-mode-hook (lambda ()
-                             (flycheck-mode)
-                             (setq js2-basic-offset 2)
-                             (tern-mode)
+  ;; (use-package company-tern
+  ;;   :ensure t
+  ;;   :config
+  ;;   (add-to-list 'company-backends 'company-tern)
+  ;;   (add-hook 'js2-mode-hook (lambda ()
+  ;;                              (flycheck-mode)
+  ;;                              (setq js2-basic-offset 2)
+  ;;                              (tern-mode)
 
-                             ;; disable jshint since we prefer eslint checking
-                             (setq-default flycheck-disabled-checkers
-                                           (append flycheck-disabled-checkers
-                                                   '(javascript-jshint)))
+  ;;                              ;; disable jshint since we prefer eslint checking
+  ;;                              (setq-default flycheck-disabled-checkers
+  ;;                                            (append flycheck-disabled-checkers
+  ;;                                                    '(javascript-jshint)))
 
-                             (company-mode)))
+  ;;                              (company-mode)))
 
-;; Disable completion keybindings, as we use xref-js2 instead
-(define-key tern-mode-keymap (kbd "M-.") nil)
-(define-key tern-mode-keymap (kbd "M-,") nil)
-)
+  ;; ;; Disable completion keybindings, as we use xref-js2 instead
+  ;; (define-key tern-mode-keymap (kbd "M-.") nil)
+  ;; (define-key tern-mode-keymap (kbd "M-,") nil)
+  ;; )
 
-;; rjsx
-  (use-package rjsx-mode
-  :ensure t
-  :config
-  )
+  ;; rjsx
+    (use-package rjsx-mode
+    :ensure t
+    :config
+    )
 ;; JavaScript:1 ends here
+
+;; [[file:~/.emacs.d/myinit.org::*lsp-mode][lsp-mode:1]]
+;;     ;;(setq exec-path (append exec-path '("~/.nvm/versions/node/v11.12.0/bin")))
+
+;;     ;; Disable lsp-ui flymake default integration
+
+;;     ;; https://github.com/emacs-lsp/lsp-ui/issues/226
+
+;;     (setq lsp-prefer-flymake nil)
+
+
+;;     (use-package typescript-mode :ensure t)
+
+;;     (use-package lsp-ui 
+;;     :ensure t
+;;     :config
+;; ;;    (lsp-ui-doc-mode)
+;;     )
+
+;;     (use-package js2-mode :ensure t)
+
+;;     (use-package rjsx-mode :ensure t)
+
+
+
+;;     ;; LSP requirements on the server
+
+;;     ;; sudo npm i -g typescript-language-server; sudo npm i -g typescript
+
+;;     ;; sudo npm i -g javascript-typescript-langserver
+
+;;     (use-package lsp-mode
+;;     :ensure t
+;;     :config
+;;     (require 'lsp-clients)
+;;     (add-hook 'typescript-mode-hook 'lsp)
+;;     (add-hook 'js2-mode-hook 'lsp)
+;; ;;    (add-hook 'js2-mode-hook 'company-mode)
+;;  ;;   (add-hook 'js2-mode-hook 'flycheck-mode)
+;;     (add-hook 'js2-mode-hook 'lsp-ui-mode)
+
+;;     (add-hook 'php-mode 'lsp)
+
+;;     (add-hook 'css-mode 'lsp)
+
+;;     (add-hook 'web-mode 'lsp))
+
+;;     (use-package company-lsp
+;;     :ensure t
+;;     :config
+;;     (push 'company-lsp company-backends)
+;;     (setq
+;;     ;company-lsp-enable-recompletion t
+;;     ;company-lsp-enable-snippet t
+;;     company-lsp-cache-candidates t
+;;     company-lsp-async t
+;;     ))
+
+
+;;     (setq lsp-language-id-configuration '((java-mode . "java")
+
+;;     (python-mode . "python")
+
+;;     (gfm-view-mode . "markdown")
+
+;;     (rust-mode . "rust")
+
+;;     (css-mode . "css")
+
+;;     (xml-mode . "xml")
+
+;;     (c-mode . "c")
+
+;;     (c++-mode . "cpp")
+
+;;     (objc-mode . "objective-c")
+
+;;     (web-mode . "html")
+
+;;     (html-mode . "html")
+
+;;     (sgml-mode . "html")
+
+;;     (mhtml-mode . "html")
+
+;;     (go-mode . "go")
+
+;;     (haskell-mode . "haskell")
+
+;;     (php-mode . "php")
+
+;;     (json-mode . "json")
+
+;;     (js2-mode . "javascript")
+
+;;     (typescript-mode . "typescript")
+
+;;     ))
+
+;;     ;; LSP debugging
+
+;;     ;;(setq lsp-print-io t)
+
+;;     ;;(setq lsp-trace t)
+
+;;     ;;(setq lsp-print-performance t)
+;; lsp-mode:1 ends here
+
+;; [[file:~/.emacs.d/myinit.org::*Tide-mode][Tide-mode:1]]
+(use-package tide
+  :ensure t
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save)))
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+(add-hook 'before-save-hook 'tide-format-before-save)
+
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+(add-hook 'js2-mode-hook #'setup-tide-mode)
+;; configure javascript-tide checker to run after your default javascript checker
+;(flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "jsx" (file-name-extension buffer-file-name))
+              (setup-tide-mode))))
+;; configure jsx-tide checker to run after your default jsx checker
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+;; Tide-mode:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Pug%20mode][Pug mode:1]]
 (use-package pug-mode
