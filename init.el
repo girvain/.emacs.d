@@ -1,13 +1,11 @@
-;;; Package --- Summary
-;;; Commentary:
-;; Gavin Ross EMACS config
-;; Disable cmake-ide when on mac, adjust fonts in font section accaordinly
-
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/"))
-
+;; (add-to-list 'package-archives
+;; 	     '("melpa2" . "http://www.mirrorservice.org/sites/melpa.org/packages/"))
+;; (add-to-list 'package-archives
+;;	     '("melpa3" . "http://www.mirrorservice.org/sites/stable.melpa.org/packages/"))
 (package-initialize)
 
 ;; Bootstrap `use-package'
@@ -15,6 +13,7 @@
 	(package-refresh-contents)
 	(package-install 'use-package))
 
+<<<<<<< HEAD
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Basic behaviour and appearance
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -894,51 +893,19 @@
 ;;                 (sit-for 0.1)
 ;;                 (git-gutter:clear))
 ;;          :color blue))
+=======
+>>>>>>> lsp-mode_withTSServer
 
 
+(org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#282c34" "#ff6c6b" "#98be65" "#ECBE7B" "#51afef" "#c678dd" "#46D9FF" "#bbc2cf"])
- '(custom-safe-themes
-   (quote
-    ("cd736a63aa586be066d5a1f0e51179239fe70e16a9f18991f6f5d99732cabb32" "fe666e5ac37c2dfcf80074e88b9252c71a22b6f5d2f566df9a7aa4f9bea55ef8" "6d589ac0e52375d311afaa745205abb6ccb3b21f6ba037104d71111e7e76a3fc" "100e7c5956d7bb3fd0eebff57fde6de8f3b9fafa056a2519f169f85199cc1c96" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "4697a2d4afca3f5ed4fdf5f715e36a6cac5c6154e105f3596b44a4874ae52c45" "49ec957b508c7d64708b40b0273697a84d3fee4f15dd9fc4a9588016adee3dad" "1c082c9b84449e54af757bcae23617d11f563fc9f33a832a8a2813c4d7dfb652" "8aca557e9a17174d8f847fb02870cb2bb67f3b6e808e46c0e54a44e3e18e1020" "6b289bab28a7e511f9c54496be647dc60f5bd8f9917c9495978762b99d8c96a0" "93a0885d5f46d2aeac12bf6be1754faa7d5e28b27926b8aa812840fe7d0b7983" "75d3dde259ce79660bac8e9e237b55674b910b470f313cdf4b019230d01a982a" "10461a3c8ca61c52dfbbdedd974319b7f7fd720b091996481c8fb1dded6c6116" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" "7e78a1030293619094ea6ae80a7579a562068087080e01c2b8b503b27900165c" "d1b4990bd599f5e2186c3f75769a2c5334063e9e541e37514942c27975700370" "6b2636879127bf6124ce541b1b2824800afc49c6ccd65439d6eb987dbf200c36" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "151bde695af0b0e69c3846500f58d9a0ca8cb2d447da68d7fbf4154dcf818ebc" default)))
- '(fci-rule-color "#5B6268")
- '(jdee-db-active-breakpoint-face-colors (cons "#1B2229" "#51afef"))
- '(jdee-db-requested-breakpoint-face-colors (cons "#1B2229" "#98be65"))
- '(jdee-db-spec-breakpoint-face-colors (cons "#1B2229" "#3f444a"))
  '(package-selected-packages
    (quote
-    (git-timemachine git-gutter magit highlight-indent-guides multi-term emmet-mode web-beautify pug-mode lsp-ui company-lsp company-tern tern-auto-complete tern js2-refactor ac-js2 web-mode doom-themes cyberpunk-theme ivy-rtags company-irony-c-headers company-irony flycheck-irony irony flycheck-plantuml flycheck-pos-tip flycheck-color-mode-line company-rtags flycheck-rtags rtags counsel-projectile neotree evil-collection evil-escape evil cquery irony-eldoc yasnippet-snippets counsel evil-visual-mark-mode cmake-ide swiper which-key try use-package)))
- '(safe-local-variable-values
-   (quote
-    ((company-clang-arguments "-I/Users/gavinross/c-demo-project/include1/" "-I/Users/gavinross/c-demo-project/include2/")
-     (cmake-ide-build-dir . "~/cpp_primer/exercises/test_area/"))))
- '(vc-annotate-background "#282c34")
- '(vc-annotate-color-map
-   (list
-    (cons 20 "#98be65")
-    (cons 40 "#b4be6c")
-    (cons 60 "#d0be73")
-    (cons 80 "#ECBE7B")
-    (cons 100 "#e6ab6a")
-    (cons 120 "#e09859")
-    (cons 140 "#da8548")
-    (cons 160 "#d38079")
-    (cons 180 "#cc7cab")
-    (cons 200 "#c678dd")
-    (cons 220 "#d974b7")
-    (cons 240 "#ec7091")
-    (cons 260 "#ff6c6b")
-    (cons 280 "#cf6162")
-    (cons 300 "#9f585a")
-    (cons 320 "#6f4e52")
-    (cons 340 "#5B6268")
-    (cons 360 "#5B6268")))
- '(vc-annotate-very-old-color nil))
+    (all-the-icons yasnippet-snippets which-key web-mode web-beautify use-package undo-tree try treemacs-projectile rjsx-mode rainbow-delimiters pug-mode org-bullets neotree multi-term magit highlight-indent-guides flycheck-pos-tip flycheck-plantuml flycheck-color-mode-line emmet-mode doom-themes dashboard counsel-projectile company-tern cmake-mode clang-format beacon))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
