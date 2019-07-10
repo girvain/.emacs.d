@@ -8,7 +8,7 @@
 ;;(setq ns-command-modifier 'meta)
 ;;(setq mac-option-modifier 'control)
 ;;(setq ns-function-modifier 'control)
-(setq meta-command-modifier 'control)
+(setq ns-command-modifier 'control)
 
 ;; show trailing spaces
 (setq-default show-trailing-whitespace t)
@@ -852,7 +852,6 @@
 (use-package evil-collection
   :after evil
   :ensure t
-;;  :custom (evil-collection-setup-minibuffer t)
   :config
   (evil-collection-init))
 
