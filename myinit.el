@@ -958,12 +958,8 @@
   (evil-mode 1)
 )
 (use-package evil-collection
-  :after evil
+  ;;:after evil
   :ensure t
-<<<<<<< HEAD
-  :custom (evil-collection-setup-minibuffer t)
-=======
->>>>>>> c02e4dde5e6fd9054d382a479971b60db1773afc
   :config
   (evil-collection-init))
 
