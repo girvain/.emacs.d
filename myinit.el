@@ -86,7 +86,7 @@
 
     ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
     ;; may have their own settings.
-    (load-theme 'doom-vibrant t)
+    ;;(load-theme 'gruvbox t)
 
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
@@ -219,6 +219,11 @@
 
 (doom-modeline-mode 1)
 )
+
+(use-package gruvbox-theme
+:ensure t
+:config
+(load-theme 'gruvbox t))
 ;; Themes:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Fonts][Fonts:1]]
@@ -1125,3 +1130,9 @@
 (setq-default evil-escape-delay 0.2)
 (setq-default evil-escape-key-sequence "jk"))
 ;; evil mode:1 ends here
+
+;; [[file:~/.emacs.d/myinit.org::*imenu-list][imenu-list:1]]
+(use-package imenu-list
+:ensure t
+:config)
+;; imenu-list:1 ends here
