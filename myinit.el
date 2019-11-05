@@ -482,7 +482,7 @@
 (use-package company
   :ensure t
   :config
-  (setq company-idle-delay 0.5)
+  (setq company-idle-delay 0.2)
   (setq company-minimum-prefix-length 1)
   (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
@@ -624,159 +624,164 @@
 ;; JavaScript:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*lsp-mode][lsp-mode:1]]
-;; ;;(setq exec-path (append exec-path '("~/.nvm/versions/node/v11.12.0/bin")))
+;;(setq exec-path (append exec-path '("~/.nvm/versions/node/v11.12.0/bin")))
 
-;; ;; Disable lsp-ui flymake default integration
+;; Disable lsp-ui flymake default integration
 
-;; ;; https://github.com/emacs-lsp/lsp-ui/issues/226
+;; https://github.com/emacs-lsp/lsp-ui/issues/226
 
-;; (setq lsp-prefer-flymake nil)
+(setq lsp-prefer-flymake nil)
 
 
-;; (use-package typescript-mode :ensure t)
+(use-package typescript-mode :ensure t)
 
-;; (use-package lsp-ui 
+(use-package lsp-ui 
+:ensure t
+:config
+(lsp-ui-doc-mode)
+(setq lsp-ui-sideline-enable nil)
+)
+
+(use-package js2-mode :ensure t)
+
+(use-package rjsx-mode :ensure t)
+
+
+
+;; LSP requirements on the server
+
+;; sudo npm i -g typescript-language-server; sudo npm i -g typescript
+
+;; sudo npm i -g javascript-typescript-langserver
+
+(use-package lsp-mode
+:ensure t
+:config
+(require 'lsp-clients)
+(add-hook 'typescript-mode-hook 'lsp)
+(add-hook 'js2-mode-hook 'lsp)
+(add-hook 'js2-mode-hook 'company-mode)
+(add-hook 'js2-mode-hook 'flycheck-mode)
+(add-hook 'js2-mode-hook 'lsp-ui-mode)
+
+(add-hook 'php-mode 'lsp)
+
+(add-hook 'css-mode 'lsp)
+
+(add-hook 'web-mode 'lsp)
+(add-hook 'python-mode-hook 'lsp)
+)
+
+(use-package company-lsp
+:ensure t
+:config
+(push 'company-lsp company-backends)
+(setq
+company-lsp-enable-recompletion t
+company-lsp-enable-snippet t
+company-lsp-cache-candidates t
+company-lsp-async t
+))
+
+;; company box (displays completion icons)
+;; (use-package company-box
 ;; :ensure t
-;; :config
-;; (lsp-ui-doc-mode)
-;; (setq lsp-ui-sideline-enable nil)
-;; )
-
-;; (use-package js2-mode :ensure t)
-
-;; (use-package rjsx-mode :ensure t)
+;; :hook (company-mode . company-box-mode))
 
 
+(setq lsp-language-id-configuration '((java-mode . "java")
 
-;; ;; LSP requirements on the server
+(python-mode . "python")
 
-;; ;; sudo npm i -g typescript-language-server; sudo npm i -g typescript
+(gfm-view-mode . "markdown")
 
-;; ;; sudo npm i -g javascript-typescript-langserver
+(rust-mode . "rust")
 
-;; (use-package lsp-mode
-;; :ensure t
-;; :config
-;; (require 'lsp-clients)
-;; (add-hook 'typescript-mode-hook 'lsp)
-;; (add-hook 'js2-mode-hook 'lsp)
-;; (add-hook 'js2-mode-hook 'company-mode)
-;; (add-hook 'js2-mode-hook 'flycheck-mode)
-;; (add-hook 'js2-mode-hook 'lsp-ui-mode)
+(css-mode . "css")
 
-;; (add-hook 'php-mode 'lsp)
+(xml-mode . "xml")
 
-;; (add-hook 'css-mode 'lsp)
+(c-mode . "c")
 
-;; (add-hook 'web-mode 'lsp)
-;; (add-hook 'python-mode-hook 'lsp)
-;; )
+(c++-mode . "cpp")
 
-;; (use-package company-lsp
-;; :ensure t
-;; :config
-;; (push 'company-lsp company-backends)
-;; (setq
-;; company-lsp-enable-recompletion t
-;; company-lsp-enable-snippet t
-;; company-lsp-cache-candidates t
-;; company-lsp-async t
-;; ))
+(objc-mode . "objective-c")
 
+(web-mode . "html")
 
-;; (setq lsp-language-id-configuration '((java-mode . "java")
+(html-mode . "html")
 
-;; (python-mode . "python")
+(sgml-mode . "html")
 
-;; (gfm-view-mode . "markdown")
+(mhtml-mode . "html")
 
-;; (rust-mode . "rust")
+(go-mode . "go")
 
-;; (css-mode . "css")
+(haskell-mode . "haskell")
 
-;; (xml-mode . "xml")
+(php-mode . "php")
 
-;; (c-mode . "c")
+(json-mode . "json")
 
-;; (c++-mode . "cpp")
+(js2-mode . "javascript")
 
-;; (objc-mode . "objective-c")
+(typescript-mode . "typescript")
 
-;; (web-mode . "html")
+))
 
-;; (html-mode . "html")
+;; LSP debugging
 
-;; (sgml-mode . "html")
+;;(setq lsp-print-io t)
 
-;; (mhtml-mode . "html")
+;;(setq lsp-trace t)
 
-;; (go-mode . "go")
-
-;; (haskell-mode . "haskell")
-
-;; (php-mode . "php")
-
-;; (json-mode . "json")
-
-;; (js2-mode . "javascript")
-
-;; (typescript-mode . "typescript")
-
-;; ))
-
-;; ;; LSP debugging
-
-;; ;;(setq lsp-print-io t)
-
-;; ;;(setq lsp-trace t)
-
-;; ;;(setq lsp-print-performance t)
+;;(setq lsp-print-performance t)
 ;; lsp-mode:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Tide-mode][Tide-mode:1]]
-(use-package tide
-  :ensure t
-  :after (typescript-mode company flycheck)
-  :hook ((typescript-mode . tide-setup)
-         (typescript-mode . tide-hl-identifier-mode)
-         ;;(before-save . tide-format-before-save)
-         )
-)
+;; (use-package tide
+;;   :ensure t
+;;   :after (typescript-mode company flycheck)
+;;   :hook ((typescript-mode . tide-setup)
+;;          (typescript-mode . tide-hl-identifier-mode)
+;;          ;;(before-save . tide-format-before-save)
+;;          )
+;; )
 
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  ;; Set flycheck to only run when file is saved
-;;  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  ;; company is an optional dependency. You have to
-  ;; install it separately via package-install
-  ;; `M-x package-install [ret] company`
-  (company-mode +1))
+;; (defun setup-tide-mode ()
+;;   (interactive)
+;;   (tide-setup)
+;;   (flycheck-mode +1)
+;;   ;; Set flycheck to only run when file is saved
+;; ;;  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;;   (eldoc-mode +1)
+;;   (tide-hl-identifier-mode +1)
+;;   ;; company is an optional dependency. You have to
+;;   ;; install it separately via package-install
+;;   ;; `M-x package-install [ret] company`
+;;   (company-mode +1))
 
-;; aligns annotation to the right hand side
-(setq company-tooltip-align-annotations t)
+;; ;; aligns annotation to the right hand side
+;; (setq company-tooltip-align-annotations t)
 
-;; formats the buffer before saving
-;;(add-hook 'before-save-hook 'tide-format-before-save)
+;; ;; formats the buffer before saving
+;; ;;(add-hook 'before-save-hook 'tide-format-before-save)
 
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
+;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
-(add-hook 'js2-mode-hook #'setup-tide-mode)
-;; configure javascript-tide checker to run after your default javascript checker
-;(flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+;; (add-hook 'js2-mode-hook #'setup-tide-mode)
+;; ;; configure javascript-tide checker to run after your default javascript checker
+;; ;(flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
 
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-(add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "jsx" (file-name-extension buffer-file-name))
-              (setup-tide-mode))))
-;; configure jsx-tide checker to run after your default jsx checker
-(flycheck-add-mode 'javascript-eslint 'web-mode)
-;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+;; (require 'web-mode)
+;; (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+;; (add-hook 'web-mode-hook
+;;           (lambda ()
+;;             (when (string-equal "jsx" (file-name-extension buffer-file-name))
+;;               (setup-tide-mode))))
+;; ;; configure jsx-tide checker to run after your default jsx checker
+;; (flycheck-add-mode 'javascript-eslint 'web-mode)
+;; ;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
 ;; Tide-mode:1 ends here
 
 ;; [[file:~/.emacs.d/myinit.org::*Pug%20mode][Pug mode:1]]
