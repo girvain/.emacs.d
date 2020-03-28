@@ -213,7 +213,7 @@
   (setq doom-modeline-env-enable-rust t)
 
   ;; Change the executables to use for the language version string
-  (setq doom-modeline-env-python-executable "python")
+  (setq doom-modeline-env-python-executable "python3")
   (setq doom-modeline-env-ruby-executable "ruby")
   (setq doom-modeline-env-perl-executable "perl")
   (setq doom-modeline-env-go-executable "go")
@@ -566,7 +566,7 @@
 (use-package company
   :ensure t
   :config
-  (setq company-idle-delay 0.2)
+  (setq company-idle-delay 0.0)
   (setq company-minimum-prefix-length 1)
   (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
@@ -800,18 +800,21 @@
 
     (add-hook 'web-mode 'lsp)
     (add-hook 'python-mode-hook 'lsp)
+    ;; Fix the lag
+    (setq gc-cons-threshold 100000000)
+    (setq read-process-output-max (* 1024 1024)) ;; 1mb
     )
 
     (use-package company-lsp
     :ensure t
     :config
     (push 'company-lsp company-backends)
-    (setq
-    company-lsp-enable-recompletion t
-    company-lsp-enable-snippet t
-    company-lsp-cache-candidates t
-    company-lsp-async t
-    ))
+    (setq company-lsp-enable-recompletion t)
+    (setq company-lsp-enable-snippet nil)
+    (setq lsp-enable-snippet nil)
+    (setq company-lsp-cache-candidates 'auto)
+    (setq company-lsp-async t)
+    )
 
     ;; company box (displays completion icons)
     ;; (use-package company-box
@@ -866,7 +869,7 @@
     ;;(setq lsp-trace t)
 
     ;;(setq lsp-print-performance t)
-
+    ;; 
 #+END_SRC
 * Tide-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1292,4 +1295,11 @@
 (use-package imenu-list
 :ensure t
 :config)
+#+end_src
+* elpy
+#+begin_src emacs-lisp :tangle yes
+  ;; (use-package elpy
+  ;;   :ensure t
+  ;;   :init
+  ;;   (elpy-enable))
 #+end_src
