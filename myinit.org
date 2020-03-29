@@ -652,28 +652,6 @@
 )
 #+END_SRC
 
-* Web beautify (commented out)
-#+BEGIN_SRC emacs-lisp
-
-  ;; (use-package web-beautify
-  ;;   :ensure t
-  ;;   :config
-  ;;   (eval-after-load 'js2-mode
-  ;;     '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
-  ;;   (eval-after-load 'json-mode
-  ;;   '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
-
-  ;; (eval-after-load 'sgml-mode
-  ;;   '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
-
-  ;; (eval-after-load 'web-mode
-  ;;   '(define-key web-mode-map (kbd "C-c b") 'web-beautify-html))
-
-  ;; (eval-after-load 'css-mode
-  ;;   '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
-  ;;   )
-#+END_SRC
-
 * Prettier-js
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package prettier-js
@@ -925,19 +903,6 @@
   )
 
   #+END_SRC
-* Ivy
-#+BEGIN_SRC emacs-lisp
-(use-package ivy
-  :ensure t
-  :config
-  (ivy-mode)
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  ;; Ivy integration with rtags.
-  ;;(setq rtags-display-result-backend 'ivy)
-  )
-#+END_SRC
-
 * IBuffer
 #+BEGIN_SRC emacs-lisp
 
@@ -978,40 +943,72 @@
 * Swiper, Ivy and Counsel
 #+BEGIN_SRC emacs-lisp
 
-(use-package counsel
-:ensure t
-  :bind
-  (("M-y" . counsel-yank-pop)
-   :map ivy-minibuffer-map
-   ("M-y" . ivy-next-line))
-  :config
-  (global-set-key "\C-x\ \C-r" 'counsel-recentf)
-  )
-
-  (use-package ivy
+  (use-package counsel
   :ensure t
-  :diminish (ivy-mode)
-  :bind (("C-x b" . ivy-switch-buffer))
-  :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "%d/%d ")
-  (setq ivy-display-style 'fancy))
+    :bind
+    (("M-y" . counsel-yank-pop)
+     :map ivy-minibuffer-map
+     ("M-y" . ivy-next-line))
+    :config
+    (global-set-key "\C-x\ \C-r" 'counsel-recentf)
+    )
 
-  (use-package swiper
-  :ensure t
-  :bind (("C-s" . swiper)
-	 ("C-r" . swiper)
-	 ("C-c C-r" . ivy-resume)
-	 ("M-x" . counsel-M-x)
-	 ("C-x C-f" . counsel-find-file))
-  :config
-  (progn
+    (use-package ivy
+    :ensure t
+    :diminish (ivy-mode)
+    :bind (("C-x b" . ivy-switch-buffer))
+    :config
     (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
-    (setq ivy-display-style 'fancy)
-    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-    ))
+    (setq ivy-count-format "%d/%d ")
+
+(setq ivy-height 17
+        ivy-wrap t
+        ivy-fixed-height-minibuffer t
+        projectile-completion-system 'ivy
+        ;; disable magic slash on non-match
+        ivy-magic-slash-non-match-action nil
+        ;; don't show recent files in switch-buffer
+        ivy-use-virtual-buffers nil
+        ;; ...but if that ever changes, show their full path
+        ivy-virtual-abbreviate 'full
+        ;; don't quit minibuffer on delete-error
+        ivy-on-del-error-function #'ignore
+        ;; enable ability to select prompt (alternative to `ivy-immediate-done')
+        ivy-use-selectable-prompt t)
+
+
+    (setq ivy-display-style 'fancy))
+
+    (use-package swiper
+    :ensure t
+    :bind (("C-s" . swiper)
+       ("C-r" . swiper)
+       ("C-c C-r" . ivy-resume)
+       ("M-x" . counsel-M-x)
+       ("C-x C-f" . counsel-find-file))
+    :config
+    (progn
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (setq ivy-display-style 'fancy)
+      (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+      ))
+
+    (use-package ivy-rich
+    :ensure t
+    :config
+    (ivy-rich-mode 1)
+    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+    )
+
+    (use-package all-the-icons-ivy-rich
+    :ensure t
+    :init (all-the-icons-ivy-rich-mode 1))
+
+    (use-package ivy-rich
+    :ensure t
+    :init (ivy-rich-mode 1))
 
 #+END_SRC
 
@@ -1265,29 +1262,6 @@
 (setq dashboard-set-file-icons t)
 (setq dashboard-set-footer nil)
  (dashboard-setup-startup-hook))
-#+END_SRC
-* evil mode
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package evil
-  :ensure t
-  :init
-  ;;(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  :config
-  (evil-mode 1)
-)
-(use-package evil-collection
-  ;;:after evil
-  :ensure t
-  :config
-  (evil-collection-init))
-
-(use-package evil-escape
-:ensure t
-:config
-(evil-escape-mode 1)
-(setq-default evil-escape-delay 0.2)
-(setq-default evil-escape-key-sequence "jk"))
 #+END_SRC
 * imenu-list
 #+begin_src emacs-lisp :tangle yes
