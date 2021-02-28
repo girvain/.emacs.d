@@ -242,7 +242,7 @@
 * Fonts
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-;;(set-frame-font "Monaco 13") ;; this is a mac font that needds installed on linux:
+(set-frame-font "Monaco 13") ;; this is a mac font that needds installed on linux:
 
 #+END_SRC
 
@@ -300,180 +300,14 @@
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 #+END_SRC
 
-* C++
-#+BEGIN_SRC emacs-lisp
-;; C++
-(use-package c++-mode
-  :after rtags
-  :mode (("\\.h\\'" . c++-mode)
-         ("\\.cc\\'" . c++-mode)
-         ("\\.cpp\\'" . c++-mode))
-  :bind (:map c++-mode-map
-              ("<home>" . 'rtags-find-symbol-at-point)
-              ("<prior>" . 'rtags-location-stack-back)
-              ("<next>" . 'rtags-location-stack-forward))
-  )
-
-;; CMake
-(use-package cmake-mode
-  :ensure t
-  :mode (("CMakeLists\\.txt\\'" . cmake-mode)
-         ("\\.cmake\\'" . cmake-mode))
-  :init (setq cmake-tab-width 4)
-  )
-
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :config
-;;   (add-to-list 'lsp-language-id-configuration '(typescript-language-server . "javascript"))
-;;  ;;  (lsp-register-client
-;;  ;; (make-lsp-client :new-connection (lsp-stdio-connection "typescript-language-server")
-;;  ;;                  :major-modes '(js2-mode)
-;;   ;;                  :server-id 'typescript-language-server))
-;;   (add-hook 'js2-mode-hook #'lsp)
-;;   )
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; cquery
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (use-package cquery
-;;   :ensure t
-;;   :config
-;;   ;; CHANGE THIS! when using linux or mac
-;;   ;;linux
-;;   ;;(setq cquery-executable "/home/gavin/cquery/build/release/bin/cquery")
-;;   ;; mac
-;;   (setq cquery-executable "/Users/gavinross/cquery/build/release/bin/cquery")
-;;   (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
-
-;;   ;; Syntax Checker for cquery
-;;   (setq cquery-sem-highlight-method 'font-lock)
-;; ;; alternatively, (setq cquery-sem-highlight-method 'overlay)
-
-;; ;; For rainbow semantic highlighting
-;; ;; (cquery-use-default-rainbow-sem-highlight)
-;;   ;; (setq cquery-executable "/path/to/cquery-install-prefix/bin/cquery")
-;;   )
-
-;; (defun cquery//enable ()
-;;   (condition-case nil
-;;       (lsp-cquery-enable)
-;;     (user-error nil)))
-
-;;   (use-package cquery
-;;     :commands lsp-cquery-enable
-;;     :init (add-hook 'c-mode-common-hook #'cquery//enable))
-;; ;; Also see lsp-project-whitelist lsp-project-blacklist cquery-root-matchers
-
-;; ;; Completion for cquery
-;; (use-package company-lsp
-;;   :ensure t
-;;   :config
-;; ;;  (push 'company-lsp company-backends)
-;;   (setq company-transformers nil company-lsp-async t company-lsp-cache-candidates nil)
-;;   )
-
-
-;; ;; lsp-ui
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :config
-;;   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-;;   )
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; rtags
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package rtags
-;;   :ensure t
-;;   :config
-;;   ;; Start the rdm process unless the process is already running.
-;;   ;; --> Launch rdm externally and prior to Emacs instead.
-;;     ;;(rtags-start-process-unless-running)
-;;   ;;
-;;   ;; Enable rtags-diagnostics.
-;;   (setq rtags-autostart-diagnostics t)
-;;   (rtags-diagnostics)
-;;   ;;
-;;   ;; Timeout for reparse on onsaved buffers.
-;;   (rtags-set-periodic-reparse-timeout 0.5)
-;;   ;;
-;;   ;; Rtags standard keybindings ([M-. on symbol to go to bindings]).
-;;   (rtags-enable-standard-keybindings)
-;;   ;;
-;;   ;; Enable completions in with rtags & company mode
-;;   ;; -> use irony for completions
-;;   ;;(setq rtags-completions-enabled t)
-;;   ;;(require 'company)
-;;   ;;(global-company-mode)
-;;   ;;(push 'company-rtags company-backends) ; Add company-rtags to company-backends
-
-  ;; ;; ivy integration
-  ;; (setq rtags-display-result-backend 'ivy)
-  ;; )
-
-;; Flycheck rtags.
-;; (use-package flycheck-rtags
-;;   :after rtags
-;;   :ensure t
-;;   :config
-;;   (defun my-flycheck-rtags-setup ()
-;;     (flycheck-select-checker 'rtags)
-;;     (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-;;     (setq-local flycheck-check-syntax-automatically nil))
-;;   (add-hook 'c-mode-hook #'my-flycheck-rtags-setup)
-;;   (add-hook 'c++-mode-hook #'my-flycheck-rtags-setup)
-;;   (add-hook 'objc-mode-hook #'my-flycheck-rtags-setup))
-
-;;Use rtags for auto-completion.
-;; (use-package company-rtags
-;;   :ensure t
-;;   :config
-;;   (progn
-;;     (setq rtags-autostart-diagnostics t)
-;;     (rtags-diagnostics)
-;;     (setq rtags-completions-enabled t)
-;;     (push 'company-rtags company-backends)
-;;     ))
-
-;; Ivy-Rtags
-;; (use-package ivy-rtags
-;;   :ensure t
-;;   :config)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; cmake ide
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package cmake-ide
-;;   :after rtags
-;;   :ensure t
-;;   :config
-;;   ;; set path to project build directory
-;;  ;; (setq cmake-ide-build-dir
-;;  ;;       (expand-file-name "~/src/stringent/build"))
-;;   ;; CURRENTLY: hardcode to build dir of default project
-;;   ;; TODO: fix via .dir-locals.el
-;;   ;;
-;;   ;; invoke cmake-ide setup
-;;   (cmake-ide-setup)
-;;   )
-#+END_SRC
-
 * flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
     :config
-    :init
     ;; set to have global completion or on specific modes.
     ;;(global-flycheck-mode)
-    (add-hook 'c++-mode-hook 'flycheck-mode)
-    (add-hook 'emacs-lisp-mode-hook 'flycheck-mode)
-    (add-hook 'js2-mode 'flycheck-mode)
+;;    (add-hook 'c-mode-hook 'flycheck-mode)
     )
 
   ;; Color mode line for errors.
@@ -497,72 +331,8 @@
      :config (flycheck-plantuml-setup)
      )
 #+END_SRC
-
-* irony
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; irony (C/C++ minor mode powered by libclang)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package irony
-;;  :ensure t
-;;  :config
-;;  (add-hook 'c-mode-hook 'irony-mode)
-;;  (add-hook 'c++-mode-hook 'irony-mode)
-;;  (add-hook 'objc-mode-hook 'irony-mode)
-;;  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-;;  (defun my-irony-mode-hook ()
-;;  (define-key irony-mode-map [remap completion-at-point]
-;;   'irony-completion-at-point-async)
-;;  (define-key irony-mode-map [remap complete-symbol]
-;;    'irony-completion-at-point-async))
-;;  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-;;  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-;;  )
-
-;; ;; Eldoc shows argument list of the function you are currently writing in the echo area.
-  ;; (use-package irony-eldoc
-  ;;   :ensure t
-  ;;   :config
-  ;;   (progn
-  ;;     (add-hook 'irony-mode-hook #'irony-eldoc)))
-
-;; Flycheck irony
-  ;; (use-package flycheck-irony
-  ;;   :after flycheck
-  ;;   :ensure t
-  ;;   :config
-  ;;   (progn
-  ;;     (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))))
-
-;;company-irony.
-;; (use-package company-irony
-;;   :after company
-;;   :ensure t
-;;   :config (global-company-mode)
-;;   ;;(optional) adds CC special commands to `company-begin-commands' in order to
-;;   ;;trigger completion at interesting places, such as after scope operator
-;;   ;;    std::|
-;;   (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
-;; )
-
-;;Company-mode backend for C/C++ header files that works with irony-mode.
-;;Complementary to company-irony by offering completion suggestions to header files.
-;; (use-package company-irony-c-headers
-;; :ensure t
-;; :after company-irony
-;; :ensure t
-;; :config
-;; ;;Load with `irony-mode` as a grouped backend
-;; (eval-after-load 'company
-;; '(add-to-list
-;; 'company-backends '(company-irony-c-headers company-irony)))
-;; )
-
 * Company
 #+BEGIN_SRC emacs-lisp
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Company Mode (Code Completion package)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Company mode.
 (use-package company
   :ensure t
   :config
@@ -574,47 +344,11 @@
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous))
   ;;  (global-company-mode t)
-  (add-hook 'c++-mode-hook 'company-mode)
+;;  (add-hook 'c-mode-hook 'company-mode)
   (add-hook 'emacs-lisp-mode-hook 'company-mode)
+  (add-hook 'lisp-mode 'company-mode)
   )
 #+END_SRC
-
-* clang format
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; clang-format
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; clang-format can be triggered using C-M-tab
-(use-package clang-format
-  :ensure t
-  :config (global-set-key [C-M-tab] 'clang-format-region)
-  )
-
-;; If the repo does not have a .clang-format files, one can
-;; be created using google style:
-;; clang-format -style=google -dump-config > .clang-format
-;; In this, default indent is 2 (see 'IndentWidth' key in generated file).
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; C/C++ mode modifications
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (add-hook 'c-mode-common-hook 'google-set-c-style)
-
-;; ;; use google style but modify offset to 4 (default for google is 2)
-;; (c-add-style "my-style"
-;; 	     '("google"
-;; 	       (c-basic-offset . 4)            ; indent by four spaces
-;; 	       ))
-
-;; ;; also toggle on auto-newline and hungry delete minor modes
-;; (defun my-c++-mode-hook ()
-;;   (c-set-style "my-style")        ; use my-style defined above
-;;   (auto-fill-mode))
-
-;; (add-hook 'c++-mode-hook 'my-c++-mode-hook)
-
-;; ;; Autoindent using google style guide
-;; (add-hook 'c-mode-common-hook 'google-make-newline-indent)
-
 * emmet
 #+BEGIN_SRC emacs-lisp
 
@@ -650,28 +384,6 @@
 (setq tab-width 2)
 (add-hook 'web-mode-hook  'emmet-mode)
 )
-#+END_SRC
-
-* Web beautify (commented out)
-#+BEGIN_SRC emacs-lisp
-
-  ;; (use-package web-beautify
-  ;;   :ensure t
-  ;;   :config
-  ;;   (eval-after-load 'js2-mode
-  ;;     '(define-key js2-mode-map (kbd "C-c b") 'web-beautify-js))
-  ;;   (eval-after-load 'json-mode
-  ;;   '(define-key json-mode-map (kbd "C-c b") 'web-beautify-js))
-
-  ;; (eval-after-load 'sgml-mode
-  ;;   '(define-key html-mode-map (kbd "C-c b") 'web-beautify-html))
-
-  ;; (eval-after-load 'web-mode
-  ;;   '(define-key web-mode-map (kbd "C-c b") 'web-beautify-html))
-
-  ;; (eval-after-load 'css-mode
-  ;;   '(define-key css-mode-map (kbd "C-c b") 'web-beautify-css))
-  ;;   )
 #+END_SRC
 
 * Prettier-js
@@ -751,125 +463,6 @@
     )
 
 
-#+END_SRC
-* lsp-mode
-  #+BEGIN_SRC emacs-lisp :tangle yes
-    ;;(setq exec-path (append exec-path '("~/.nvm/versions/node/v11.12.0/bin")))
-
-    ;; Disable lsp-ui flymake default integration
-
-    ;; https://github.com/emacs-lsp/lsp-ui/issues/226
-
-    (setq lsp-prefer-flymake nil)
-
-
-    (use-package typescript-mode :ensure t)
-
-    (use-package lsp-ui 
-    :ensure t
-    :config
-    (lsp-ui-doc-mode)
-    (setq lsp-ui-sideline-enable nil)
-    )
-
-    (use-package js2-mode :ensure t)
-
-    (use-package rjsx-mode :ensure t)
-
-
-
-    ;; LSP requirements on the server
-
-    ;; sudo npm i -g typescript-language-server; sudo npm i -g typescript
-
-    ;; sudo npm i -g javascript-typescript-langserver
-
-    (use-package lsp-mode
-    :ensure t
-    :config
-    (require 'lsp-clients)
-    (add-hook 'typescript-mode-hook 'lsp)
-    (add-hook 'js2-mode-hook 'lsp)
-    (add-hook 'js2-mode-hook 'company-mode)
-    (add-hook 'js2-mode-hook 'flycheck-mode)
-    (add-hook 'js2-mode-hook 'lsp-ui-mode)
-
-    (add-hook 'php-mode 'lsp)
-
-    (add-hook 'css-mode 'lsp)
-
-    (add-hook 'web-mode 'lsp)
-    (add-hook 'python-mode-hook 'lsp)
-    ;; Fix the lag
-    (setq gc-cons-threshold 100000000)
-    (setq read-process-output-max (* 1024 1024)) ;; 1mb
-    )
-
-    (use-package company-lsp
-    :ensure t
-    :config
-    (push 'company-lsp company-backends)
-    (setq company-lsp-enable-recompletion t)
-    (setq company-lsp-enable-snippet nil)
-    (setq lsp-enable-snippet nil)
-    (setq company-lsp-cache-candidates 'auto)
-    (setq company-lsp-async t)
-    )
-
-    ;; company box (displays completion icons)
-    ;; (use-package company-box
-    ;; :ensure t
-    ;; :hook (company-mode . company-box-mode))
-
-
-    (setq lsp-language-id-configuration '((java-mode . "java")
-
-    (python-mode . "python")
-
-    (gfm-view-mode . "markdown")
-
-    (rust-mode . "rust")
-
-    (css-mode . "css")
-
-    (xml-mode . "xml")
-
-    (c-mode . "c")
-
-    (c++-mode . "cpp")
-
-    (objc-mode . "objective-c")
-
-    (web-mode . "html")
-
-    (html-mode . "html")
-
-    (sgml-mode . "html")
-
-    (mhtml-mode . "html")
-
-    (go-mode . "go")
-
-    (haskell-mode . "haskell")
-
-    (php-mode . "php")
-
-    (json-mode . "json")
-
-    (js2-mode . "javascript")
-
-    (typescript-mode . "typescript")
-
-    ))
-
-    ;; LSP debugging
-
-    ;;(setq lsp-print-io t)
-
-    ;;(setq lsp-trace t)
-
-    ;;(setq lsp-print-performance t)
-    ;; 
 #+END_SRC
 * Tide-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1181,16 +774,6 @@
     :after treemacs magit
     :ensure t)
 #+END_SRC
-* neotree
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package neotree
-  :ensure t
-  :config
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-  (global-set-key [f8] 'neotree-toggle)
-  ;;(neotree-projectile-action )
-  )
-#+END_SRC
 * Magit
 #+BEGIN_SRC emacs-lisp
 
@@ -1269,26 +852,26 @@
 #+END_SRC
 * evil mode
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package evil
-  :ensure t
-  :init
-  ;;(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  :config
-  (evil-mode 1)
-)
-(use-package evil-collection
-  ;;:after evil
-  :ensure t
-  :config
-  (evil-collection-init))
+  ;; (use-package evil
+  ;;   :ensure t
+  ;;   :init
+  ;;   ;;(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  ;;   (setq evil-want-keybinding nil)
+  ;;   :config
+  ;;   (evil-mode 1)
+  ;; )
+  ;; (use-package evil-collection
+  ;;   ;;:after evil
+  ;;   :ensure t
+  ;;   :config
+  ;;   (evil-collection-init))
 
-(use-package evil-escape
-:ensure t
-:config
-(evil-escape-mode 1)
-(setq-default evil-escape-delay 0.2)
-(setq-default evil-escape-key-sequence "jk"))
+  ;; (use-package evil-escape
+  ;; :ensure t
+  ;; :config
+  ;; (evil-escape-mode 1)
+  ;; (setq-default evil-escape-delay 0.2)
+  ;; (setq-default evil-escape-key-sequence "jk"))
 #+END_SRC
 * imenu-list
 #+begin_src emacs-lisp :tangle yes
@@ -1296,10 +879,64 @@
 :ensure t
 :config)
 #+end_src
-* elpy
-#+begin_src emacs-lisp :tangle yes
-  ;; (use-package elpy
-  ;;   :ensure t
-  ;;   :init
-  ;;   (elpy-enable))
-#+end_src
+* lsp-mode2
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; set prefix for lsp-command-keymap (few alternatives - "s-l", "C-l")
+    (setq lsp-keymap-prefix "C-c l")
+    (setq company-clang-executable "/usr/local//Cellar/llvm/11.0.1/bin/clangd")
+    (setq lsp-clients-clangd-executable "/usr/local//Cellar/llvm/11.0.1/bin/clangd")
+
+
+    (use-package lsp-mode
+      :ensure t
+      :commands lsp
+      :hook ((c-mode c++-mode  python-mode) . lsp)
+      )
+
+    (use-package lsp-treemacs :ensure t)
+    (add-hook 'c-mode-hook 'lsp)
+    (add-hook 'c++-mode-hook 'lsp)
+    (add-hook 'cpp-mode-hook 'lsp)
+    (setq lsp-enabled-clients '(jedi clangd))
+    (use-package lsp-ui
+    :ensure t
+      :hook (lsp-mode . lsp-ui-mode)
+      :config
+      (setq lsp-ui-sideline-enable t)
+      (setq lsp-ui-sideline-show-hover nil)
+      (setq lsp-ui-doc-position 'bottom)
+  ;; lsp config stuff
+  (setq lsp-enable-links nil)
+  (setq lsp-signature-render-documentation nil)
+  (setq lsp-headerline-breadcrumb-enable nil)
+  (setq lsp-ui-doc-enable nil)
+  (setq lsp-completion-enable-additional-text-edit nil)
+  (setq web-mode-enable-current-element-highlight t)
+      (lsp-ui-doc-show))
+
+
+    (use-package lsp-jedi
+      :ensure t
+      :config
+      (with-eval-after-load "lsp-mode"
+        (add-to-list 'lsp-disabled-clients 'pyls)
+        (add-to-list 'lsp-enabled-clients 'jedi)))
+
+    (setq lsp-ui-doc-show-with-cursor nil)
+
+    ;; (use-package dap-mode
+    ;;   :ensure t
+    ;;   :hook (lsp-mode . dap-mode)
+    ;;   :config
+    ;;   (dap-ui-mode 1)
+    ;;   (dap-tooltip-mode 1)
+    ;;   (require 'dap-node)
+    ;;   (dap-node-setup))
+
+    ;; (dap-auto-configure-mode)
+    ;; (require 'dap-gdb-lldb)
+    ;;  (require 'dap-cpptools)
+    ;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
+
+
+#+END_SRC
