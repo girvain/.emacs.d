@@ -9,81 +9,84 @@
 * interface tweaks
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(setq inhibit-startup-message t)
-(tool-bar-mode -1)
-(fset 'yes-or-no-p 'y-or-n-p)
-(global-set-key (kbd "<f5>") 'revert-buffer)
+      (setq inhibit-startup-message t)
+      (tool-bar-mode -1)
+      (fset 'yes-or-no-p 'y-or-n-p)
+      (global-set-key (kbd "<f5>") 'revert-buffer)
 
-;; mac key remap
-;;(setq ns-command-modifier 'meta)
-;;(setq mac-option-modifier 'control)
-;;(setq ns-function-modifier 'control)
-(setq ns-command-modifier 'control)
+      ;; mac key remap
+      ;;(setq ns-command-modifier 'meta)
+      ;;(setq mac-option-modifier 'control)
+      ;;(setq ns-function-modifier 'control)
+      (setq ns-command-modifier 'control)
 
-;; show trailing spaces
-(setq-default show-trailing-whitespace t)
+      ;; show trailing spaces
+      (setq-default show-trailing-whitespace t)
 
-;; set tabs to indent as white spaces and set default tab width to 4 white spaces
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-;(setq-default indent-line-function 'insert-tab)
+      ;; set tabs to indent as white spaces and set default tab width to 4 white spaces
+      (setq-default indent-tabs-mode nil)
+      (setq-default tab-width 4)
+      ;(setq-default indent-line-function 'insert-tab)
 
-;; setup: M-y saves the new yank to the clipboard.
-(setq yank-pop-change-selection t)
+      ;; setup: M-y saves the new yank to the clipboard.
+      (setq yank-pop-change-selection t)
 
-(show-paren-mode 1)
-(setq column-number-mode t)
+      (show-paren-mode 1)
+      (setq column-number-mode t)
 
-;; minimalistic Emacs at startup
-(menu-bar-mode 1)
-(tool-bar-mode 0)
-(set-scroll-bar-mode nil)
+      ;; minimalistic Emacs at startup
+      (menu-bar-mode 1)
+      (tool-bar-mode 0)
+      (set-scroll-bar-mode nil)
 
-;; don't use global line highlight mode
-(global-hl-line-mode 0)
+      ;; don't use global line highlight mode
+      (global-hl-line-mode 0)
 
-;; supress welcome screen
-(setq inhibit-startup-message t)
+      ;; supress welcome screen
+      (setq inhibit-startup-message t)
 
-;; Bind other-window (and custom prev-window) to more accessible keys.
-(defun prev-window ()
-  (interactive)
-  (other-window -1))
-(global-set-key (kbd "C-'") 'other-window)
-(global-set-key (kbd "C-;") 'prev-window)
+      ;; Bind other-window (and custom prev-window) to more accessible keys.
+      (defun prev-window ()
+        (interactive)
+        (other-window -1))
+      (global-set-key (kbd "C-'") 'other-window)
+      (global-set-key (kbd "C-;") 'prev-window)
 
-;; enable line numbers for all programing modes
-;;(add-hook 'prog-mode-hook 'linum-mode)
+      ;; enable line numbers for all programing modes
+      ;;(add-hook 'prog-mode-hook 'linum-mode)
 
-; Highlights the current cursor line
-(global-hl-line-mode t)
+      ; Highlights the current cursor line
+      (global-hl-line-mode t)
 
-;; auto close bracket insertion. New in emacs 24
-(electric-pair-mode 1)
+      ;; auto close bracket insertion. New in emacs 24
+      (electric-pair-mode 1)
 
-;; compile key command
-(global-set-key [(f7)] 'compile)
-(global-set-key [(f8)] 'recompile)
+      ;; compile key command
+      (global-set-key [(f7)] 'compile)
+      (global-set-key [(f8)] 'recompile)
 
-;; backup in one place. flat, no tree structure
-;; this stops emacs making ~file copies of everything
-(setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+      ;; backup in one place. flat, no tree structure
+      ;; this stops emacs making ~file copies of everything
+      (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
 
-;; enable recent file mode on startup
-(recentf-mode 1)
-(setq recentf-max-menu-items 25)
-(setq recentf-max-saved-items 25)
-;;(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+      ;; enable recent file mode on startup
+      (recentf-mode 1)
+      (setq recentf-max-menu-items 25)
+      (setq recentf-max-saved-items 25)
+      ;;(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
-;; disable line wrapping
-(set-default 'truncate-lines t)
+      ;; disable line wrapping
+      (set-default 'truncate-lines t)
 
-;; Auto refresh buffers
-(global-auto-revert-mode 1)
+      ;; Auto refresh buffers
+      (global-auto-revert-mode 1)
 
-;; Also auto refresh dired, but be quiet about it
-(setq global-auto-revert-non-file-buffers t)
-(setq auto-revert-verbose nil)
+      ;; Also auto refresh dired, but be quiet about it
+      (setq global-auto-revert-non-file-buffers t)
+      (setq auto-revert-verbose nil)
+
+  ;; Org mode settings
+  (setq org-startup-folded t)
 #+END_SRC
 
 * Themes
@@ -242,10 +245,16 @@
 * Fonts
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-(set-frame-font "Monaco 13") ;; this is a mac font that needds installed on linux:
+(set-frame-font "Monaco 12") ;; this is a mac font that needds installed on linux:
 
 #+END_SRC
-
+* Path
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
+#+END_SRC
 * Rainbow Delimiters
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package rainbow-delimiters
@@ -360,30 +369,30 @@
 * web mode
 #+BEGIN_SRC emacs-lisp
 
-(use-package web-mode
-  :ensure t
-    :config
-	(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-	(add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
-;; 	(setq web-mode-engines-alist
-;; 		  '(("django"    . "\\.html\\'")))
-;; 	(setq web-mode-ac-sources-alist
-;; 	      '(("css" . (ac-source-css-property))
-;; 	        ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
-;;             ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
-     (setq web-mode-enable-auto-closing t) ;)
-     (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
+  (use-package web-mode
+    :ensure t
+      :config
+      (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+  ;; 	(setq web-mode-engines-alist
+  ;; 		  '(("django"    . "\\.html\\'")))
+  ;; 	(setq web-mode-ac-sources-alist
+  ;; 	      '(("css" . (ac-source-css-property))
+  ;; 	        ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
+  ;;             ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+       (setq web-mode-enable-auto-closing t) ;)
+       (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
 
-    (defun my-web-mode-hook ()
-  "Hooks for Web mode."
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-)
-(add-hook 'web-mode-hook  'my-web-mode-hook)
-(setq tab-width 2)
-(add-hook 'web-mode-hook  'emmet-mode)
-)
+      (defun my-web-mode-hook ()
+    "Hooks for Web mode."
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+  )
+  (add-hook 'web-mode-hook  'my-web-mode-hook)
+  (setq tab-width 2)
+  (add-hook 'web-mode-hook  'emmet-mode)
+  )
 #+END_SRC
 
 * Prettier-js
@@ -466,49 +475,49 @@
 #+END_SRC
 * Tide-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package tide
-  ;;   :ensure t
-  ;;   :after (typescript-mode company flycheck)
-  ;;   :hook ((typescript-mode . tide-setup)
-  ;;          (typescript-mode . tide-hl-identifier-mode)
-  ;;          ;;(before-save . tide-format-before-save)
-  ;;          )
-  ;; )
+  (use-package tide
+    :ensure t
+    :after (typescript-mode company flycheck)
+    :hook ((typescript-mode . tide-setup)
+           (typescript-mode . tide-hl-identifier-mode)
+           ;;(before-save . tide-format-before-save)
+           )
+  )
 
-  ;; (defun setup-tide-mode ()
-  ;;   (interactive)
-  ;;   (tide-setup)
-  ;;   (flycheck-mode +1)
-  ;;   ;; Set flycheck to only run when file is saved
-  ;; ;;  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  ;;   (eldoc-mode +1)
-  ;;   (tide-hl-identifier-mode +1)
-  ;;   ;; company is an optional dependency. You have to
-  ;;   ;; install it separately via package-install
-  ;;   ;; `M-x package-install [ret] company`
-  ;;   (company-mode +1))
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (flycheck-mode +1)
+    ;; Set flycheck to only run when file is saved
+  ;;  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    ;; company is an optional dependency. You have to
+    ;; install it separately via package-install
+    ;; `M-x package-install [ret] company`
+    (company-mode +1))
 
-  ;; ;; aligns annotation to the right hand side
-  ;; (setq company-tooltip-align-annotations t)
+  ;; aligns annotation to the right hand side
+  (setq company-tooltip-align-annotations t)
 
-  ;; ;; formats the buffer before saving
-  ;; ;;(add-hook 'before-save-hook 'tide-format-before-save)
+  ;; formats the buffer before saving
+  ;;(add-hook 'before-save-hook 'tide-format-before-save)
 
-  ;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
-  ;; (add-hook 'js2-mode-hook #'setup-tide-mode)
-  ;; ;; configure javascript-tide checker to run after your default javascript checker
-  ;; ;(flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+  (add-hook 'js2-mode-hook #'setup-tide-mode)
+  ;; configure javascript-tide checker to run after your default javascript checker
+  ;(flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
 
-  ;; (require 'web-mode)
-  ;; (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-  ;; (add-hook 'web-mode-hook
-  ;;           (lambda ()
-  ;;             (when (string-equal "jsx" (file-name-extension buffer-file-name))
-  ;;               (setup-tide-mode))))
-  ;; ;; configure jsx-tide checker to run after your default jsx checker
-  ;; (flycheck-add-mode 'javascript-eslint 'web-mode)
-  ;; ;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+  (require 'web-mode)
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (string-equal "jsx" (file-name-extension buffer-file-name))
+                (setup-tide-mode))))
+  ;; configure jsx-tide checker to run after your default jsx checker
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+  ;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
 
 #+END_SRC  
 * Pug mode
@@ -852,26 +861,26 @@
 #+END_SRC
 * evil mode
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package evil
-  ;;   :ensure t
-  ;;   :init
-  ;;   ;;(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  ;;   (setq evil-want-keybinding nil)
-  ;;   :config
-  ;;   (evil-mode 1)
-  ;; )
-  ;; (use-package evil-collection
-  ;;   ;;:after evil
-  ;;   :ensure t
-  ;;   :config
-  ;;   (evil-collection-init))
+  (use-package evil
+    :ensure t
+    :init
+    ;;(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+    (setq evil-want-keybinding nil)
+    :config
+    (evil-mode 1)
+  )
+  (use-package evil-collection
+    ;;:after evil
+    :ensure t
+    :config
+    (evil-collection-init))
 
-  ;; (use-package evil-escape
-  ;; :ensure t
-  ;; :config
-  ;; (evil-escape-mode 1)
-  ;; (setq-default evil-escape-delay 0.2)
-  ;; (setq-default evil-escape-key-sequence "jk"))
+  (use-package evil-escape
+  :ensure t
+  :config
+  (evil-escape-mode 1)
+  (setq-default evil-escape-delay 0.2)
+  (setq-default evil-escape-key-sequence "jk"))
 #+END_SRC
 * imenu-list
 #+begin_src emacs-lisp :tangle yes
