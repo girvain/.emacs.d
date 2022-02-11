@@ -47,7 +47,7 @@ There are two things you can do about this warning:
  '(ansi-color-names-vector
    ["#282a36" "#ff5555" "#50fa7b" "#f1fa8c" "#61bfff" "#ff79c6" "#8be9fd" "#f8f8f2"])
  '(custom-safe-themes
-   '("34c99997eaa73d64b1aaa95caca9f0d64229871c200c5254526d0062f8074693" "4e10cdf7d030fb41061cf57c74f6ddfc19db8d4af6c8e0723dc77f9922543a3d" "955426466aa729d7d32483d3b2408cf474a1332550ad364848d1dfe9eecc8a16" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" "fd944f09d4d0c4d4a3c82bd7b3360f17e3ada8adf29f28199d09308ba01cc092" "1436d643b98844555d56c59c74004eb158dc85fc55d2e7205f8d9b8c860e177f" default))
+   '("333958c446e920f5c350c4b4016908c130c3b46d590af91e1e7e2a0611f1e8c5" "7a7b1d475b42c1a0b61f3b1d1225dd249ffa1abb1b7f726aec59ac7ca3bf4dae" "6c98bc9f39e8f8fd6da5b9c74a624cbb3782b4be8abae8fd84cbc43053d7c175" "d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "83e0376b5df8d6a3fbdfffb9fb0e8cf41a11799d9471293a810deb7586c131e6" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" "6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "5784d048e5a985627520beb8a101561b502a191b52fa401139f4dd20acb07607" "db3e80842b48f9decb532a1d74e7575716821ee631f30267e4991f4ba2ddf56e" "34c99997eaa73d64b1aaa95caca9f0d64229871c200c5254526d0062f8074693" "4e10cdf7d030fb41061cf57c74f6ddfc19db8d4af6c8e0723dc77f9922543a3d" "955426466aa729d7d32483d3b2408cf474a1332550ad364848d1dfe9eecc8a16" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" "fd944f09d4d0c4d4a3c82bd7b3360f17e3ada8adf29f28199d09308ba01cc092" "1436d643b98844555d56c59c74004eb158dc85fc55d2e7205f8d9b8c860e177f" default))
  '(fci-rule-color "#6272a4")
  '(jdee-db-active-breakpoint-face-colors (cons "#1E2029" "#bd93f9"))
  '(jdee-db-requested-breakpoint-face-colors (cons "#1E2029" "#50fa7b"))
@@ -55,7 +55,7 @@ There are two things you can do about this warning:
  '(objed-cursor-color "#ff5555")
  '(org-agenda-files nil)
  '(package-selected-packages
-   '(evil-escape evil-collection evil dashboard undo-tree neotree treemacs-magit treemacs-projectile treemacs-evil treemacs multi-term counsel-projectile projectile yasnippet-snippets yasnippet counsel ivy pug-mode tide rjsx-mode js2-mode prettier-js web-mode emmet-mode company flycheck-plantuml flycheck-pos-tip flycheck-color-mode-line flycheck cmake-mode highlight-indent-guides beacon org-bullets which-key try rainbow-delimiters doom-modeline all-the-icons doom-themes use-package))
+   '(gnu-elpa-keyring-update lsp-ui lsp-mode yasnippet-classic-snippets evil-escape evil-collection evil dashboard undo-tree neotree treemacs-magit treemacs-projectile treemacs-evil treemacs multi-term counsel-projectile projectile yasnippet-snippets yasnippet counsel ivy pug-mode tide rjsx-mode js2-mode prettier-js web-mode emmet-mode company flycheck-plantuml flycheck-pos-tip flycheck-color-mode-line flycheck cmake-mode highlight-indent-guides beacon org-bullets which-key try rainbow-delimiters doom-modeline all-the-icons doom-themes use-package))
  '(vc-annotate-background "#282a36")
  '(vc-annotate-color-map
    (list

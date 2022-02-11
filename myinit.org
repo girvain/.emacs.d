@@ -9,84 +9,88 @@
 * interface tweaks
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-      (setq inhibit-startup-message t)
-      (tool-bar-mode -1)
-      (fset 'yes-or-no-p 'y-or-n-p)
-      (global-set-key (kbd "<f5>") 'revert-buffer)
+          (setq inhibit-startup-message t)
+          (tool-bar-mode -1)
+		  (setq gc-cons-threshold 100000000)
+          (fset 'yes-or-no-p 'y-or-n-p)
+          (global-set-key (kbd "<f5>") 'revert-buffer)
 
-      ;; mac key remap
-      ;;(setq ns-command-modifier 'meta)
-      ;;(setq mac-option-modifier 'control)
-      ;;(setq ns-function-modifier 'control)
-      (setq ns-command-modifier 'control)
+  ;;start in full screen
+    (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
 
-      ;; show trailing spaces
-      (setq-default show-trailing-whitespace t)
+          ;; mac key remap
+          ;;(setq ns-command-modifier 'meta)
+          ;;(setq mac-option-modifier 'control)
+          ;;(setq ns-function-modifier 'control)
+          (setq ns-command-modifier 'control)
 
-      ;; set tabs to indent as white spaces and set default tab width to 4 white spaces
-      (setq-default indent-tabs-mode nil)
-      (setq-default tab-width 4)
-      ;(setq-default indent-line-function 'insert-tab)
+          ;; show trailing spaces
+          (setq-default show-trailing-whitespace nil)
 
-      ;; setup: M-y saves the new yank to the clipboard.
-      (setq yank-pop-change-selection t)
+          ;; set tabs to indent as white spaces and set default tab width to 4 white spaces
+          (setq-default indent-tabs-mode nil)
+          (setq-default tab-width 4)
+          ;(setq-default indent-line-function 'insert-tab)
 
-      (show-paren-mode 1)
-      (setq column-number-mode t)
+          ;; setup: M-y saves the new yank to the clipboard.
+          (setq yank-pop-change-selection t)
 
-      ;; minimalistic Emacs at startup
-      (menu-bar-mode 1)
-      (tool-bar-mode 0)
-      (set-scroll-bar-mode nil)
+          (show-paren-mode 1)
+          (setq column-number-mode t)
 
-      ;; don't use global line highlight mode
-      (global-hl-line-mode 0)
+          ;; minimalistic Emacs at startup
+          (menu-bar-mode 1)
+          (tool-bar-mode 0)
+          (set-scroll-bar-mode nil)
 
-      ;; supress welcome screen
-      (setq inhibit-startup-message t)
+          ;; don't use global line highlight mode
+          (global-hl-line-mode 0)
 
-      ;; Bind other-window (and custom prev-window) to more accessible keys.
-      (defun prev-window ()
-        (interactive)
-        (other-window -1))
-      (global-set-key (kbd "C-'") 'other-window)
-      (global-set-key (kbd "C-;") 'prev-window)
+          ;; supress welcome screen
+          (setq inhibit-startup-message t)
 
-      ;; enable line numbers for all programing modes
-      ;;(add-hook 'prog-mode-hook 'linum-mode)
+          ;; Bind other-window (and custom prev-window) to more accessible keys.
+          (defun prev-window ()
+            (interactive)
+            (other-window -1))
+          (global-set-key (kbd "C-'") 'other-window)
+          (global-set-key (kbd "C-;") 'prev-window)
 
-      ; Highlights the current cursor line
-      (global-hl-line-mode t)
+          ;; enable line numbers for all programing modes
+          ;;(add-hook 'prog-mode-hook 'linum-mode)
 
-      ;; auto close bracket insertion. New in emacs 24
-      (electric-pair-mode 1)
+          ; Highlights the current cursor line
+          (global-hl-line-mode t)
 
-      ;; compile key command
-      (global-set-key [(f7)] 'compile)
-      (global-set-key [(f8)] 'recompile)
+          ;; auto close bracket insertion. New in emacs 24
+          (electric-pair-mode 1)
 
-      ;; backup in one place. flat, no tree structure
-      ;; this stops emacs making ~file copies of everything
-      (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+          ;; compile key command
+          (global-set-key [(f7)] 'compile)
+          (global-set-key [(f8)] 'recompile)
 
-      ;; enable recent file mode on startup
-      (recentf-mode 1)
-      (setq recentf-max-menu-items 25)
-      (setq recentf-max-saved-items 25)
-      ;;(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+          ;; backup in one place. flat, no tree structure
+          ;; this stops emacs making ~file copies of everything
+          (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
 
-      ;; disable line wrapping
-      (set-default 'truncate-lines t)
+          ;; enable recent file mode on startup
+          (recentf-mode 1)
+          (setq recentf-max-menu-items 25)
+          (setq recentf-max-saved-items 25)
+          ;;(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
-      ;; Auto refresh buffers
-      (global-auto-revert-mode 1)
+          ;; disable line wrapping
+          (set-default 'truncate-lines t)
 
-      ;; Also auto refresh dired, but be quiet about it
-      (setq global-auto-revert-non-file-buffers t)
-      (setq auto-revert-verbose nil)
+          ;; Auto refresh buffers
+          (global-auto-revert-mode 1)
 
-  ;; Org mode settings
-  (setq org-startup-folded t)
+          ;; Also auto refresh dired, but be quiet about it
+          (setq global-auto-revert-non-file-buffers t)
+          (setq auto-revert-verbose nil)
+
+      ;; Org mode settings
+      (setq org-startup-folded t)
 #+END_SRC
 
 * Themes
@@ -248,13 +252,6 @@
 (set-frame-font "Monaco 12") ;; this is a mac font that needds installed on linux:
 
 #+END_SRC
-* Path
-#+BEGIN_SRC emacs-lisp
-(use-package exec-path-from-shell
-  :ensure t
-  :config
-  (exec-path-from-shell-initialize))
-#+END_SRC
 * Rainbow Delimiters
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package rainbow-delimiters
@@ -369,30 +366,31 @@
 * web mode
 #+BEGIN_SRC emacs-lisp
 
-  (use-package web-mode
-    :ensure t
-      :config
-      (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
-  ;; 	(setq web-mode-engines-alist
-  ;; 		  '(("django"    . "\\.html\\'")))
-  ;; 	(setq web-mode-ac-sources-alist
-  ;; 	      '(("css" . (ac-source-css-property))
-  ;; 	        ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
-  ;;             ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
-       (setq web-mode-enable-auto-closing t) ;)
-       (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
+    (use-package web-mode
+      :ensure t
+        :config
+        (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+        (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+    ;; 	(setq web-mode-engines-alist
+    ;; 		  '(("django"    . "\\.html\\'")))
+    ;; 	(setq web-mode-ac-sources-alist
+    ;; 	      '(("css" . (ac-source-css-property))
+    ;; 	        ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
+    ;;             ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+         (setq web-mode-enable-auto-closing t) ;)
+         (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
 
-      (defun my-web-mode-hook ()
-    "Hooks for Web mode."
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-code-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-  )
-  (add-hook 'web-mode-hook  'my-web-mode-hook)
-  (setq tab-width 2)
-  (add-hook 'web-mode-hook  'emmet-mode)
-  )
+        (defun my-web-mode-hook ()
+      "Hooks for Web mode."
+      (setq web-mode-markup-indent-offset 2)
+      (setq web-mode-code-indent-offset 2)
+      (setq web-mode-css-indent-offset 2))
+    (add-hook 'web-mode-hook  'my-web-mode-hook)
+    (setq tab-width 2)
+    (add-hook 'web-mode-hook  'emmet-mode)
+
+
+    )
 #+END_SRC
 
 * Prettier-js
@@ -401,7 +399,7 @@
 :ensure t
 :config
 (add-hook 'js2-mode-hook 'prettier-js-mode)
-(add-hook 'web-mode-hook 'prettier-js-mode)
+;;(add-hook 'web-mode-hook 'prettier-js-mode)
 )
 #+END_SRC
 * JavaScript
@@ -581,40 +579,50 @@
 * Swiper, Ivy and Counsel
 #+BEGIN_SRC emacs-lisp
 
-(use-package counsel
-:ensure t
-  :bind
-  (("M-y" . counsel-yank-pop)
-   :map ivy-minibuffer-map
-   ("M-y" . ivy-next-line))
-  :config
-  (global-set-key "\C-x\ \C-r" 'counsel-recentf)
-  )
-
-  (use-package ivy
+  (use-package counsel
   :ensure t
-  :diminish (ivy-mode)
-  :bind (("C-x b" . ivy-switch-buffer))
-  :config
-  (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "%d/%d ")
-  (setq ivy-display-style 'fancy))
+    :bind
+    (("M-y" . counsel-yank-pop)
+     :map ivy-minibuffer-map
+     ("M-y" . ivy-next-line))
+    :config
+    (global-set-key "\C-x\ \C-r" 'counsel-recentf)
+    )
 
-  (use-package swiper
-  :ensure t
-  :bind (("C-s" . swiper)
-	 ("C-r" . swiper)
-	 ("C-c C-r" . ivy-resume)
-	 ("M-x" . counsel-M-x)
-	 ("C-x C-f" . counsel-find-file))
-  :config
-  (progn
+    (use-package ivy
+    :ensure t
+    :diminish (ivy-mode)
+    :bind (("C-x b" . ivy-switch-buffer))
+    :config
     (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
-    (setq ivy-display-style 'fancy)
-    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-    ))
+    (setq ivy-count-format "%d/%d ")
+    (setq ivy-display-style 'fancy))
+
+    (use-package ivy-rich
+    :ensure t
+    :config
+    (ivy-rich-mode 1)
+    )
+
+    (use-package all-the-icons-ivy-rich
+    :ensure t
+    :init (all-the-icons-ivy-rich-mode 1))
+
+    (use-package swiper
+    :ensure t
+    :bind (("C-s" . swiper)
+       ("C-r" . swiper)
+       ("C-c C-r" . ivy-resume)
+       ("M-x" . counsel-M-x)
+       ("C-x C-f" . counsel-find-file))
+    :config
+    (progn
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (setq ivy-display-style 'fancy)
+      (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+      ))
 
 #+END_SRC
 
@@ -890,62 +898,70 @@
 #+end_src
 * lsp-mode2
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; set prefix for lsp-command-keymap (few alternatives - "s-l", "C-l")
-    (setq lsp-keymap-prefix "C-c l")
-    (setq company-clang-executable "/usr/local//Cellar/llvm/11.0.1/bin/clangd")
-    (setq lsp-clients-clangd-executable "/usr/local//Cellar/llvm/11.0.1/bin/clangd")
+    ;; set prefix for lsp-command-keymap (few alternatives - "s-l", "C-l")
+      (setq lsp-keymap-prefix "C-c l")
+      (setq company-clang-executable "/usr/local//Cellar/llvm/11.0.1/bin/clangd")
+      (setq lsp-clients-clangd-executable "/usr/local//Cellar/llvm/11.0.1/bin/clangd")
 
+      (use-package lsp-mode
+        :ensure t
+        :commands lsp
+        :hook ((c-mode c++-mode python-mode web-mode php-mode) . lsp)
+        :config
+        )
 
-    (use-package lsp-mode
-      :ensure t
-      :commands lsp
-      :hook ((c-mode c++-mode  python-mode) . lsp)
-      )
-
-    (use-package lsp-treemacs :ensure t)
-    (add-hook 'c-mode-hook 'lsp)
-    (add-hook 'c++-mode-hook 'lsp)
-    (add-hook 'cpp-mode-hook 'lsp)
-    (setq lsp-enabled-clients '(jedi clangd))
-    (use-package lsp-ui
+      (use-package lsp-treemacs :ensure t)
+      (add-hook 'c-mode-hook 'lsp)
+      (add-hook 'c++-mode-hook 'lsp)
+      (add-hook 'cpp-mode-hook 'lsp)
+  ;;  (setq lsp-enabled-clients '(jedi clangd))
+  (use-package lsp-ui
+    :after lsp
     :ensure t
-      :hook (lsp-mode . lsp-ui-mode)
-      :config
-      (setq lsp-ui-sideline-enable t)
-      (setq lsp-ui-sideline-show-hover nil)
-      (setq lsp-ui-doc-position 'bottom)
-  ;; lsp config stuff
-  (setq lsp-enable-links nil)
-  (setq lsp-signature-render-documentation nil)
-  (setq lsp-headerline-breadcrumb-enable nil)
-  (setq lsp-ui-doc-enable nil)
-  (setq lsp-completion-enable-additional-text-edit nil)
-  (setq web-mode-enable-current-element-highlight t)
-      (lsp-ui-doc-show))
+    :hook (lsp-mode . lsp-ui-mode)
+    :config
+    ;; (setq lsp-ui-sideline-enable t)
+    ;; (setq lsp-ui-sideline-show-hover nil)
+    ;; (setq lsp-ui-doc-position 'bottom)
+    ;; ;; lsp config stuff
+    ;; (setq lsp-enable-links nil)
+    ;; ;; (setq lsp-signature-render-documentation nil)
+    ;; (setq lsp-headerline-breadcrumb-enable nil)
+    ;; (setq lsp-ui-doc-enable nil)
+    ;; (setq lsp-completion-enable-additional-text-edit nil)
+    ;; (setq web-mode-enable-current-element-highlight t)
+    (lsp-ui-doc-show))
 
 
-    (use-package lsp-jedi
-      :ensure t
-      :config
-      (with-eval-after-load "lsp-mode"
-        (add-to-list 'lsp-disabled-clients 'pyls)
-        (add-to-list 'lsp-enabled-clients 'jedi)))
+      ;; (use-package lsp-jedi
+      ;;   :ensure t
+      ;;   :config
+      ;;   (with-eval-after-load "lsp-mode"
+      ;;     (add-to-list 'lsp-disabled-clients 'pyls)
+      ;;     (add-to-list 'lsp-enabled-clients 'jedi)))
 
-    (setq lsp-ui-doc-show-with-cursor nil)
+      (setq lsp-ui-doc-show-with-cursor nil)
 
-    ;; (use-package dap-mode
-    ;;   :ensure t
-    ;;   :hook (lsp-mode . dap-mode)
-    ;;   :config
-    ;;   (dap-ui-mode 1)
-    ;;   (dap-tooltip-mode 1)
-    ;;   (require 'dap-node)
-    ;;   (dap-node-setup))
+      ;; (use-package dap-mode
+      ;;   :ensure t
+      ;;   :hook (lsp-mode . dap-mode)
+      ;;   :config
+      ;;   (dap-ui-mode 1)
+      ;;   (dap-tooltip-mode 1)
+      ;;   (require 'dap-node)
+      ;;   (dap-node-setup))
 
-    ;; (dap-auto-configure-mode)
-    ;; (require 'dap-gdb-lldb)
-    ;;  (require 'dap-cpptools)
-    ;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
+      ;; (dap-auto-configure-mode)
+      ;; (require 'dap-gdb-lldb)
+      ;;  (require 'dap-cpptools)
+      ;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
 
 
 #+END_SRC
+
+* php mode
+#+begin_src emacs-lisp
+(use-package php-mode
+:ensure t
+:config)
+#+end_src
