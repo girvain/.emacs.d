@@ -9,88 +9,90 @@
 * interface tweaks
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-          (setq inhibit-startup-message t)
-          (tool-bar-mode -1)
-		  (setq gc-cons-threshold 100000000)
-          (fset 'yes-or-no-p 'y-or-n-p)
-          (global-set-key (kbd "<f5>") 'revert-buffer)
+            (setq inhibit-startup-message t)
+            (tool-bar-mode -1)
+            (setq gc-cons-threshold 100000000)
+            (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
-  ;;start in full screen
-    (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
+            (fset 'yes-or-no-p 'y-or-n-p)
+            (global-set-key (kbd "<f5>") 'revert-buffer)
 
-          ;; mac key remap
-          ;;(setq ns-command-modifier 'meta)
-          ;;(setq mac-option-modifier 'control)
-          ;;(setq ns-function-modifier 'control)
-          (setq ns-command-modifier 'control)
+    ;;start in full screen
+      (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
 
-          ;; show trailing spaces
-          (setq-default show-trailing-whitespace nil)
+            ;; mac key remap
+            ;;(setq ns-command-modifier 'meta)
+            ;;(setq mac-option-modifier 'control)
+            ;;(setq ns-function-modifier 'control)
+            (setq ns-command-modifier 'control)
 
-          ;; set tabs to indent as white spaces and set default tab width to 4 white spaces
-          (setq-default indent-tabs-mode nil)
-          (setq-default tab-width 4)
-          ;(setq-default indent-line-function 'insert-tab)
+            ;; show trailing spaces
+            (setq-default show-trailing-whitespace nil)
 
-          ;; setup: M-y saves the new yank to the clipboard.
-          (setq yank-pop-change-selection t)
+            ;; set tabs to indent as white spaces and set default tab width to 4 white spaces
+            (setq-default indent-tabs-mode nil)
+            (setq-default tab-width 4)
+            ;(setq-default indent-line-function 'insert-tab)
 
-          (show-paren-mode 1)
-          (setq column-number-mode t)
+            ;; setup: M-y saves the new yank to the clipboard.
+            (setq yank-pop-change-selection t)
 
-          ;; minimalistic Emacs at startup
-          (menu-bar-mode 1)
-          (tool-bar-mode 0)
-          (set-scroll-bar-mode nil)
+            (show-paren-mode 1)
+            (setq column-number-mode t)
 
-          ;; don't use global line highlight mode
-          (global-hl-line-mode 0)
+            ;; minimalistic Emacs at startup
+            (menu-bar-mode 1)
+            (tool-bar-mode 0)
+            (set-scroll-bar-mode nil)
 
-          ;; supress welcome screen
-          (setq inhibit-startup-message t)
+            ;; don't use global line highlight mode
+            (global-hl-line-mode 0)
 
-          ;; Bind other-window (and custom prev-window) to more accessible keys.
-          (defun prev-window ()
-            (interactive)
-            (other-window -1))
-          (global-set-key (kbd "C-'") 'other-window)
-          (global-set-key (kbd "C-;") 'prev-window)
+            ;; supress welcome screen
+            (setq inhibit-startup-message t)
 
-          ;; enable line numbers for all programing modes
-          ;;(add-hook 'prog-mode-hook 'linum-mode)
+            ;; Bind other-window (and custom prev-window) to more accessible keys.
+            (defun prev-window ()
+              (interactive)
+              (other-window -1))
+            (global-set-key (kbd "C-'") 'other-window)
+            (global-set-key (kbd "C-;") 'prev-window)
 
-          ; Highlights the current cursor line
-          (global-hl-line-mode t)
+            ;; enable line numbers for all programing modes
+            ;;(add-hook 'prog-mode-hook 'linum-mode)
 
-          ;; auto close bracket insertion. New in emacs 24
-          (electric-pair-mode 1)
+            ; Highlights the current cursor line
+            (global-hl-line-mode t)
 
-          ;; compile key command
-          (global-set-key [(f7)] 'compile)
-          (global-set-key [(f8)] 'recompile)
+            ;; auto close bracket insertion. New in emacs 24
+            (electric-pair-mode 1)
 
-          ;; backup in one place. flat, no tree structure
-          ;; this stops emacs making ~file copies of everything
-          (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+            ;; compile key command
+            (global-set-key [(f7)] 'compile)
+            (global-set-key [(f8)] 'recompile)
 
-          ;; enable recent file mode on startup
-          (recentf-mode 1)
-          (setq recentf-max-menu-items 25)
-          (setq recentf-max-saved-items 25)
-          ;;(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+            ;; backup in one place. flat, no tree structure
+            ;; this stops emacs making ~file copies of everything
+            (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
 
-          ;; disable line wrapping
-          (set-default 'truncate-lines t)
+            ;; enable recent file mode on startup
+            (recentf-mode 1)
+            (setq recentf-max-menu-items 25)
+            (setq recentf-max-saved-items 25)
+            ;;(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
-          ;; Auto refresh buffers
-          (global-auto-revert-mode 1)
+            ;; disable line wrapping
+            (set-default 'truncate-lines t)
 
-          ;; Also auto refresh dired, but be quiet about it
-          (setq global-auto-revert-non-file-buffers t)
-          (setq auto-revert-verbose nil)
+            ;; Auto refresh buffers
+            (global-auto-revert-mode 1)
 
-      ;; Org mode settings
-      (setq org-startup-folded t)
+            ;; Also auto refresh dired, but be quiet about it
+            (setq global-auto-revert-non-file-buffers t)
+            (setq auto-revert-verbose nil)
+
+        ;; Org mode settings
+        (setq org-startup-folded t)
 #+END_SRC
 
 * Themes
@@ -105,7 +107,7 @@
 
       ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
       ;; may have their own settings.
-      (load-theme 'doom-one t)
+      (load-theme 'doom-badger t)
 
       ;; Enable flashing mode-line on errors
       (doom-themes-visual-bell-config)
@@ -900,8 +902,6 @@
 #+BEGIN_SRC emacs-lisp :tangle yes
     ;; set prefix for lsp-command-keymap (few alternatives - "s-l", "C-l")
       (setq lsp-keymap-prefix "C-c l")
-      (setq company-clang-executable "/usr/local//Cellar/llvm/11.0.1/bin/clangd")
-      (setq lsp-clients-clangd-executable "/usr/local//Cellar/llvm/11.0.1/bin/clangd")
 
       (use-package lsp-mode
         :ensure t
@@ -910,10 +910,6 @@
         :config
         )
 
-      (use-package lsp-treemacs :ensure t)
-      (add-hook 'c-mode-hook 'lsp)
-      (add-hook 'c++-mode-hook 'lsp)
-      (add-hook 'cpp-mode-hook 'lsp)
   ;;  (setq lsp-enabled-clients '(jedi clangd))
   (use-package lsp-ui
     :after lsp
@@ -974,3 +970,14 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize)))
 #+end_src
+
+* yaml-mode
+#+begin_src emacs-lisp
+(use-package yaml-mode
+      :ensure t
+      :config
+  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+      (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode)))
+#+end_src
+
+
