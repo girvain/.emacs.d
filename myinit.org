@@ -310,34 +310,38 @@
 
 * flycheck
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :ensure t
-    :config
-    ;; set to have global completion or on specific modes.
-    ;;(global-flycheck-mode)
-;;    (add-hook 'c-mode-hook 'flycheck-mode)
-    )
+    (use-package flycheck
+      :ensure t
+      :config
+      ;; set to have global completion or on specific modes.
+      ;;(global-flycheck-mode)
+  ;;    (add-hook 'c-mode-hook 'flycheck-mode)
+     ;; (setq flycheck-php-phpcs-executable "./vendor/bin/phpcs"
+     ;;   flycheck-phpcs-standard  (concat (projectile-project-root) "/sniffs.xml")))
+(defun setup-flycheck-php-project-path () 
+      (setq flycheck-php-phpcs-executable (concat (projectile-project-root)  "vendor/bin/phpcs")
+     flycheck-phpcs-standard (concat (projectile-project-root) "sniffs.xml"))))
 
-  ;; Color mode line for errors.
-   (use-package flycheck-color-mode-line
-     :ensure t
-     :after flycheck
-     :config '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
-     )
+    ;; Color mode line for errors.
+     (use-package flycheck-color-mode-line
+       :ensure t
+       :after flycheck
+       :config '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
+       )
 
-  ;; Show pos-tip popups for errors.
-   (use-package flycheck-pos-tip
-     :ensure t
-     :after flycheck
-     :config (flycheck-pos-tip-mode)
-     )
+    ;; Show pos-tip popups for errors.
+     (use-package flycheck-pos-tip
+       :ensure t
+       :after flycheck
+       :config (flycheck-pos-tip-mode)
+       )
 
-  ;; Flycheck-plantuml/
-   (use-package flycheck-plantuml
-     :after flycheck
-     :ensure t
-     :config (flycheck-plantuml-setup)
-     )
+    ;; Flycheck-plantuml/
+     (use-package flycheck-plantuml
+       :after flycheck
+       :ensure t
+       :config (flycheck-plantuml-setup)
+       )
 #+END_SRC
 * Company
 #+BEGIN_SRC emacs-lisp
@@ -644,19 +648,20 @@
 
 * Projectile
 #+BEGIN_SRC emacs-lisp
-(use-package projectile
-  :ensure t
-  :config
-  (projectile-mode)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (setq projectile-completion-system 'ivy))
+  (use-package projectile
+    :ensure t
+    :config
+    (projectile-mode)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
-(use-package counsel-projectile
-  :ensure t
-  :config
-;;  (counsel-projectile-on)
-  (counsel-projectile-mode 1)
-  )
+    (setq projectile-completion-system 'ivy))
+
+  (use-package counsel-projectile
+    :ensure t
+    :config
+  ;;  (counsel-projectile-on)
+    (counsel-projectile-mode 1)
+    )
 #+END_SRC
 * multi-term
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -957,9 +962,12 @@
 
 * php mode
 #+begin_src emacs-lisp
-(use-package php-mode
-:ensure t
-:config)
+         (use-package php-mode
+         :ensure t
+         :config
+    ;;        (setq flycheck-php-phpcs-executable (concat (projectile-project-root)  "vendor/bin/phpcs")
+     ;;      flycheck-phpcs-standard (concat (projectile-project-root)  "sniffs.xml")))
+  )
 #+end_src
 
 * exec path from shell
