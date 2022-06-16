@@ -37,47 +37,881 @@ There are two things you can do about this warning:
 	(package-install 'use-package))
 
 
+;; Interface Tweaks
+(setq inhibit-startup-message t)
+            (tool-bar-mode -1)
+            (setq gc-cons-threshold 100000000)
+            (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
-(org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
+            (fset 'yes-or-no-p 'y-or-n-p)
+            (global-set-key (kbd "<f5>") 'revert-buffer)
+
+    ;;start in full screen
+      (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
+
+            ;; mac key remap
+            ;;(setq ns-command-modifier 'meta)
+            ;;(setq mac-option-modifier 'control)
+            ;;(setq ns-function-modifier 'control)
+            (setq ns-command-modifier 'control)
+
+            ;; show trailing spaces
+            (setq-default show-trailing-whitespace nil)
+
+            ;; set tabs to indent as white spaces and set default tab width to 4 white spaces
+            (setq-default indent-tabs-mode nil)
+            (setq-default tab-width 4)
+            ;(setq-default indent-line-function 'insert-tab)
+
+            ;; setup: M-y saves the new yank to the clipboard.
+            (setq yank-pop-change-selection t)
+
+            (show-paren-mode 1)
+            (setq column-number-mode t)
+
+            ;; minimalistic Emacs at startup
+            (menu-bar-mode 1)
+            (tool-bar-mode 0)
+            (set-scroll-bar-mode nil)
+
+            ;; don't use global line highlight mode
+            (global-hl-line-mode 0)
+
+
+            ;; supress welcome screen
+            (setq inhibit-startup-message t)
+
+            ;; Bind other-window (and custom prev-window) to more accessible keys.
+            (defun prev-window ()
+              (interactive)
+              (other-window -1))
+            (global-set-key (kbd "C-'") 'other-window)
+            (global-set-key (kbd "C-;") 'prev-window)
+
+            ;; enable line numbers for all programing modes
+            ;;(add-hook 'prog-mode-hook 'linum-mode)
+
+            ; Highlights the current cursor line
+            (global-hl-line-mode t)
+
+            ;; auto close bracket insertion. New in emacs 24
+            (electric-pair-mode 1)
+
+            ;; compile key command
+            (global-set-key [(f7)] 'compile)
+            (global-set-key [(f8)] 'recompile)
+
+            ;; backup in one place. flat, no tree structure
+            ;; this stops emacs making ~file copies of everything
+            (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+
+            ;; enable recent file mode on startup
+            (recentf-mode 1)
+            (setq recentf-max-menu-items 25)
+            (setq recentf-max-saved-items 25)
+            ;;(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
+            ;; disable line wrapping
+            (set-default 'truncate-lines t)
+
+            ;; Auto refresh buffers
+            (global-auto-revert-mode 1)
+
+            ;; Also auto refresh dired, but be quiet about it
+            (setq global-auto-revert-non-file-buffers t)
+            (setq auto-revert-verbose nil)
+
+        ;; Org mode settings
+        (setq org-startup-folded t)
+
+;; Themes
+  (use-package doom-themes
+    :ensure t
+    :config
+      ;; Global settings (defaults)
+      (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+      ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
+      ;; may have their own settings.
+      (load-theme 'doom-badger t)
+
+      ;; Enable flashing mode-line on errors
+      (doom-themes-visual-bell-config)
+
+      ;; Enable custom neotree theme (all-the-icons must be installed!)
+  ;;    (doom-themes-neotree-config)
+      ;; or for treemacs users
+   ;;   (doom-themes-treemacs-config)
+
+      ;; Corrects (and improves) org-mode's native fontification.
+      (doom-themes-org-config)
+      )
+
+  (use-package all-the-icons
+  :ensure t
+  :config )
+  ;; (use-package zenburn-theme
+  ;;   :ensure t
+  ;;  :cosnfig (load-theme 'zenburn t))
+
+  ;; (use-package monokai-theme
+  ;;   :ensure t
+  ;;   :config (load-theme 'monokai t))
+  (use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode)
+  :config
+  ;; How tall the mode-line should be. It's only respected in GUI.
+  ;; If the actual char height is larger, it respects the actual height.
+  (setq doom-modeline-height 25)
+
+  ;; How wide the mode-line bar should be. It's only respected in GUI.
+  (setq doom-modeline-bar-width 3)
+
+  ;; Determines the style used by `doom-modeline-buffer-file-name'.
+  ;;
+  ;; Given ~/Projects/FOSS/emacs/lisp/comint.el
+  ;;   truncate-upto-project => ~/P/F/emacs/lisp/comint.el
+  ;;   truncate-from-project => ~/Projects/FOSS/emacs/l/comint.el
+  ;;   truncate-with-project => emacs/l/comint.el
+  ;;   truncate-except-project => ~/P/F/emacs/l/comint.el
+  ;;   truncate-upto-root => ~/P/F/e/lisp/comint.el
+  ;;   truncate-all => ~/P/F/e/l/comint.el
+  ;;   relative-from-project => emacs/lisp/comint.el
+  ;;   relative-to-project => lisp/comint.el
+  ;;   file-name => comint.el
+  ;;   buffer-name => comint.el<2> (uniquify buffer name)
+  ;;
+  ;; If you are expereicing the laggy issue, especially while editing remote files
+  ;; with tramp, please try `file-name' style.
+  ;; Please refer to https://github.com/bbatsov/projectile/issues/657.
+  (setq doom-modeline-buffer-file-name-style 'truncate-upto-project)
+
+  ;; Whether display icons in mode-line or not.
+  (setq doom-modeline-icon t)
+
+  ;; Whether display the icon for major mode. It respects `doom-modeline-icon'.
+  (setq doom-modeline-major-mode-icon t)
+
+  ;; Whether display color icons for `major-mode'. It respects
+  ;; `doom-modeline-icon' and `all-the-icons-color-icons'.
+  (setq doom-modeline-major-mode-color-icon t)
+
+  ;; Whether display icons for buffer states. It respects `doom-modeline-icon'.
+  (setq doom-modeline-buffer-state-icon t)
+
+  ;; Whether display buffer modification icon. It respects `doom-modeline-icon'
+  ;; and `doom-modeline-buffer-state-icon'.
+  (setq doom-modeline-buffer-modification-icon t)
+
+  ;; Whether display minor modes in mode-line or not.
+  (setq doom-modeline-minor-modes nil)
+
+  ;; If non-nil, a word count will be added to the selection-info modeline segment.
+  (setq doom-modeline-enable-word-count nil)
+
+  ;; Whether display buffer encoding.
+  (setq doom-modeline-buffer-encoding t)
+
+  ;; Whether display indentation information.
+  (setq doom-modeline-indent-info nil)
+
+  ;; If non-nil, only display one number for checker information if applicable.
+  (setq doom-modeline-checker-simple-format t)
+
+  ;; The maximum displayed length of the branch name of version control.
+  (setq doom-modeline-vcs-max-length 12)
+
+  ;; Whether display perspective name or not. Non-nil to display in mode-line.
+  (setq doom-modeline-persp-name t)
+
+  ;; Whether display icon for persp name. Nil to display a # sign. It respects `doom-modeline-icon'
+  (setq doom-modeline-persp-name-icon nil)
+
+  ;; Whether display `lsp' state or not. Non-nil to display in mode-line.
+  (setq doom-modeline-lsp t)
+
+  ;; Whether display github notifications or not. Requires `ghub` package.
+  (setq doom-modeline-github nil)
+
+  ;; The interval of checking github.
+  (setq doom-modeline-github-interval (* 30 60))
+
+  ;; Whether display environment version or not
+  (setq doom-modeline-env-version t)
+  ;; Or for individual languages
+  (setq doom-modeline-env-enable-python t)
+  (setq doom-modeline-env-enable-ruby t)
+  (setq doom-modeline-env-enable-perl t)
+  (setq doom-modeline-env-enable-go t)
+  (setq doom-modeline-env-enable-elixir t)
+  (setq doom-modeline-env-enable-rust t)
+
+  ;; Change the executables to use for the language version string
+  (setq doom-modeline-env-python-executable "python3")
+  (setq doom-modeline-env-ruby-executable "ruby")
+  (setq doom-modeline-env-perl-executable "perl")
+  (setq doom-modeline-env-go-executable "go")
+  (setq doom-modeline-env-elixir-executable "iex")
+  (setq doom-modeline-env-rust-executable "rustc")
+
+  ;; Whether display mu4e notifications or not. Requires `mu4e-alert' package.
+  (setq doom-modeline-mu4e t)
+
+  ;; Whether display irc notifications or not. Requires `circe' package.
+  (setq doom-modeline-irc t)
+
+  ;; Function to stylize the irc buffer names.
+  (setq doom-modeline-irc-stylize 'identity)
+
+  (doom-modeline-mode 1)
+  )
+
+  (use-package gruvbox-theme
+  :ensure t
+  :config
+  ;; (load-theme 'gruvbox t)
+  )
+
+
+
+;; swiper, ivy and counsel
+  (use-package counsel
+  :ensure t
+    :bind
+    (("M-y" . counsel-yank-pop)
+     :map ivy-minibuffer-map
+     ("M-y" . ivy-next-line))
+    :config
+    (global-set-key "\C-x\ \C-r" 'counsel-recentf)
+    )
+
+    (use-package ivy
+    :ensure t
+    :diminish (ivy-mode)
+    :bind (("C-x b" . ivy-switch-buffer))
+    :config
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-count-format "%d/%d ")
+    (setq ivy-display-style 'fancy))
+
+    (use-package ivy-rich
+    :ensure t
+    :config
+    (ivy-rich-mode 1)
+    )
+
+    (use-package all-the-icons-ivy-rich
+    :ensure t
+    :init (all-the-icons-ivy-rich-mode 1))
+
+    (use-package swiper
+    :ensure t
+    :bind (("C-s" . swiper)
+       ("C-r" . swiper)
+       ("C-c C-r" . ivy-resume)
+       ("M-x" . counsel-M-x)
+       ("C-x C-f" . counsel-find-file))
+    :config
+    (progn
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (setq ivy-display-style 'fancy)
+      (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+      ))
+
+;; fonts
+(set-frame-font "Monaco 12") ;; this is a mac font that needds installed on linux:
+
+;; rainbow delimiters
+(use-package rainbow-delimiters
+:ensure t
+:config
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'rjsx-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'js2-mode-hook 'rainbow-delimiters-mode))
+
+;; Try
+(use-package try
+	:ensure t)
+
+
+;; Which key
+(use-package which-key
+	:ensure t
+	:config
+	(which-key-mode))
+
+;; Org Bullets
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+;; beacon
+; flashes the cursor's line when you scroll
+(use-package beacon
+  :ensure t
+  :config
+  (beacon-mode 1)
+  ; (setq beacon-color "#666600")
+  )
+
+;; Highlight indent guides
+;; indentation lines
+(use-package highlight-indent-guides
+  :ensure t
+  :config
+  (setq highlight-indent-guides-method 'character)
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
+;; flycheck
+  (use-package flycheck
+    :ensure t
+    :config
+    ;; set to have global completion or on specific modes.
+    ;;(global-flycheck-mode)
+;;    (add-hook 'c-mode-hook 'flycheck-mode)
+    )
+
+  ;; Color mode line for errors.
+   (use-package flycheck-color-mode-line
+     :ensure t
+     :after flycheck
+     :config '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
+     )
+
+  ;; Show pos-tip popups for errors.
+   (use-package flycheck-pos-tip
+     :ensure t
+     :after flycheck
+     :config (flycheck-pos-tip-mode)
+     )
+
+  ;; Flycheck-plantuml/
+   (use-package flycheck-plantuml
+     :after flycheck
+     :ensure t
+     :config (flycheck-plantuml-setup)
+     )
+
+;; Company
+(use-package company
+  :ensure t
+  :config
+  (setq company-idle-delay 0.0)
+  (setq company-minimum-prefix-length 1)
+  (with-eval-after-load 'company
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous))
+  ;;  (global-company-mode t)
+;;  (add-hook 'c-mode-hook 'company-mode)
+  (add-hook 'emacs-lisp-mode-hook 'company-mode)
+  (add-hook 'lisp-mode 'company-mode)
+  )
+
+;; web mode
+
+    (use-package web-mode
+      :ensure t
+        :config
+        (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+        (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+    ;; 	(setq web-mode-engines-alist
+    ;; 		  '(("django"    . "\\.html\\'")))
+    ;; 	(setq web-mode-ac-sources-alist
+    ;; 	      '(("css" . (ac-source-css-property))
+    ;; 	        ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
+    ;;             ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+         (setq web-mode-enable-auto-closing t) ;)
+         (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
+
+        (defun my-web-mode-hook ()
+      "Hooks for Web mode."
+      (setq web-mode-markup-indent-offset 2)
+      (setq web-mode-code-indent-offset 2)
+      (setq web-mode-css-indent-offset 2))
+    (add-hook 'web-mode-hook  'my-web-mode-hook)
+    (setq tab-width 2)
+    (add-hook 'web-mode-hook  'emmet-mode)
+
+
+    )
+
+;; Prettier-js
+(use-package prettier-js
+:ensure t
+:config
+(add-hook 'js2-mode-hook 'prettier-js-mode)
+;;(add-hook 'web-mode-hook 'prettier-js-mode)
+)
+
+;; JavaScript
+
+  (use-package js2-mode
+    :ensure t
+    :config
+    (setq js2-basic-offset 2)
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+  ;; turn on flychecking globally
+  ;;(add-hook 'after-init-hook #'global-flycheck-mode)
+
+  ;; turn off js2 syntax hilighting
+    (setq js2-strict-missing-semi-warning nil)
+    (setq js2-mode-show-parse-errors nil)
+    (setq js2-mode-show-strict-warnings nil)
+
+  ;; disable jshint since we prefer eslint checking
+  (setq-default flycheck-disabled-checkers
+    (append flycheck-disabled-checkers
+      '(javascript-jshint)))
+
+  ;; use eslint with web-mode for jsx files
+;;  (flycheck-add-mode 'javascript-eslint 'web-mode)
+
+  ;; customize flycheck temp file prefix
+  ;;(setq-default flycheck-temp-prefix ".flycheck")
+
+  ;; disable json-jsonlist checking for json files
+  (setq-default flycheck-disabled-checkers
+    (append flycheck-disabled-checkers
+      '(json-jsonlist)))
+
+    )
+
+
+  ;; Better imenu
+  ;;(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+
+  ;; (use-package company-tern
+  ;;   :ensure t
+  ;;   :config
+  ;;   (add-to-list 'company-backends 'company-tern)
+  ;;   (add-hook 'js2-mode-hook (lambda ()
+  ;;                              (flycheck-mode)
+  ;;                              (setq js2-basic-offset 2)
+  ;;                              (tern-mode)
+
+  ;;                              ;; disable jshint since we prefer eslint checking
+  ;;                              (setq-default flycheck-disabled-checkers
+  ;;                                            (append flycheck-disabled-checkers
+  ;;                                                    '(javascript-jshint)))
+
+  ;;                              (company-mode)))
+
+  ;; ;; Disable completion keybindings, as we use xref-js2 instead
+  ;; (define-key tern-mode-keymap (kbd "M-.") nil)
+  ;; (define-key tern-mode-keymap (kbd "M-,") nil)
+  ;; )
+
+  ;; rjsx
+    (use-package rjsx-mode
+    :ensure t
+    :config
+
+    )
+
+
+;; Tide-mode
+  (use-package tide
+    :ensure t
+    :after (typescript-mode company flycheck)
+    :hook ((typescript-mode . tide-setup)
+           (typescript-mode . tide-hl-identifier-mode)
+           ;;(before-save . tide-format-before-save)
+           )
+  )
+
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (flycheck-mode +1)
+    ;; Set flycheck to only run when file is saved
+  ;;  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    ;; company is an optional dependency. You have to
+    ;; install it separately via package-install
+    ;; `M-x package-install [ret] company`
+    (company-mode +1))
+
+  ;; aligns annotation to the right hand side
+  (setq company-tooltip-align-annotations t)
+
+  ;; formats the buffer before saving
+  ;;(add-hook 'before-save-hook 'tide-format-before-save)
+
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+  (add-hook 'js2-mode-hook #'setup-tide-mode)
+  ;; configure javascript-tide checker to run after your default javascript checker
+  ;(flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+
+  (require 'web-mode)
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (string-equal "jsx" (file-name-extension buffer-file-name))
+                (setup-tide-mode))))
+  ;; configure jsx-tide checker to run after your default jsx checker
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+  ;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+
+;; Yasnippet
+
+(use-package yasnippet
+  :ensure t
+  :init
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :ensure t)
+
+
+;; Projectile
+
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-mode)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (setq projectile-completion-system 'ivy))
+
+(use-package counsel-projectile
+  :ensure t
+  :config
+;;  (counsel-projectile-on)
+  (counsel-projectile-mode 1)
+  )
+
+;; multi-term
+
+(use-package multi-term
+  :ensure t
+  :config
+;;  (setq multi-term-program "/usr/local/bin/zsh")
+
+(add-hook 'term-mode-hook
+          (lambda ()
+            (setq term-buffer-maximum-size 10000)))
+
+(add-hook 'term-mode-hook
+          (lambda ()
+            (setq show-trailing-whitespace nil)))
+
+;; (defcustom term-unbind-key-list
+;;   '("C-z" "C-x" "C-c" "C-h" "C-y" "<ESC>")
+;;   "The key list that will need to be unbind."
+;;   :type 'list
+;;   :group 'multi-term)
+
+;; (defcustom term-bind-key-alist
+;;   '(
+;;     ("C-c C-c" . term-interrupt-subjob)
+;;     ("C-p" . previous-line)
+;;     ("C-n" . next-line)
+;;     ("C-s" . isearch-forward)
+;;     ("C-r" . isearch-backward)
+;;     ("C-m" . term-send-raw)
+;;     ("M-f" . term-send-forward-word)
+;;     ("M-b" . term-send-backward-word)
+;;     ("M-o" . term-send-backspace)
+;;     ("M-p" . term-send-up)
+;;     ("M-n" . term-send-down)
+;;     ("M-M" . term-send-forward-kill-word)
+;;     ("M-N" . term-send-backward-kill-word)
+;;     ("M-r" . term-send-reverse-search-history)
+;;     ("M-," . term-send-input)
+;;     ("M-." . comint-dynamic-complete))
+;;   "The key alist that will need to be bind.
+;; If you do not like default setup, modify it, with (KEY . COMMAND) format."
+;;   :type 'alist
+;;   :group 'multi-term)
+
+(add-hook 'term-mode-hook
+          (lambda ()
+            (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
+            (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))))
+
+(add-hook 'term-mode-hook
+          (lambda ()
+            (define-key term-raw-map (kbd "C-y") 'term-paste)) ))
+
+;; Bind launch multi-term to C-`, the same as VSCode
+(global-set-key (kbd "C-`") (kbd "M-x multi-term RET"))
+
+;; Treemacs
+  (use-package treemacs
+    :ensure t
+    :defer t
+    :init
+    (with-eval-after-load 'winum
+      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    :config
+    (progn
+      (setq treemacs-collapse-dirs                 (if (treemacs--find-python3) 3 0)
+            treemacs-deferred-git-apply-delay      0.5
+            treemacs-display-in-side-window        t
+            treemacs-eldoc-display                 t
+            treemacs-file-event-delay              5000
+            treemacs-file-follow-delay             0.2
+            treemacs-follow-after-init             t
+            treemacs-git-command-pipe              ""
+            treemacs-goto-tag-strategy             'refetch-index
+            treemacs-indentation                   2
+            treemacs-indentation-string            " "
+            treemacs-is-never-other-window         nil
+            treemacs-max-git-entries               5000
+            treemacs-missing-project-action        'ask
+            treemacs-no-png-images                 nil
+            treemacs-no-delete-other-windows       t
+            treemacs-project-follow-cleanup        nil
+            treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+            treemacs-recenter-distance             0.1
+            treemacs-recenter-after-file-follow    nil
+            treemacs-recenter-after-tag-follow     nil
+            treemacs-recenter-after-project-jump   'always
+            treemacs-recenter-after-project-expand 'on-distance
+            treemacs-show-cursor                   nil
+            treemacs-show-hidden-files             t
+            treemacs-silent-filewatch              nil
+            treemacs-silent-refresh                nil
+            treemacs-sorting                       'alphabetic-desc
+            treemacs-space-between-root-nodes      t
+            treemacs-tag-follow-cleanup            t
+            treemacs-tag-follow-delay              1.5
+            treemacs-width                         35)
+
+      ;; The default width and height of the icons is 22 pixels. If you are
+      ;; using a Hi-DPI display, uncomment this to double the icon size.
+      ;;(treemacs-resize-icons 44)
+
+      (treemacs-follow-mode t)
+      (treemacs-filewatch-mode t)
+      (treemacs-fringe-indicator-mode t)
+      (pcase (cons (not (null (executable-find "git")))
+                   (not (null (treemacs--find-python3))))
+        (`(t . t)
+         (treemacs-git-mode 'deferred))
+        (`(t . _)
+         (treemacs-git-mode 'simple))))
+    :bind
+    (:map global-map
+          ("M-0"       . treemacs-select-window)
+          ("C-x t 1"   . treemacs-delete-other-windows)
+          ("C-x t t"   . treemacs)
+          ("C-x t B"   . treemacs-bookmark)
+          ("C-x t C-t" . treemacs-find-file)
+          ("C-x t M-t" . treemacs-find-tag)))
+
+  (use-package treemacs-evil
+    :after treemacs evil
+    :ensure t)
+
+  (use-package treemacs-projectile
+    :after treemacs projectile
+    :ensure t)
+
+  (use-package treemacs-magit
+    :after treemacs magit
+    :ensure t)
+
+;; Magit
+
+  (use-package magit
+      :ensure t
+      :init
+      (progn
+      (bind-key "C-x g" 'magit-status)
+      ))
+
+  ;; (setq magit-status-margin
+  ;;   '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18))
+  ;;     (use-package git-gutter
+  ;;     :ensure t
+  ;;     :init
+  ;;     (global-git-gutter-mode +1))
+
+  ;;     (global-set-key (kbd "M-g M-g") 'hydra-git-gutter/body)
+
+
+  ;;     (use-package git-timemachine
+  ;;     :ensure t
+  ;;     )
+  ;;   (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
+  ;;                               :hint nil)
+  ;;     "
+  ;;   Git gutter:
+  ;;     _j_: next hunk        _s_tage hunk     _q_uit
+  ;;     _k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
+  ;;     ^ ^                   _p_opup hunk
+  ;;     _h_: first hunk
+  ;;     _l_: last hunk        set start _R_evision
+  ;;   "
+  ;;     ("j" git-gutter:next-hunk)
+  ;;     ("k" git-gutter:previous-hunk)
+  ;;     ("h" (progn (goto-char (point-min))
+  ;;                 (git-gutter:next-hunk 1)))
+  ;;     ("l" (progn (goto-char (point-min))
+  ;;                 (git-gutter:previous-hunk 1)))
+  ;;     ("s" git-gutter:stage-hunk)
+  ;;     ("r" git-gutter:revert-hunk)
+  ;;     ("p" git-gutter:popup-hunk)
+  ;;     ("R" git-gutter:set-start-revision)
+  ;;     ("q" nil :color blue)
+  ;;     ("Q" (progn (git-gutter-mode -1)
+  ;;                 ;; git-gutter-fringe doesn't seem to
+  ;;                 ;; clear the markup right away
+  ;;                 (sit-for 0.1)
+  ;;                 (git-gutter:clear))
+  ;;          :color blue))
+
+;; undo-tree
+(use-package undo-tree
+  :ensure t
+  :config
+  (progn
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t)))
+
+
+;; dashboard
+
+(use-package dashboard
+ :ensure t
+ :config
+(setq dashboard-banner-logo-title "I'm Batman")
+(setq dashboard-startup-banner 'logo)
+
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-set-footer nil)
+ (dashboard-setup-startup-hook))
+
+;; evil mode
+
+  ;; (use-package evil
+  ;;   :ensure t
+  ;;   :init
+  ;;   ;;(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  ;;   (setq evil-want-keybinding nil)
+  ;;   :config
+  ;;   (evil-mode 1)
+  ;; )
+  ;; (use-package evil-collection
+  ;;   ;;:after evil
+  ;;   :ensure t
+  ;;   :config
+  ;;   (evil-collection-init))
+
+  ;; (use-package evil-escape
+  ;; :ensure t
+  ;; :config
+  ;; (evil-escape-mode 1)
+  ;; (setq-default evil-escape-delay 0.2)
+  ;; (setq-default evil-escape-key-sequence "jk"))
+
+;; imenu-list
+
+(use-package imenu-list
+:ensure t
+:config)
+
+;; lsp-mode2
+
+    ;; set prefix for lsp-command-keymap (few alternatives - "s-l", "C-l")
+      (setq lsp-keymap-prefix "C-c l")
+
+      (use-package lsp-mode
+        :ensure t
+        :commands lsp
+        :hook ((c-mode c++-mode python-mode web-mode php-mode) . lsp)
+        :config
+        )
+
+  ;;  (setq lsp-enabled-clients '(jedi clangd))
+  (use-package lsp-ui
+    :after lsp
+    :ensure t
+    :hook (lsp-mode . lsp-ui-mode)
+    :config
+    ;; (setq lsp-ui-sideline-enable t)
+    ;; (setq lsp-ui-sideline-show-hover nil)
+    ;; (setq lsp-ui-doc-position 'bottom)
+    ;; ;; lsp config stuff
+    ;; (setq lsp-enable-links nil)
+    ;; ;; (setq lsp-signature-render-documentation nil)
+    ;; (setq lsp-headerline-breadcrumb-enable nil)
+    ;; (setq lsp-ui-doc-enable nil)
+    ;; (setq lsp-completion-enable-additional-text-edit nil)
+    ;; (setq web-mode-enable-current-element-highlight t)
+    (lsp-ui-doc-show))
+
+
+      ;; (use-package lsp-jedi
+      ;;   :ensure t
+      ;;   :config
+      ;;   (with-eval-after-load "lsp-mode"
+      ;;     (add-to-list 'lsp-disabled-clients 'pyls)
+      ;;     (add-to-list 'lsp-enabled-clients 'jedi)))
+
+      (setq lsp-ui-doc-show-with-cursor nil)
+
+      ;; (use-package dap-mode
+      ;;   :ensure t
+      ;;   :hook (lsp-mode . dap-mode)
+      ;;   :config
+      ;;   (dap-ui-mode 1)
+      ;;   (dap-tooltip-mode 1)
+      ;;   (require 'dap-node)
+      ;;   (dap-node-setup))
+
+      ;; (dap-auto-configure-mode)
+      ;; (require 'dap-gdb-lldb)
+      ;;  (require 'dap-cpptools)
+      ;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
+
+
+;; php mode
+
+(use-package php-mode
+:ensure t
+:config)
+
+
+;; exec path from shell
+
+    (use-package exec-path-from-shell
+    :ensure t
+    :config
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize)))
+
+
+;; yaml-mode
+
+(use-package yaml-mode
+      :ensure t
+      :config
+  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+      (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode)))
+
+
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#282a36" "#ff5555" "#50fa7b" "#f1fa8c" "#61bfff" "#ff79c6" "#8be9fd" "#f8f8f2"])
  '(custom-safe-themes
-   '("333958c446e920f5c350c4b4016908c130c3b46d590af91e1e7e2a0611f1e8c5" "7a7b1d475b42c1a0b61f3b1d1225dd249ffa1abb1b7f726aec59ac7ca3bf4dae" "6c98bc9f39e8f8fd6da5b9c74a624cbb3782b4be8abae8fd84cbc43053d7c175" "d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "83e0376b5df8d6a3fbdfffb9fb0e8cf41a11799d9471293a810deb7586c131e6" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" "6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "5784d048e5a985627520beb8a101561b502a191b52fa401139f4dd20acb07607" "db3e80842b48f9decb532a1d74e7575716821ee631f30267e4991f4ba2ddf56e" "34c99997eaa73d64b1aaa95caca9f0d64229871c200c5254526d0062f8074693" "4e10cdf7d030fb41061cf57c74f6ddfc19db8d4af6c8e0723dc77f9922543a3d" "955426466aa729d7d32483d3b2408cf474a1332550ad364848d1dfe9eecc8a16" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" "fd944f09d4d0c4d4a3c82bd7b3360f17e3ada8adf29f28199d09308ba01cc092" "1436d643b98844555d56c59c74004eb158dc85fc55d2e7205f8d9b8c860e177f" default))
- '(fci-rule-color "#6272a4")
- '(jdee-db-active-breakpoint-face-colors (cons "#1E2029" "#bd93f9"))
- '(jdee-db-requested-breakpoint-face-colors (cons "#1E2029" "#50fa7b"))
- '(jdee-db-spec-breakpoint-face-colors (cons "#1E2029" "#565761"))
- '(objed-cursor-color "#ff5555")
- '(org-agenda-files nil)
- '(package-selected-packages
-   '(gnu-elpa-keyring-update lsp-ui lsp-mode yasnippet-classic-snippets evil-escape evil-collection evil dashboard undo-tree neotree treemacs-magit treemacs-projectile treemacs-evil treemacs multi-term counsel-projectile projectile yasnippet-snippets yasnippet counsel ivy pug-mode tide rjsx-mode js2-mode prettier-js web-mode emmet-mode company flycheck-plantuml flycheck-pos-tip flycheck-color-mode-line flycheck cmake-mode highlight-indent-guides beacon org-bullets which-key try rainbow-delimiters doom-modeline all-the-icons doom-themes use-package))
- '(vc-annotate-background "#282a36")
- '(vc-annotate-color-map
-   (list
-    (cons 20 "#50fa7b")
-    (cons 40 "#85fa80")
-    (cons 60 "#bbf986")
-    (cons 80 "#f1fa8c")
-    (cons 100 "#f5e381")
-    (cons 120 "#face76")
-    (cons 140 "#ffb86c")
-    (cons 160 "#ffa38a")
-    (cons 180 "#ff8ea8")
-    (cons 200 "#ff79c6")
-    (cons 220 "#ff6da0")
-    (cons 240 "#ff617a")
-    (cons 260 "#ff5555")
-    (cons 280 "#d45558")
-    (cons 300 "#aa565a")
-    (cons 320 "#80565d")
-    (cons 340 "#6272a4")
-    (cons 360 "#6272a4")))
- '(vc-annotate-very-old-color nil))
+   '("23c806e34594a583ea5bbf5adf9a964afe4f28b4467d28777bcba0d35aa0872e" "1d5e33500bc9548f800f9e248b57d1b2a9ecde79cb40c0b1398dec51ee820daf" "730c0535f3d0edc8119588447af65230d205a7402bf71194a9817d3bf0d6b5ea" "7a7b1d475b42c1a0b61f3b1d1225dd249ffa1abb1b7f726aec59ac7ca3bf4dae" default)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
