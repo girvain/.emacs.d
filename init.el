@@ -36,8 +36,14 @@ There are two things you can do about this warning:
 	(package-refresh-contents)
 	(package-install 'use-package))
 
+;;
+;; Use ctrl alt q to format the code
+;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interface Tweaks
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (setq inhibit-startup-message t)
             (tool-bar-mode -1)
             (setq gc-cons-threshold 100000000)
@@ -46,27 +52,27 @@ There are two things you can do about this warning:
             (fset 'yes-or-no-p 'y-or-n-p)
             (global-set-key (kbd "<f5>") 'revert-buffer)
 
-    ;;start in full screen
-      (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
+;;start in full screen
+(add-hook 'emacs-startup-hook 'toggle-frame-maximized)
 
-            ;; mac key remap
-            ;;(setq ns-command-modifier 'meta)
-            ;;(setq mac-option-modifier 'control)
-            ;;(setq ns-function-modifier 'control)
-            (setq ns-command-modifier 'control)
+;; mac key remap
+;;(setq ns-command-modifier 'meta)
+;;(setq mac-option-modifier 'control)
+;;(setq ns-function-modifier 'control)
+(setq ns-command-modifier 'control)
 
-            ;; show trailing spaces
-            (setq-default show-trailing-whitespace nil)
+;; show trailing spaces
+(setq-default show-trailing-whitespace nil)
 
-            ;; set tabs to indent as white spaces and set default tab width to 4 white spaces
-            (setq-default indent-tabs-mode nil)
+;; set tabs to indent as white spaces and set default tab width to 4 white spaces
+(setq-default indent-tabs-mode nil)
             (setq-default tab-width 4)
             ;(setq-default indent-line-function 'insert-tab)
 
-            ;; setup: M-y saves the new yank to the clipboard.
-            (setq yank-pop-change-selection t)
+;; setup: M-y saves the new yank to the clipboard.
+(setq yank-pop-change-selection t)
 
-            (show-paren-mode 1)
+(show-paren-mode 1)
             (setq column-number-mode t)
 
             ;; minimalistic Emacs at startup
@@ -89,7 +95,7 @@ There are two things you can do about this warning:
             (global-set-key (kbd "C-;") 'prev-window)
 
             ;; enable line numbers for all programing modes
-            ;;(add-hook 'prog-mode-hook 'linum-mode)
+            (add-hook 'prog-mode-hook 'linum-mode)
 
             ; Highlights the current cursor line
             (global-hl-line-mode t)
@@ -122,9 +128,14 @@ There are two things you can do about this warning:
             (setq auto-revert-verbose nil)
 
         ;; Org mode settings
-        (setq org-startup-folded t)
+(setq org-startup-folded t)
 
+;; gccemacs settings
+(setq warning-minimum-level :error)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Themes
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package doom-themes
     :ensure t
     :config
@@ -134,7 +145,8 @@ There are two things you can do about this warning:
 
       ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
       ;; may have their own settings.
-      (load-theme 'doom-badger t)
+      (load-theme 'doom-gruvbox t)
+      (setq doom-gruvbox-dark-variant "hard")
 
       ;; Enable flashing mode-line on errors
       (doom-themes-visual-bell-config)
@@ -275,8 +287,35 @@ There are two things you can do about this warning:
   )
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; evil mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (use-package evil
+;;   :ensure t
+;;   :init
+;;   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+;;   (setq evil-want-keybinding nil)
+;;   :config
+;;   (evil-mode 1))
 
+;; (use-package evil-collection
+;;   :after evil
+;;   :ensure t
+;;   :config
+;;   (evil-collection-init))
+
+  ;; (use-package evil-escape
+  ;; :ensure t
+  ;; :config
+  ;; (evil-escape-mode 1)
+  ;; (setq-default evil-escape-delay 0.2)
+  ;; (setq-default evil-escape-key-sequence "jk"))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; swiper, ivy and counsel
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package counsel
   :ensure t
     :bind
@@ -322,8 +361,14 @@ There are two things you can do about this warning:
       (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
       ))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; fonts
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (set-frame-font "Monaco 12") ;; this is a mac font that needds installed on linux:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; UI
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; rainbow delimiters
 (use-package rainbow-delimiters
@@ -338,20 +383,16 @@ There are two things you can do about this warning:
 	:ensure t)
 
 
-;; Which key
 (use-package which-key
 	:ensure t
 	:config
 	(which-key-mode))
 
-;; Org Bullets
 (use-package org-bullets
   :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-;; beacon
-; flashes the cursor's line when you scroll
 (use-package beacon
   :ensure t
   :config
@@ -367,12 +408,14 @@ There are two things you can do about this warning:
   (setq highlight-indent-guides-method 'character)
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; flycheck
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (use-package flycheck
     :ensure t
     :config
     ;; set to have global completion or on specific modes.
-    ;;(global-flycheck-mode)
+    (global-flycheck-mode)
 ;;    (add-hook 'c-mode-hook 'flycheck-mode)
     )
 
@@ -397,7 +440,9 @@ There are two things you can do about this warning:
      :config (flycheck-plantuml-setup)
      )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Company
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package company
   :ensure t
   :config
@@ -408,14 +453,27 @@ There are two things you can do about this warning:
   (define-key company-active-map (kbd "M-p") nil)
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous))
-  ;;  (global-company-mode t)
+  (global-company-mode t)
 ;;  (add-hook 'c-mode-hook 'company-mode)
   (add-hook 'emacs-lisp-mode-hook 'company-mode)
   (add-hook 'lisp-mode 'company-mode)
   )
 
-;; web mode
 
+;;(use-package pos-tip
+;;  :ensure t
+;;  :hook (company-mode . pos-tip)
+;;  :config)
+
+(use-package company-quickhelp
+  :ensure t
+  :hook (company-mode . company-quickhelp-mode)
+  :config)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; web mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     (use-package web-mode
       :ensure t
         :config
@@ -442,6 +500,10 @@ There are two things you can do about this warning:
 
     )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; JavaScript
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Prettier-js
 (use-package prettier-js
 :ensure t
@@ -450,39 +512,37 @@ There are two things you can do about this warning:
 ;;(add-hook 'web-mode-hook 'prettier-js-mode)
 )
 
-;; JavaScript
-
-  (use-package js2-mode
-    :ensure t
-    :config
-    (setq js2-basic-offset 2)
-    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(use-package js2-mode
+  :ensure t
+  :config
+  (setq js2-basic-offset 2)
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
   ;; turn on flychecking globally
   ;;(add-hook 'after-init-hook #'global-flycheck-mode)
 
   ;; turn off js2 syntax hilighting
-    (setq js2-strict-missing-semi-warning nil)
-    (setq js2-mode-show-parse-errors nil)
-    (setq js2-mode-show-strict-warnings nil)
+  (setq js2-strict-missing-semi-warning nil)
+  (setq js2-mode-show-parse-errors nil)
+  (setq js2-mode-show-strict-warnings nil)
 
   ;; disable jshint since we prefer eslint checking
   (setq-default flycheck-disabled-checkers
-    (append flycheck-disabled-checkers
-      '(javascript-jshint)))
+                (append flycheck-disabled-checkers
+                        '(javascript-jshint)))
 
   ;; use eslint with web-mode for jsx files
-;;  (flycheck-add-mode 'javascript-eslint 'web-mode)
+  ;;  (flycheck-add-mode 'javascript-eslint 'web-mode)
 
   ;; customize flycheck temp file prefix
   ;;(setq-default flycheck-temp-prefix ".flycheck")
 
   ;; disable json-jsonlist checking for json files
   (setq-default flycheck-disabled-checkers
-    (append flycheck-disabled-checkers
-      '(json-jsonlist)))
+                (append flycheck-disabled-checkers
+                        '(json-jsonlist)))
 
-    )
+  )
 
 
   ;; Better imenu
@@ -562,7 +622,6 @@ There are two things you can do about this warning:
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   ;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
 
-;; Yasnippet
 
 (use-package yasnippet
   :ensure t
@@ -580,6 +639,7 @@ There are two things you can do about this warning:
   :config
   (projectile-mode)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (setq projectile-enable-caching t) ;; Much better performance on large projects
   (setq projectile-completion-system 'ivy))
 
 (use-package counsel-projectile
@@ -589,7 +649,6 @@ There are two things you can do about this warning:
   (counsel-projectile-mode 1)
   )
 
-;; multi-term
 
 (use-package multi-term
   :ensure t
@@ -643,92 +702,13 @@ There are two things you can do about this warning:
             (define-key term-raw-map (kbd "C-y") 'term-paste)) ))
 
 ;; Bind launch multi-term to C-`, the same as VSCode
-(global-set-key (kbd "C-`") (kbd "M-x multi-term RET"))
+;; (global-set-key (kbd "C-`") (kbd "M-x multi-term RET"))
 
-;; Treemacs
-  (use-package treemacs
-    :ensure t
-    :defer t
-    :init
-    (with-eval-after-load 'winum
-      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-    :config
-    (progn
-      (setq treemacs-collapse-dirs                 (if (treemacs--find-python3) 3 0)
-            treemacs-deferred-git-apply-delay      0.5
-            treemacs-display-in-side-window        t
-            treemacs-eldoc-display                 t
-            treemacs-file-event-delay              5000
-            treemacs-file-follow-delay             0.2
-            treemacs-follow-after-init             t
-            treemacs-git-command-pipe              ""
-            treemacs-goto-tag-strategy             'refetch-index
-            treemacs-indentation                   2
-            treemacs-indentation-string            " "
-            treemacs-is-never-other-window         nil
-            treemacs-max-git-entries               5000
-            treemacs-missing-project-action        'ask
-            treemacs-no-png-images                 nil
-            treemacs-no-delete-other-windows       t
-            treemacs-project-follow-cleanup        nil
-            treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-            treemacs-recenter-distance             0.1
-            treemacs-recenter-after-file-follow    nil
-            treemacs-recenter-after-tag-follow     nil
-            treemacs-recenter-after-project-jump   'always
-            treemacs-recenter-after-project-expand 'on-distance
-            treemacs-show-cursor                   nil
-            treemacs-show-hidden-files             t
-            treemacs-silent-filewatch              nil
-            treemacs-silent-refresh                nil
-            treemacs-sorting                       'alphabetic-desc
-            treemacs-space-between-root-nodes      t
-            treemacs-tag-follow-cleanup            t
-            treemacs-tag-follow-delay              1.5
-            treemacs-width                         35)
-
-      ;; The default width and height of the icons is 22 pixels. If you are
-      ;; using a Hi-DPI display, uncomment this to double the icon size.
-      ;;(treemacs-resize-icons 44)
-
-      (treemacs-follow-mode t)
-      (treemacs-filewatch-mode t)
-      (treemacs-fringe-indicator-mode t)
-      (pcase (cons (not (null (executable-find "git")))
-                   (not (null (treemacs--find-python3))))
-        (`(t . t)
-         (treemacs-git-mode 'deferred))
-        (`(t . _)
-         (treemacs-git-mode 'simple))))
-    :bind
-    (:map global-map
-          ("M-0"       . treemacs-select-window)
-          ("C-x t 1"   . treemacs-delete-other-windows)
-          ("C-x t t"   . treemacs)
-          ("C-x t B"   . treemacs-bookmark)
-          ("C-x t C-t" . treemacs-find-file)
-          ("C-x t M-t" . treemacs-find-tag)))
-
-  (use-package treemacs-evil
-    :after treemacs evil
-    :ensure t)
-
-  (use-package treemacs-projectile
-    :after treemacs projectile
-    :ensure t)
-
-  (use-package treemacs-magit
-    :after treemacs magit
-    :ensure t)
-
-;; Magit
-
-  (use-package magit
-      :ensure t
-      :init
-      (progn
-      (bind-key "C-x g" 'magit-status)
-      ))
+(use-package magit
+  :ensure t
+  :init
+  (progn
+    (bind-key "C-x g" 'magit-status)))
 
   ;; (setq magit-status-margin
   ;;   '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18))
@@ -771,17 +751,14 @@ There are two things you can do about this warning:
   ;;                 (git-gutter:clear))
   ;;          :color blue))
 
-;; undo-tree
-(use-package undo-tree
-  :ensure t
-  :config
-  (progn
-    (global-undo-tree-mode)
-    (setq undo-tree-visualizer-timestamps t)
-    (setq undo-tree-visualizer-diff t)))
+;; (use-package undo-tree
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (global-undo-tree-mode)
+;;     (setq undo-tree-visualizer-timestamps t)
+;;     (setq undo-tree-visualizer-diff t)))
 
-
-;; dashboard
 
 (use-package dashboard
  :ensure t
@@ -794,107 +771,85 @@ There are two things you can do about this warning:
 (setq dashboard-set-footer nil)
  (dashboard-setup-startup-hook))
 
-;; evil mode
-
-  ;; (use-package evil
-  ;;   :ensure t
-  ;;   :init
-  ;;   ;;(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  ;;   (setq evil-want-keybinding nil)
-  ;;   :config
-  ;;   (evil-mode 1)
-  ;; )
-  ;; (use-package evil-collection
-  ;;   ;;:after evil
-  ;;   :ensure t
-  ;;   :config
-  ;;   (evil-collection-init))
-
-  ;; (use-package evil-escape
-  ;; :ensure t
-  ;; :config
-  ;; (evil-escape-mode 1)
-  ;; (setq-default evil-escape-delay 0.2)
-  ;; (setq-default evil-escape-key-sequence "jk"))
-
-;; imenu-list
-
 (use-package imenu-list
 :ensure t
 :config)
 
-;; lsp-mode2
 
-    ;; set prefix for lsp-command-keymap (few alternatives - "s-l", "C-l")
-      (setq lsp-keymap-prefix "C-c l")
+(use-package lsp-mode
+  :defer t
+  :commands (lsp lsp-deferred)
+  :hook ((c-mode c++-mode python-mode web-mode php-mode js2-mode typescript-mode) . lsp)
+  :config
+  (setq lsp-diagnostic-package :none)
+  (setq lsp-keymap-prefix "C-c l")
+  (with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
-      (use-package lsp-mode
-        :ensure t
-        :commands lsp
-        :hook ((c-mode c++-mode python-mode web-mode php-mode) . lsp)
-        :config
-        )
+  )
+  (setq lsp-keymap-prefix "C-c l")
 
-  ;;  (setq lsp-enabled-clients '(jedi clangd))
-  (use-package lsp-ui
-    :after lsp
-    :ensure t
-    :hook (lsp-mode . lsp-ui-mode)
-    :config
-    ;; (setq lsp-ui-sideline-enable t)
-    ;; (setq lsp-ui-sideline-show-hover nil)
-    ;; (setq lsp-ui-doc-position 'bottom)
-    ;; ;; lsp config stuff
-    ;; (setq lsp-enable-links nil)
-    ;; ;; (setq lsp-signature-render-documentation nil)
-    ;; (setq lsp-headerline-breadcrumb-enable nil)
-    ;; (setq lsp-ui-doc-enable nil)
-    ;; (setq lsp-completion-enable-additional-text-edit nil)
-    ;; (setq web-mode-enable-current-element-highlight t)
-    (lsp-ui-doc-show))
+;;  (setq lsp-enabled-clients '(jedi clangd))
 
-
-      ;; (use-package lsp-jedi
-      ;;   :ensure t
-      ;;   :config
-      ;;   (with-eval-after-load "lsp-mode"
-      ;;     (add-to-list 'lsp-disabled-clients 'pyls)
-      ;;     (add-to-list 'lsp-enabled-clients 'jedi)))
-
-      (setq lsp-ui-doc-show-with-cursor nil)
-
-      ;; (use-package dap-mode
-      ;;   :ensure t
-      ;;   :hook (lsp-mode . dap-mode)
-      ;;   :config
-      ;;   (dap-ui-mode 1)
-      ;;   (dap-tooltip-mode 1)
-      ;;   (require 'dap-node)
-      ;;   (dap-node-setup))
-
-      ;; (dap-auto-configure-mode)
-      ;; (require 'dap-gdb-lldb)
-      ;;  (require 'dap-cpptools)
-      ;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
+;; (use-package lsp-ui
+;;   :hook (lsp-mode . lsp-ui-mode)
+;;   :custom
+;;   ;; (setq lsp-ui-sideline-enable t)
+;;   ;; (setq lsp-ui-sideline-show-hover nil)
+;;   ;; (setq lsp-ui-doc-position 'bottom)
+;;   ;; ;; lsp config stuff
+;;   ;; (setq lsp-enable-links nil)
+;;   ;; ;; (setq lsp-signature-render-documentation nil)
+;;   ;;(setq lsp-headerline-breadcrumb-mode nil)
+;;   (lsp-ui-doc-enable t)
+;;   (lsp-ui-doc-enable)
+;;   (lsp-ui-peek--show t)
+;;   (lsp-ui-doc--display t)
+;;   (lsp-signature-toggle-full-docs)
+;;   (lsp-enable-file-watchers nil)
+;;   ;; (setq lsp-completion-enable-additional-text-edit nil)
+;;   ;; (setq web-mode-enable-current-element-highlight t)
+;;   (lsp-ui-doc-show t)
+;;   (lsp-ui-doc-show)
+;;   ;;(lsp-ui-doc-position 'bottom)
+;;  )
 
 
-;; php mode
+;;       (use-package dap-mode
+;;         :ensure t
+;;         :hook (lsp-mode . dap-mode)
+;;         :config
+;;         (dap-ui-mode 1)
+;;         (dap-tooltip-mode 1)
+;;         (require 'dap-node)
+;;         ;;      (dap-node-setup)
+;;         )
+
+;;       (dap-auto-configure-mode)
+;; ;;      (require 'dap-gdb-lldb)
+;; ;;       (require 'dap-cpptools)
+;; ;;      https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
+
+;; eglot mode, try this out again soon!
+
+;; (use-package eglot
+;; :ensure t
+;; :config
+;; (add-to-list 'eglot-server-programs '(php-mode . ("intelephense" "--stdio")))
+;;)
+
 
 (use-package php-mode
 :ensure t
 :config)
 
 
-;; exec path from shell
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
 
-    (use-package exec-path-from-shell
-    :ensure t
-    :config
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize)))
-
-
-;; yaml-mode
 
 (use-package yaml-mode
       :ensure t
@@ -903,18 +858,20 @@ There are two things you can do about this warning:
       (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode)))
 
 
+(use-package fzf
+  :bind
+    ;; Don't forget to set keybinds!
+  :config
+  (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
+        fzf/executable "fzf"
+        fzf/git-grep-args "-i --line-number %s"
+        ;; command used for `fzf-grep-*` functions
+        ;; example usage for ripgrep:
+        ;; fzf/grep-command "rg --no-heading -nH"
+        fzf/grep-command "grep -nrH"
+        ;; If nil, the fzf buffer will appear at the top of the window
+        fzf/position-bottom t
+        fzf/window-height 15))
 
+;; vlf, used for opening large files apparently
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("23c806e34594a583ea5bbf5adf9a964afe4f28b4467d28777bcba0d35aa0872e" "1d5e33500bc9548f800f9e248b57d1b2a9ecde79cb40c0b1398dec51ee820daf" "730c0535f3d0edc8119588447af65230d205a7402bf71194a9817d3bf0d6b5ea" "7a7b1d475b42c1a0b61f3b1d1225dd249ffa1abb1b7f726aec59ac7ca3bf4dae" default)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
