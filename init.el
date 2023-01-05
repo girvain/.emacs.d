@@ -44,6 +44,9 @@ There are two things you can do about this warning:
 ;; Interface Tweaks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; This shit slows it right down when enabled!
+(setq auto-save-default nil)
+
 (setq inhibit-startup-message t)
             (tool-bar-mode -1)
             (setq gc-cons-threshold 100000000)
@@ -73,7 +76,7 @@ There are two things you can do about this warning:
 (setq yank-pop-change-selection t)
 
 (show-paren-mode 1)
-            (setq column-number-mode t)
+            ;; (setq column-number-mode t)
 
             ;; minimalistic Emacs at startup
             (menu-bar-mode 1)
@@ -93,9 +96,10 @@ There are two things you can do about this warning:
               (other-window -1))
             (global-set-key (kbd "C-'") 'other-window)
             (global-set-key (kbd "C-;") 'prev-window)
+            (global-set-key (kbd "C-`") 'other-frame)
 
             ;; enable line numbers for all programing modes
-            (add-hook 'prog-mode-hook 'linum-mode)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
             ; Highlights the current cursor line
             (global-hl-line-mode t)
@@ -290,26 +294,26 @@ There are two things you can do about this warning:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; evil mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  :config
-  (evil-mode 1))
+;; (use-package evil
+;;   :ensure t
+;;   :init
+;;   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+;;   (setq evil-want-keybinding nil)
+;;   :config
+;;   (evil-mode 1))
 
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
+;; (use-package evil-collection
+;;   :after evil
+;;   :ensure t
+;;   :config
+;;   (evil-collection-init))
 
-  (use-package evil-escape
-  :ensure t
-  :config
-  (evil-escape-mode 1)
-  (setq-default evil-escape-delay 0.2)
-  (setq-default evil-escape-key-sequence "jk"))
+;;   (use-package evil-escape
+;;   :ensure t
+;;   :config
+;;   (evil-escape-mode 1)
+;;   (setq-default evil-escape-delay 0.2)
+;;   (setq-default evil-escape-key-sequence "jk"))
 
 
 
@@ -364,7 +368,7 @@ There are two things you can do about this warning:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; fonts
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(set-frame-font "Monaco 12") ;; this is a mac font that needds installed on linux:
+;;(set-frame-font "Monaco 12") ;; this is a mac font that needds installed on linux:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI
@@ -416,7 +420,20 @@ There are two things you can do about this warning:
     :config
     ;; set to have global completion or on specific modes.
     (global-flycheck-mode)
-;;    (add-hook 'c-mode-hook 'flycheck-mode)
+    ;;    (add-hook 'c-mode-hook 'flycheck-mode)
+
+    ;; use local eslint from node_modules before global
+    ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
+    (defun my/use-eslint-from-node-modules ()
+      (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (eslint (and root
+                      (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                        root))))
+    (when (and eslint (file-executable-p eslint))
+      (setq-local flycheck-javascript-eslint-executable eslint))))
+    (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
     )
 
   ;; Color mode line for errors.
@@ -479,6 +496,7 @@ There are two things you can do about this warning:
         :config
         (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
         (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+        (add-to-list 'auto-mode-alist '("\\.handlebars?\\'" . web-mode))
     ;; 	(setq web-mode-engines-alist
     ;; 		  '(("django"    . "\\.html\\'")))
     ;; 	(setq web-mode-ac-sources-alist
@@ -509,6 +527,7 @@ There are two things you can do about this warning:
 :ensure t
 :config
 (add-hook 'js2-mode-hook 'prettier-js-mode)
+(add-hook 'typescript-mode-hook 'prettier-js-mode)
 ;;(add-hook 'web-mode-hook 'prettier-js-mode)
 )
 
@@ -532,7 +551,7 @@ There are two things you can do about this warning:
                         '(javascript-jshint)))
 
   ;; use eslint with web-mode for jsx files
-  ;;  (flycheck-add-mode 'javascript-eslint 'web-mode)
+   (flycheck-add-mode 'javascript-eslint 'web-mode)
 
   ;; customize flycheck temp file prefix
   ;;(setq-default flycheck-temp-prefix ".flycheck")
@@ -575,61 +594,67 @@ There are two things you can do about this warning:
     :config
 
     )
-
-
-;; Tide-mode
-  (use-package tide
-    :ensure t
-    :after (typescript-mode company flycheck)
-    :hook ((typescript-mode . tide-setup)
-           (typescript-mode . tide-hl-identifier-mode)
-           ;;(before-save . tide-format-before-save)
-           )
-  )
-
-  (defun setup-tide-mode ()
-    (interactive)
-    (tide-setup)
-    (flycheck-mode +1)
-    ;; Set flycheck to only run when file is saved
-  ;;  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1)
-    ;; company is an optional dependency. You have to
-    ;; install it separately via package-install
-    ;; `M-x package-install [ret] company`
-    (company-mode +1))
-
-  ;; aligns annotation to the right hand side
-  (setq company-tooltip-align-annotations t)
-
-  ;; formats the buffer before saving
-  ;;(add-hook 'before-save-hook 'tide-format-before-save)
-
-  (add-hook 'typescript-mode-hook #'setup-tide-mode)
-
-  (add-hook 'js2-mode-hook #'setup-tide-mode)
-  ;; configure javascript-tide checker to run after your default javascript checker
-  ;(flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-
-  (require 'web-mode)
-  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (when (string-equal "jsx" (file-name-extension buffer-file-name))
-                (setup-tide-mode))))
-  ;; configure jsx-tide checker to run after your default jsx checker
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-  ;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
-
-
-(use-package yasnippet
+(use-package typescript-mode
   :ensure t
-  :init
-  (yas-global-mode 1))
+  :config
+  (setq typescript-indent-level 2)
+  (flycheck-add-mode 'javascript-eslint 'typescript-mode)
+  (flycheck-add-mode 'typescript-tslint 'typescript-mode)
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
 
-(use-package yasnippet-snippets
-  :ensure t)
+;; ;; Tide-mode
+;;   (use-package tide
+;;     :ensure t
+;;     :after (typescript-mode company flycheck)
+;;     :hook ((typescript-mode . tide-setup)
+;;            (typescript-mode . tide-hl-identifier-mode)
+;;            ;;(before-save . tide-format-before-save)
+;;            )
+;;   )
+
+;;   (defun setup-tide-mode ()
+;;     (interactive)
+;;     (tide-setup)
+;;     (flycheck-mode +1)
+;;     ;; Set flycheck to only run when file is saved
+;;   ;;  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;;     (eldoc-mode +1)
+;;     (tide-hl-identifier-mode +1)
+;;     ;; company is an optional dependency. You have to
+;;     ;; install it separately via package-install
+;;     ;; `M-x package-install [ret] company`
+;;     (company-mode +1))
+
+;;   ;; aligns annotation to the right hand side
+;;   (setq company-tooltip-align-annotations t)
+
+;;   ;; formats the buffer before saving
+;;   ;;(add-hook 'before-save-hook 'tide-format-before-save)
+
+;;   (add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+;;   (add-hook 'js2-mode-hook #'setup-tide-mode)
+;;   ;; configure javascript-tide checker to run after your default javascript checker
+;;   ;(flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+
+;;   (require 'web-mode)
+;;   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+;;   (add-hook 'web-mode-hook
+;;             (lambda ()
+;;               (when (string-equal "jsx" (file-name-extension buffer-file-name))
+;;                 (setup-tide-mode))))
+;;   ;; configure jsx-tide checker to run after your default jsx checker
+;;   (flycheck-add-mode 'javascript-eslint 'web-mode)
+;;   ;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+
+
+;; (use-package yasnippet
+;;   :ensure t
+;;   :init
+;;   (yas-global-mode 1))
+
+;; (use-package yasnippet-snippets
+;;   :ensure t)
 
 
 ;; Projectile
@@ -775,44 +800,53 @@ There are two things you can do about this warning:
 :ensure t
 :config)
 
+(use-package go-mode
+:ensure t
+:config
+(add-hook 'go-mode-hook 'lsp-deferred))
+
 
 (use-package lsp-mode
   :defer t
   :commands (lsp lsp-deferred)
-  :hook ((c-mode c++-mode python-mode web-mode php-mode js2-mode typescript-mode) . lsp)
+  :hook ((c-mode c++-mode web-mode python-mode php-mode js2-mode typescript-mode go-mode) . lsp)
   :config
-  (setq lsp-diagnostic-package :none)
+  ;; (setq lsp-diagnostic-package :none)
   (setq lsp-keymap-prefix "C-c l")
   (with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
-
+    (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+  (setq lsp-headerline-breadcrumb-mode nil)
+  (setq lsp-eslint-auto-fix-on-save t)
   )
+
   (setq lsp-keymap-prefix "C-c l")
 
 ;;  (setq lsp-enabled-clients '(jedi clangd))
 
-;; (use-package lsp-ui
-;;   :hook (lsp-mode . lsp-ui-mode)
-;;   :custom
-;;   ;; (setq lsp-ui-sideline-enable t)
-;;   ;; (setq lsp-ui-sideline-show-hover nil)
-;;   ;; (setq lsp-ui-doc-position 'bottom)
-;;   ;; ;; lsp config stuff
-;;   ;; (setq lsp-enable-links nil)
-;;   ;; ;; (setq lsp-signature-render-documentation nil)
-;;   ;;(setq lsp-headerline-breadcrumb-mode nil)
-;;   (lsp-ui-doc-enable t)
-;;   (lsp-ui-doc-enable)
-;;   (lsp-ui-peek--show t)
-;;   (lsp-ui-doc--display t)
-;;   (lsp-signature-toggle-full-docs)
-;;   (lsp-enable-file-watchers nil)
-;;   ;; (setq lsp-completion-enable-additional-text-edit nil)
-;;   ;; (setq web-mode-enable-current-element-highlight t)
-;;   (lsp-ui-doc-show t)
-;;   (lsp-ui-doc-show)
-;;   ;;(lsp-ui-doc-position 'bottom)
-;;  )
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :custom
+  ;; (setq lsp-ui-sideline-enable t)
+  ;; (setq lsp-ui-sideline-show-hover nil)
+  ;; (setq lsp-ui-doc-position 'bottom)
+  ;; ;; lsp config stuff
+  ;; (setq lsp-enable-links nil)
+  ;; ;; (setq lsp-signature-render-documentation nil)
+  (lsp-headerline-breadcrumb-mode nil)
+;;  (lsp-ui-sideline-show-code-actions t)
+
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-show-with-cursor t)
+  (lsp-ui-peek--show t)
+  (lsp-ui-doc--display t)
+  (lsp-signature-toggle-full-docs)
+  (lsp-enable-file-watchers nil)
+  ;; (setq lsp-completion-enable-additional-text-edit nil)
+  ;; (setq web-mode-enable-current-element-highlight t)
+  (lsp-ui-doc-show t)
+  (lsp-ui-doc-show)
+  ;;(lsp-ui-doc-position 'bottom)
+ )
 
 
 ;;       (use-package dap-mode
@@ -859,8 +893,7 @@ There are two things you can do about this warning:
 
 
 (use-package fzf
-  :bind
-    ;; Don't forget to set keybinds!
+  :ensure t
   :config
   (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
         fzf/executable "fzf"
@@ -875,3 +908,17 @@ There are two things you can do about this warning:
 
 ;; vlf, used for opening large files apparently
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(yasnippet-snippets yaml-mode which-key web-mode web-beautify use-package undo-tree try treemacs-projectile tide rjsx-mode rainbow-delimiters pug-mode prettier-js php-mode org-bullets neotree multi-term magit lsp-ui imenu-list highlight-indent-guides gruvbox-theme go-mode flycheck-pos-tip flycheck-plantuml flycheck-color-mode-line exec-path-from-shell evil-escape evil-collection emmet-mode doom-themes doom-modeline dashboard counsel-projectile company-quickhelp cmake-mode beacon all-the-icons-ivy-rich))
+ '(warning-suppress-types '((use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
