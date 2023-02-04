@@ -294,26 +294,26 @@ There are two things you can do about this warning:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; evil mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package evil
-;;   :ensure t
-;;   :init
-;;   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-;;   (setq evil-want-keybinding nil)
-;;   :config
-;;   (evil-mode 1))
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1))
 
-;; (use-package evil-collection
-;;   :after evil
-;;   :ensure t
-;;   :config
-;;   (evil-collection-init))
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
 
-;;   (use-package evil-escape
-;;   :ensure t
-;;   :config
-;;   (evil-escape-mode 1)
-;;   (setq-default evil-escape-delay 0.2)
-;;   (setq-default evil-escape-key-sequence "jk"))
+  (use-package evil-escape
+  :ensure t
+  :config
+  (evil-escape-mode 1)
+  (setq-default evil-escape-delay 0.2)
+  (setq-default evil-escape-key-sequence "jk"))
 
 
 
@@ -411,6 +411,29 @@ There are two things you can do about this warning:
   :config
   (setq highlight-indent-guides-method 'character)
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Treesitter
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package tree-sitter
+  :ensure t
+  :config
+  (global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
+  )
+
+(use-package tree-sitter-langs
+  :ensure t
+  :after tree-sitter
+  :config
+  ;; Load the language definition for Rust, if it hasn't been loaded.
+;; Return the language object.
+(tree-sitter-require 'tsx)
+(tree-sitter-require 'php)
+(tree-sitter-require 'typescript))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; flycheck
@@ -594,13 +617,16 @@ There are two things you can do about this warning:
     :config
 
     )
+
 (use-package typescript-mode
   :ensure t
   :config
   (setq typescript-indent-level 2)
   (flycheck-add-mode 'javascript-eslint 'typescript-mode)
   (flycheck-add-mode 'typescript-tslint 'typescript-mode)
+  (add-hook 'typescript-mode-hook #'tree-sitter-hl-mode)
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
+
 
 ;; ;; Tide-mode
 ;;   (use-package tide
@@ -913,8 +939,10 @@ There are two things you can do about this warning:
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("2ff9ac386eac4dffd77a33e93b0c8236bb376c5a5df62e36d4bfa821d56e4e20" "d80952c58cf1b06d936b1392c38230b74ae1a2a6729594770762dc0779ac66b7" "e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "2e05569868dc11a52b08926b4c1a27da77580daa9321773d92822f7a639956ce" default))
  '(package-selected-packages
-   '(yasnippet-snippets yaml-mode which-key web-mode web-beautify use-package undo-tree try treemacs-projectile tide rjsx-mode rainbow-delimiters pug-mode prettier-js php-mode org-bullets neotree multi-term magit lsp-ui imenu-list highlight-indent-guides gruvbox-theme go-mode flycheck-pos-tip flycheck-plantuml flycheck-color-mode-line exec-path-from-shell evil-escape evil-collection emmet-mode doom-themes doom-modeline dashboard counsel-projectile company-quickhelp cmake-mode beacon all-the-icons-ivy-rich))
+   '(tree-sitter-langs yasnippet-snippets yaml-mode which-key web-mode web-beautify use-package undo-tree try treemacs-projectile tide rjsx-mode rainbow-delimiters pug-mode prettier-js php-mode org-bullets neotree multi-term magit lsp-ui imenu-list highlight-indent-guides gruvbox-theme go-mode flycheck-pos-tip flycheck-plantuml flycheck-color-mode-line exec-path-from-shell evil-escape evil-collection emmet-mode doom-themes doom-modeline dashboard counsel-projectile company-quickhelp cmake-mode beacon all-the-icons-ivy-rich))
  '(warning-suppress-types '((use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
