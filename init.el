@@ -28,37 +28,6 @@ There are two things you can do about this warning:
 ;; ;;(add-to-list 'package-archives
 ;; ;; 	     '("melpa2" . "http://www.mirrorservice.org/sites/melpa.org/packages/"))
 ;; (package-initialize)
-
-;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-
-;; Bootstrap `use-package'
-(unless (package-installed-p 'use-package)
-	(package-refresh-contents)
-	(package-install 'use-package))
-
-;;
-;; Use ctrl alt q to format the code
-;;
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Interface Tweaks
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; This shit slows it right down when enabled!
-(setq auto-save-default nil)
-
-(setq inhibit-startup-message t)
-            (tool-bar-mode -1)
-            (setq gc-cons-threshold 100000000)
-            (setq read-process-output-max (* 1024 1024)) ;; 1mb
-
-            (fset 'yes-or-no-p 'y-or-n-p)
-            (global-set-key (kbd "<f5>") 'revert-buffer)
-
-;;start in full screen
-(add-hook 'emacs-startup-hook 'toggle-frame-maximized)
-
-;; mac key remap
 ;;(setq ns-command-modifier 'meta)
 ;;(setq mac-option-modifier 'control)
 ;;(setq ns-function-modifier 'control)
@@ -300,13 +269,25 @@ There are two things you can do about this warning:
   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
   (setq evil-want-keybinding nil)
   :config
+;; set leader key in all states
+  (evil-set-leader nil (kbd "C-SPC"))
+  (add-hook 'magit-mode-hook #'turn-off-evil-mode)
+  (add-hook 'magit-status-mode-hook #'turn-off-evil-mode)
+
+;; set leader key in normal state
+(evil-set-leader 'normal (kbd "SPC"))
+
+;; set local leader
+(evil-set-leader 'normal "," t)
   (evil-mode 1))
 
 (use-package evil-collection
   :after evil
   :ensure t
   :config
-  (evil-collection-init))
+  ;;(evil-collection-init
+  ;; only use bindings for these packages
+(evil-collection-init '(calendar dired calc ediff eglot org)))
 
   (use-package evil-escape
   :ensure t
@@ -368,7 +349,7 @@ There are two things you can do about this warning:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; fonts
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(set-frame-font "Monaco 12") ;; this is a mac font that needds installed on linux:
+(set-frame-font "Monaco 12") ;; this is a mac font that needds installed on linux:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI
@@ -379,7 +360,6 @@ There are two things you can do about this warning:
 :ensure t
 :config
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'rjsx-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'js2-mode-hook 'rainbow-delimiters-mode))
 
 ;; Try
@@ -414,79 +394,12 @@ There are two things you can do about this warning:
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Treesitter
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package tree-sitter
-  :ensure t
-  :config
-  (global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-
-  )
-
-(use-package tree-sitter-langs
-  :ensure t
-  :after tree-sitter
-  :config
-  ;; Load the language definition for Rust, if it hasn't been loaded.
-;; Return the language object.
-(tree-sitter-require 'tsx)
-(tree-sitter-require 'php)
-(tree-sitter-require 'typescript))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; flycheck
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (use-package flycheck
-    :ensure t
-    :config
-    ;; set to have global completion or on specific modes.
-    (global-flycheck-mode)
-    ;;    (add-hook 'c-mode-hook 'flycheck-mode)
-
-    ;; use local eslint from node_modules before global
-    ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
-    (defun my/use-eslint-from-node-modules ()
-      (let* ((root (locate-dominating-file
-                (or (buffer-file-name) default-directory)
-                "node_modules"))
-         (eslint (and root
-                      (expand-file-name "node_modules/eslint/bin/eslint.js"
-                                        root))))
-    (when (and eslint (file-executable-p eslint))
-      (setq-local flycheck-javascript-eslint-executable eslint))))
-    (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
-    )
-
-  ;; Color mode line for errors.
-   (use-package flycheck-color-mode-line
-     :ensure t
-     :after flycheck
-     :config '(add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
-     )
-
-  ;; Show pos-tip popups for errors.
-   (use-package flycheck-pos-tip
-     :ensure t
-     :after flycheck
-     :config (flycheck-pos-tip-mode)
-     )
-
-  ;; Flycheck-plantuml/
-   (use-package flycheck-plantuml
-     :after flycheck
-     :ensure t
-     :config (flycheck-plantuml-setup)
-     )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Company
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package company
   :ensure t
   :config
-  (setq company-idle-delay 0.0)
+  (setq company-idle-delay 0.3)
   (setq company-minimum-prefix-length 1)
   (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
@@ -496,7 +409,7 @@ There are two things you can do about this warning:
   (global-company-mode t)
 ;;  (add-hook 'c-mode-hook 'company-mode)
   (add-hook 'emacs-lisp-mode-hook 'company-mode)
-  (add-hook 'lisp-mode 'company-mode)
+  (add-hook 'lisp-mode-hook 'company-mode)
   )
 
 
@@ -554,133 +467,14 @@ There are two things you can do about this warning:
 ;;(add-hook 'web-mode-hook 'prettier-js-mode)
 )
 
-(use-package js2-mode
+
+(use-package yasnippet
   :ensure t
-  :config
-  (setq js2-basic-offset 2)
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  :init
+  (yas-global-mode 1))
 
-  ;; turn on flychecking globally
-  ;;(add-hook 'after-init-hook #'global-flycheck-mode)
-
-  ;; turn off js2 syntax hilighting
-  (setq js2-strict-missing-semi-warning nil)
-  (setq js2-mode-show-parse-errors nil)
-  (setq js2-mode-show-strict-warnings nil)
-
-  ;; disable jshint since we prefer eslint checking
-  (setq-default flycheck-disabled-checkers
-                (append flycheck-disabled-checkers
-                        '(javascript-jshint)))
-
-  ;; use eslint with web-mode for jsx files
-   (flycheck-add-mode 'javascript-eslint 'web-mode)
-
-  ;; customize flycheck temp file prefix
-  ;;(setq-default flycheck-temp-prefix ".flycheck")
-
-  ;; disable json-jsonlist checking for json files
-  (setq-default flycheck-disabled-checkers
-                (append flycheck-disabled-checkers
-                        '(json-jsonlist)))
-
-  )
-
-
-  ;; Better imenu
-  ;;(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
-
-  ;; (use-package company-tern
-  ;;   :ensure t
-  ;;   :config
-  ;;   (add-to-list 'company-backends 'company-tern)
-  ;;   (add-hook 'js2-mode-hook (lambda ()
-  ;;                              (flycheck-mode)
-  ;;                              (setq js2-basic-offset 2)
-  ;;                              (tern-mode)
-
-  ;;                              ;; disable jshint since we prefer eslint checking
-  ;;                              (setq-default flycheck-disabled-checkers
-  ;;                                            (append flycheck-disabled-checkers
-  ;;                                                    '(javascript-jshint)))
-
-  ;;                              (company-mode)))
-
-  ;; ;; Disable completion keybindings, as we use xref-js2 instead
-  ;; (define-key tern-mode-keymap (kbd "M-.") nil)
-  ;; (define-key tern-mode-keymap (kbd "M-,") nil)
-  ;; )
-
-  ;; rjsx
-    (use-package rjsx-mode
-    :ensure t
-    :config
-
-    )
-
-(use-package typescript-mode
-  :ensure t
-  :config
-  (setq typescript-indent-level 2)
-  (flycheck-add-mode 'javascript-eslint 'typescript-mode)
-  (flycheck-add-mode 'typescript-tslint 'typescript-mode)
-  (add-hook 'typescript-mode-hook #'tree-sitter-hl-mode)
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode)))
-
-
-;; ;; Tide-mode
-;;   (use-package tide
-;;     :ensure t
-;;     :after (typescript-mode company flycheck)
-;;     :hook ((typescript-mode . tide-setup)
-;;            (typescript-mode . tide-hl-identifier-mode)
-;;            ;;(before-save . tide-format-before-save)
-;;            )
-;;   )
-
-;;   (defun setup-tide-mode ()
-;;     (interactive)
-;;     (tide-setup)
-;;     (flycheck-mode +1)
-;;     ;; Set flycheck to only run when file is saved
-;;   ;;  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-;;     (eldoc-mode +1)
-;;     (tide-hl-identifier-mode +1)
-;;     ;; company is an optional dependency. You have to
-;;     ;; install it separately via package-install
-;;     ;; `M-x package-install [ret] company`
-;;     (company-mode +1))
-
-;;   ;; aligns annotation to the right hand side
-;;   (setq company-tooltip-align-annotations t)
-
-;;   ;; formats the buffer before saving
-;;   ;;(add-hook 'before-save-hook 'tide-format-before-save)
-
-;;   (add-hook 'typescript-mode-hook #'setup-tide-mode)
-
-;;   (add-hook 'js2-mode-hook #'setup-tide-mode)
-;;   ;; configure javascript-tide checker to run after your default javascript checker
-;;   ;(flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-
-;;   (require 'web-mode)
-;;   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-;;   (add-hook 'web-mode-hook
-;;             (lambda ()
-;;               (when (string-equal "jsx" (file-name-extension buffer-file-name))
-;;                 (setup-tide-mode))))
-;;   ;; configure jsx-tide checker to run after your default jsx checker
-;;   (flycheck-add-mode 'javascript-eslint 'web-mode)
-;;   ;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
-
-
-;; (use-package yasnippet
-;;   :ensure t
-;;   :init
-;;   (yas-global-mode 1))
-
-;; (use-package yasnippet-snippets
-;;   :ensure t)
+(use-package yasnippet-snippets
+  :ensure t)
 
 
 ;; Projectile
@@ -758,8 +552,13 @@ There are two things you can do about this warning:
 (use-package magit
   :ensure t
   :init
+  :config
   (progn
-    (bind-key "C-x g" 'magit-status)))
+    (bind-key "C-x g" 'magit-status)
+    )
+
+  (setq turn-off-evil-mode nil)
+  )
 
   ;; (setq magit-status-margin
   ;;   '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18))
@@ -822,88 +621,6 @@ There are two things you can do about this warning:
 (setq dashboard-set-footer nil)
  (dashboard-setup-startup-hook))
 
-(use-package imenu-list
-:ensure t
-:config)
-
-(use-package go-mode
-:ensure t
-:config
-(add-hook 'go-mode-hook 'lsp-deferred))
-
-
-(use-package lsp-mode
-  :defer t
-  :commands (lsp lsp-deferred)
-  :hook ((c-mode c++-mode web-mode python-mode php-mode js2-mode typescript-mode go-mode) . lsp)
-  :config
-  ;; (setq lsp-diagnostic-package :none)
-  (setq lsp-keymap-prefix "C-c l")
-  (with-eval-after-load 'lsp-mode
-    (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
-  (setq lsp-headerline-breadcrumb-mode nil)
-  (setq lsp-eslint-auto-fix-on-save t)
-  )
-
-  (setq lsp-keymap-prefix "C-c l")
-
-;;  (setq lsp-enabled-clients '(jedi clangd))
-
-(use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
-  :custom
-  ;; (setq lsp-ui-sideline-enable t)
-  ;; (setq lsp-ui-sideline-show-hover nil)
-  ;; (setq lsp-ui-doc-position 'bottom)
-  ;; ;; lsp config stuff
-  ;; (setq lsp-enable-links nil)
-  ;; ;; (setq lsp-signature-render-documentation nil)
-  (lsp-headerline-breadcrumb-mode nil)
-;;  (lsp-ui-sideline-show-code-actions t)
-
-  (lsp-ui-doc-enable t)
-  (lsp-ui-doc-show-with-cursor t)
-  (lsp-ui-peek--show t)
-  (lsp-ui-doc--display t)
-  (lsp-signature-toggle-full-docs)
-  (lsp-enable-file-watchers nil)
-  ;; (setq lsp-completion-enable-additional-text-edit nil)
-  ;; (setq web-mode-enable-current-element-highlight t)
-  (lsp-ui-doc-show t)
-  (lsp-ui-doc-show)
-  ;;(lsp-ui-doc-position 'bottom)
- )
-
-
-;;       (use-package dap-mode
-;;         :ensure t
-;;         :hook (lsp-mode . dap-mode)
-;;         :config
-;;         (dap-ui-mode 1)
-;;         (dap-tooltip-mode 1)
-;;         (require 'dap-node)
-;;         ;;      (dap-node-setup)
-;;         )
-
-;;       (dap-auto-configure-mode)
-;; ;;      (require 'dap-gdb-lldb)
-;; ;;       (require 'dap-cpptools)
-;; ;;      https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
-
-;; eglot mode, try this out again soon!
-
-;; (use-package eglot
-;; :ensure t
-;; :config
-;; (add-to-list 'eglot-server-programs '(php-mode . ("intelephense" "--stdio")))
-;;)
-
-
-(use-package php-mode
-:ensure t
-:config)
-
-
 (use-package exec-path-from-shell
   :ensure t
   :config
@@ -911,11 +628,11 @@ There are two things you can do about this warning:
     (exec-path-from-shell-initialize)))
 
 
-(use-package yaml-mode
-      :ensure t
-      :config
-  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-      (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode)))
+;; (use-package yaml-mode
+;;       :ensure t
+;;       :config
+;;   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+;;       (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode)))
 
 
 (use-package fzf
@@ -926,27 +643,68 @@ There are two things you can do about this warning:
         fzf/git-grep-args "-i --line-number %s"
         ;; command used for `fzf-grep-*` functions
         ;; example usage for ripgrep:
-        ;; fzf/grep-command "rg --no-heading -nH"
+        ;; fzf/grep-commanqd "rg --no-heading -nH"
         fzf/grep-command "grep -nrH"
         ;; If nil, the fzf buffer will appear at the top of the window
         fzf/position-bottom t
-        fzf/window-height 15))
+        fzf/window-height 15)
 
-;; vlf, used for opening large files apparently
+(defun fzf-example ()
+  (fzf-with-entries
+   (list "a" "b" "c")
+   'print))
+(defun fzf-find-notes (&optional directory)
+  (interactive)
+  (let ((d (fzf/resolve-directory directory)))
+    (fzf
+    (lambda (x)
+        (let ((f (expand-file-name x d)))
+        (when (file-exists-p f)
+            (find-file f))))
+    d)))
+  (defun my-notes ()
+  (interactive)
+    (fzf/resolve-directory "~/Dropbox")))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("2ff9ac386eac4dffd77a33e93b0c8236bb376c5a5df62e36d4bfa821d56e4e20" "d80952c58cf1b06d936b1392c38230b74ae1a2a6729594770762dc0779ac66b7" "e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "2e05569868dc11a52b08926b4c1a27da77580daa9321773d92822f7a639956ce" default))
- '(package-selected-packages
-   '(tree-sitter-langs yasnippet-snippets yaml-mode which-key web-mode web-beautify use-package undo-tree try treemacs-projectile tide rjsx-mode rainbow-delimiters pug-mode prettier-js php-mode org-bullets neotree multi-term magit lsp-ui imenu-list highlight-indent-guides gruvbox-theme go-mode flycheck-pos-tip flycheck-plantuml flycheck-color-mode-line exec-path-from-shell evil-escape evil-collection emmet-mode doom-themes doom-modeline dashboard counsel-projectile company-quickhelp cmake-mode beacon all-the-icons-ivy-rich))
- '(warning-suppress-types '((use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Treesitter config
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;(setq treesit-extra-load-path '("/usr/local/lib"))
+
+(setq treesit-language-source-alist
+   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+     (cmake "https://github.com/uyha/tree-sitter-cmake")
+     (css "https://github.com/tree-sitter/tree-sitter-css")
+     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (html "https://github.com/tree-sitter/tree-sitter-html")
+     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+     (json "https://github.com/tree-sitter/tree-sitter-json")
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (python "https://github.com/tree-sitter/tree-sitter-python")
+     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+(setq major-mode-remap-alist
+ '((yaml-mode . yaml-ts-mode)
+   (bash-mode . bash-ts-mode)
+   (js2-mode . js-ts-mode)
+   (typescript-mode . typescript-ts-mode)
+   (json-mode . json-ts-mode)
+   (css-mode . css-ts-mode)
+   (python-mode . python-ts-mode)))
+
+
+(add-hook 'typescript-ts-mode-hook 'eglot-ensure)
+(add-hook 'tsx-ts-mode-hook 'eglot-ensure)
+
+(add-to-list 'auto-mode-alist '("\\.ts$" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx$" . tsx-ts-mode))
+
+(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
+(add-hook 'python-ts-mode 'eglot)
