@@ -309,6 +309,8 @@ There are two things you can do about this warning:
      ("M-y" . ivy-next-line))
     :config
     (global-set-key "\C-x\ \C-r" 'counsel-recentf)
+    (global-set-key (kbd "C-c k") 'counsel-ag)
+    (global-set-key (kbd "C-c f") 'counsel-fzf)
     )
 
     (use-package ivy
@@ -476,6 +478,54 @@ There are two things you can do about this warning:
 (use-package yasnippet-snippets
   :ensure t)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Clojure
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package clojure-mode
+  :ensure t
+  :config
+  (add-hook 'clojure-mode-hook #'lsp)
+  (add-hook 'clojure-mode-hook #'describe-bindings)
+)
+
+(use-package clojure-ts-mode
+  :ensure t
+  :config
+  (add-hook 'clojure-ts-mode-hook #'lsp)
+)
+
+ (use-package cider
+    :ensure t
+    :config
+    (add-hook 'cider-repl-mode-hook #'company-mode)
+    (add-hook 'cider-mode-hook #'company-mode)
+    (add-hook 'cider-mode-hook #'eldoc-mode)
+;;    (add-hook 'cider-mode-hook #'cider-hydra-mode)
+    (setq cider-repl-use-pretty-printing t)
+    (setq cider-repl-display-help-banner nil)
+    ;;    (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
+
+    :bind (("M-r" . cider-namespace-refresh)
+           ("C-c r" . cider-repl-reset)
+           ("C-c ." . cider-reset-test-run-tests))
+    )
+
+  (use-package clj-refactor
+    :ensure t
+    :config
+    (add-hook 'clojure-mode-hook (lambda ()
+                                   (clj-refactor-mode 1)
+                                   ;; insert keybinding setup here
+                                   ))
+    (cljr-add-keybindings-with-prefix "C-c C-m")
+    (setq cljr-warn-on-eval nil)
+    :bind ("C-c '" . hydra-cljr-help-menu/body)
+    )
+
+(use-package cider
+    :ensure t
+    :config
+    )
 
 ;; Projectile
 
@@ -649,6 +699,18 @@ There are two things you can do about this warning:
         fzf/position-bottom t
         fzf/window-height 15)
 
+; Recursive fuzzy file search
+; (resolve-directory will use the projectile root if set)
+(defun fzf-find-fart (&optional directory)
+  (interactive)
+  (let ((d (fzf/resolve-directory directory)))
+    (fzf-base
+    (lambda (x)
+        (let ((f (expand-file-name x d)))
+        (when (file-exists-p f)
+            (find-file f))))
+    d)))
+
 (defun fzf-example ()
   (fzf-with-entries
    (list "a" "b" "c")
@@ -677,6 +739,7 @@ There are two things you can do about this warning:
    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
      (cmake "https://github.com/uyha/tree-sitter-cmake")
      (css "https://github.com/tree-sitter/tree-sitter-css")
+     (clojure "git@github.com:sogaiu/tree-sitter-clojure.git")
      (elisp "https://github.com/Wilfred/tree-sitter-elisp")
      (go "https://github.com/tree-sitter/tree-sitter-go")
      (html "https://github.com/tree-sitter/tree-sitter-html")
@@ -697,6 +760,7 @@ There are two things you can do about this warning:
    (typescript-mode . typescript-ts-mode)
    (json-mode . json-ts-mode)
    (css-mode . css-ts-mode)
+     (clojure-mode . clojure-ts-mode)
    (python-mode . python-ts-mode)))
 
 
@@ -706,5 +770,28 @@ There are two things you can do about this warning:
 (add-to-list 'auto-mode-alist '("\\.ts$" . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx$" . tsx-ts-mode))
 
+(add-to-list 'auto-mode-alist '("\\.clj$" . clojure-ts-mode))
+;;(add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
+
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (add-hook 'python-ts-mode 'eglot)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2"
+     "8b148cf8154d34917dfc794b5d0fe65f21e9155977a36a5985f89c09a9669aa0"
+     "456697e914823ee45365b843c89fbc79191fdbaff471b29aad9dcbe0ee1d5641"
+     "a5270d86fac30303c5910be7403467662d7601b821af2ff0c4eb181153ebfc0a"
+     default))
+ '(package-selected-packages nil)
+ '(warning-suppress-log-types '((comp) (comp)))
+ '(warning-suppress-types '((use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
