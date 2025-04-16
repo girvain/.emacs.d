@@ -38,112 +38,120 @@ There are two things you can do about this warning:
 
 ;; set tabs to indent as white spaces and set default tab width to 4 white spaces
 (setq-default indent-tabs-mode nil)
-            (setq-default tab-width 4)
-            ;(setq-default indent-line-function 'insert-tab)
+(setq-default tab-width 4)
+                                        ;(setq-default indent-line-function 'insert-tab)
 
 ;; setup: M-y saves the new yank to the clipboard.
 (setq yank-pop-change-selection t)
 
 (show-paren-mode 1)
-            ;; (setq column-number-mode t)
+;; (setq column-number-mode t)
 
-            ;; minimalistic Emacs at startup
-            (menu-bar-mode 1)
-            (tool-bar-mode 0)
-            (set-scroll-bar-mode nil)
+;; minimalistic Emacs at startup
+(menu-bar-mode 1)
+(tool-bar-mode 0)
+(set-scroll-bar-mode nil)
 
-            ;; don't use global line highlight mode
-            (global-hl-line-mode 0)
+;; don't use global line highlight mode
+(global-hl-line-mode 0)
 
 
-            ;; supress welcome screen
-            (setq inhibit-startup-message t)
+;; supress welcome screen
+(setq inhibit-startup-message t)
 
-            ;; Bind other-window (and custom prev-window) to more accessible keys.
-            (defun prev-window ()
-              (interactive)
-              (other-window -1))
-            (global-set-key (kbd "C-'") 'other-window)
-            (global-set-key (kbd "C-;") 'prev-window)
-            (global-set-key (kbd "C-`") 'other-frame)
+;; Bind other-window (and custom prev-window) to more accessible keys.
+(defun prev-window ()
+  (interactive)
+  (other-window -1))
+(global-set-key (kbd "C-'") 'other-window)
+(global-set-key (kbd "C-;") 'prev-window)
+(global-set-key (kbd "C-`") 'other-frame)
 
-            ;; enable line numbers for all programing modes
+;; enable line numbers for all programing modes
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
-            ; Highlights the current cursor line
-            (global-hl-line-mode t)
+                                        ; Highlights the current cursor line
+(global-hl-line-mode t)
 
-            ;; auto close bracket insertion. New in emacs 24
-            (electric-pair-mode 1)
+;; auto close bracket insertion. New in emacs 24
+(electric-pair-mode 1)
 
-            ;; compile key command
-            (global-set-key [(f7)] 'compile)
-            (global-set-key [(f8)] 'recompile)
+;; compile key command
+(global-set-key [(f7)] 'compile)
+(global-set-key [(f8)] 'recompile)
 
-            ;; backup in one place. flat, no tree structure
-            ;; this stops emacs making ~file copies of everything
-            (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+;; backup in one place. flat, no tree structure
+;; this stops emacs making ~file copies of everything
+(setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
 
-            ;; enable recent file mode on startup
-            (recentf-mode 1)
-            (setq recentf-max-menu-items 25)
-            (setq recentf-max-saved-items 25)
-            ;;(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+;; enable recent file mode on startup
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(setq recentf-max-saved-items 25)
+;;(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
-            ;; disable line wrapping
-            (set-default 'truncate-lines t)
+;; disable line wrapping
+(set-default 'truncate-lines t)
 
-            ;; Auto refresh buffers
-            (global-auto-revert-mode 1)
+;; Auto refresh buffers
+(global-auto-revert-mode 1)
 
-            ;; Also auto refresh dired, but be quiet about it
-            (setq global-auto-revert-non-file-buffers t)
-            (setq auto-revert-verbose nil)
+;; Also auto refresh dired, but be quiet about it
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
 
-        ;; Org mode settings
+;; Org mode settings
 (setq org-startup-folded t)
 
 ;; gccemacs settings
 (setq warning-minimum-level :error)
 
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook
+                      (lambda ()
+                        (indent-region (point-min) (point-max)))
+                      nil 'local)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Themes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (use-package doom-themes
-    :ensure t
-    :config
-      ;; Global settings (defaults)
-      (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
-      ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
-      ;; may have their own settings.
-      (load-theme 'doom-gruvbox t)
-      (setq doom-gruvbox-dark-variant "hard")
+  ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
+  ;; may have their own settings.
+  (load-theme 'doom-gruvbox t)
+  (setq doom-gruvbox-dark-variant "hard")
 
-      ;; Enable flashing mode-line on errors
-      (doom-themes-visual-bell-config)
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
 
-      ;; Enable custom neotree theme (all-the-icons must be installed!)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
   ;;    (doom-themes-neotree-config)
-      ;; or for treemacs users
-   ;;   (doom-themes-treemacs-config)
+  ;; or for treemacs users
+  ;;   (doom-themes-treemacs-config)
 
-      ;; Corrects (and improves) org-mode's native fontification.
-      (doom-themes-org-config)
-      )
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config)
+  )
 
-  (use-package all-the-icons
+(use-package all-the-icons
   :ensure t
   :config )
-  ;; (use-package zenburn-theme
-  ;;   :ensure t
-  ;;  :cosnfig (load-theme 'zenburn t))
+;; (use-package zenburn-theme
+;;   :ensure t
+;;  :cosnfig (load-theme 'zenburn t))
 
-  ;; (use-package monokai-theme
-  ;;   :ensure t
-  ;;   :config (load-theme 'monokai t))
-  (use-package doom-modeline
+;; (use-package monokai-theme
+;;   :ensure t
+;;   :config (load-theme 'monokai t))
+
+(use-package doom-modeline
   :ensure t
   :hook (after-init . doom-modeline-mode)
   :config
@@ -253,7 +261,7 @@ There are two things you can do about this warning:
   (doom-modeline-mode 1)
   )
 
-  (use-package gruvbox-theme
+(use-package gruvbox-theme
   :ensure t
   :config
   ;; (load-theme 'gruvbox t)
@@ -269,16 +277,16 @@ There are two things you can do about this warning:
   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
   (setq evil-want-keybinding nil)
   :config
-;; set leader key in all states
+  ;; set leader key in all states
   (evil-set-leader nil (kbd "C-SPC"))
   (add-hook 'magit-mode-hook #'turn-off-evil-mode)
   (add-hook 'magit-status-mode-hook #'turn-off-evil-mode)
 
-;; set leader key in normal state
-(evil-set-leader 'normal (kbd "SPC"))
+  ;; set leader key in normal state
+  (evil-set-leader 'normal (kbd "SPC"))
 
-;; set local leader
-(evil-set-leader 'normal "," t)
+  ;; set local leader
+  (evil-set-leader 'normal "," t)
   (evil-mode 1))
 
 (use-package evil-collection
@@ -287,9 +295,9 @@ There are two things you can do about this warning:
   :config
   ;;(evil-collection-init
   ;; only use bindings for these packages
-(evil-collection-init '(calendar dired calc ediff eglot org)))
+  (evil-collection-init '(calendar dired calc ediff eglot org)))
 
-  (use-package evil-escape
+(use-package evil-escape
   :ensure t
   :config
   (evil-escape-mode 1)
@@ -301,50 +309,50 @@ There are two things you can do about this warning:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; swiper, ivy and counsel
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (use-package counsel
+(use-package counsel
   :ensure t
-    :bind
-    (("M-y" . counsel-yank-pop)
-     :map ivy-minibuffer-map
-     ("M-y" . ivy-next-line))
-    :config
-    (global-set-key "\C-x\ \C-r" 'counsel-recentf)
-    )
+  :bind
+  (("M-y" . counsel-yank-pop)
+   :map ivy-minibuffer-map
+   ("M-y" . ivy-next-line))
+  :config
+  (global-set-key "\C-x\ \C-r" 'counsel-recentf)
+  )
 
-    (use-package ivy
-    :ensure t
-    :diminish (ivy-mode)
-    :bind (("C-x b" . ivy-switch-buffer))
-    :config
+(use-package ivy
+  :ensure t
+  :diminish (ivy-mode)
+  :bind (("C-x b" . ivy-switch-buffer))
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "%d/%d ")
+  (setq ivy-display-style 'fancy))
+
+(use-package ivy-rich
+  :ensure t
+  :config
+  (ivy-rich-mode 1)
+  )
+
+(use-package all-the-icons-ivy-rich
+  :ensure t
+  :init (all-the-icons-ivy-rich-mode 1))
+
+(use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper)
+         ("C-r" . swiper)
+         ("C-c C-r" . ivy-resume)
+         ("M-x" . counsel-M-x)
+         ("C-x C-f" . counsel-find-file))
+  :config
+  (progn
     (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
-    (setq ivy-count-format "%d/%d ")
-    (setq ivy-display-style 'fancy))
-
-    (use-package ivy-rich
-    :ensure t
-    :config
-    (ivy-rich-mode 1)
-    )
-
-    (use-package all-the-icons-ivy-rich
-    :ensure t
-    :init (all-the-icons-ivy-rich-mode 1))
-
-    (use-package swiper
-    :ensure t
-    :bind (("C-s" . swiper)
-       ("C-r" . swiper)
-       ("C-c C-r" . ivy-resume)
-       ("M-x" . counsel-M-x)
-       ("C-x C-f" . counsel-find-file))
-    :config
-    (progn
-      (ivy-mode 1)
-      (setq ivy-use-virtual-buffers t)
-      (setq ivy-display-style 'fancy)
-      (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-      ))
+    (setq ivy-display-style 'fancy)
+    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; fonts
@@ -357,20 +365,20 @@ There are two things you can do about this warning:
 
 ;; rainbow delimiters
 (use-package rainbow-delimiters
-:ensure t
-:config
+  :ensure t
+  :config
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'js2-mode-hook 'rainbow-delimiters-mode))
 
 ;; Try
 (use-package try
-	:ensure t)
+  :ensure t)
 
 
 (use-package which-key
-	:ensure t
-	:config
-	(which-key-mode))
+  :ensure t
+  :config
+  (which-key-mode))
 
 (use-package org-bullets
   :ensure t
@@ -381,7 +389,7 @@ There are two things you can do about this warning:
   :ensure t
   :config
   (beacon-mode 1)
-  ; (setq beacon-color "#666600")
+                                        ; (setq beacon-color "#666600")
   )
 
 ;; Highlight indent guides
@@ -402,12 +410,12 @@ There are two things you can do about this warning:
   (setq company-idle-delay 0.3)
   (setq company-minimum-prefix-length 1)
   (with-eval-after-load 'company
-  (define-key company-active-map (kbd "M-n") nil)
-  (define-key company-active-map (kbd "M-p") nil)
-  (define-key company-active-map (kbd "C-n") #'company-select-next)
-  (define-key company-active-map (kbd "C-p") #'company-select-previous))
+    (define-key company-active-map (kbd "M-n") nil)
+    (define-key company-active-map (kbd "M-p") nil)
+    (define-key company-active-map (kbd "C-n") #'company-select-next)
+    (define-key company-active-map (kbd "C-p") #'company-select-previous))
   (global-company-mode t)
-;;  (add-hook 'c-mode-hook 'company-mode)
+  ;;  (add-hook 'c-mode-hook 'company-mode)
   (add-hook 'emacs-lisp-mode-hook 'company-mode)
   (add-hook 'lisp-mode-hook 'company-mode)
   )
@@ -427,32 +435,32 @@ There are two things you can do about this warning:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; web mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    (use-package web-mode
-      :ensure t
-        :config
-        (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-        (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
-        (add-to-list 'auto-mode-alist '("\\.handlebars?\\'" . web-mode))
-    ;; 	(setq web-mode-engines-alist
-    ;; 		  '(("django"    . "\\.html\\'")))
-    ;; 	(setq web-mode-ac-sources-alist
-    ;; 	      '(("css" . (ac-source-css-property))
-    ;; 	        ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
-    ;;             ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
-         (setq web-mode-enable-auto-closing t) ;)
-         (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
+(use-package web-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.handlebars?\\'" . web-mode))
+  ;; 	(setq web-mode-engines-alist
+  ;; 		  '(("django"    . "\\.html\\'")))
+  ;; 	(setq web-mode-ac-sources-alist
+  ;; 	      '(("css" . (ac-source-css-property))
+  ;; 	        ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
+  ;;             ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+  (setq web-mode-enable-auto-closing t) ;)
+  (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
 
-        (defun my-web-mode-hook ()
-      "Hooks for Web mode."
-      (setq web-mode-markup-indent-offset 2)
-      (setq web-mode-code-indent-offset 2)
-      (setq web-mode-css-indent-offset 2))
-    (add-hook 'web-mode-hook  'my-web-mode-hook)
-    (setq tab-width 2)
-    (add-hook 'web-mode-hook  'emmet-mode)
+  (defun my-web-mode-hook ()
+    "Hooks for Web mode."
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-css-indent-offset 2))
+  (add-hook 'web-mode-hook  'my-web-mode-hook)
+  (setq tab-width 2)
+  (add-hook 'web-mode-hook  'emmet-mode)
 
 
-    )
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; JavaScript
@@ -460,12 +468,12 @@ There are two things you can do about this warning:
 
 ;; Prettier-js
 (use-package prettier-js
-:ensure t
-:config
-(add-hook 'js2-mode-hook 'prettier-js-mode)
-(add-hook 'typescript-mode-hook 'prettier-js-mode)
-;;(add-hook 'web-mode-hook 'prettier-js-mode)
-)
+  :ensure t
+  :config
+  (add-hook 'js2-mode-hook 'prettier-js-mode)
+  (add-hook 'typescript-mode-hook 'prettier-js-mode)
+  ;;(add-hook 'web-mode-hook 'prettier-js-mode)
+  )
 
 
 (use-package yasnippet
@@ -490,7 +498,7 @@ There are two things you can do about this warning:
 (use-package counsel-projectile
   :ensure t
   :config
-;;  (counsel-projectile-on)
+  ;;  (counsel-projectile-on)
   (counsel-projectile-mode 1)
   )
 
@@ -498,53 +506,53 @@ There are two things you can do about this warning:
 (use-package multi-term
   :ensure t
   :config
-;;  (setq multi-term-program "/usr/local/bin/zsh")
+  ;;  (setq multi-term-program "/usr/local/bin/zsh")
 
-(add-hook 'term-mode-hook
-          (lambda ()
-            (setq term-buffer-maximum-size 10000)))
+  (add-hook 'term-mode-hook
+            (lambda ()
+              (setq term-buffer-maximum-size 10000)))
 
-(add-hook 'term-mode-hook
-          (lambda ()
-            (setq show-trailing-whitespace nil)))
+  (add-hook 'term-mode-hook
+            (lambda ()
+              (setq show-trailing-whitespace nil)))
 
-;; (defcustom term-unbind-key-list
-;;   '("C-z" "C-x" "C-c" "C-h" "C-y" "<ESC>")
-;;   "The key list that will need to be unbind."
-;;   :type 'list
-;;   :group 'multi-term)
+  ;; (defcustom term-unbind-key-list
+  ;;   '("C-z" "C-x" "C-c" "C-h" "C-y" "<ESC>")
+  ;;   "The key list that will need to be unbind."
+  ;;   :type 'list
+  ;;   :group 'multi-term)
 
-;; (defcustom term-bind-key-alist
-;;   '(
-;;     ("C-c C-c" . term-interrupt-subjob)
-;;     ("C-p" . previous-line)
-;;     ("C-n" . next-line)
-;;     ("C-s" . isearch-forward)
-;;     ("C-r" . isearch-backward)
-;;     ("C-m" . term-send-raw)
-;;     ("M-f" . term-send-forward-word)
-;;     ("M-b" . term-send-backward-word)
-;;     ("M-o" . term-send-backspace)
-;;     ("M-p" . term-send-up)
-;;     ("M-n" . term-send-down)
-;;     ("M-M" . term-send-forward-kill-word)
-;;     ("M-N" . term-send-backward-kill-word)
-;;     ("M-r" . term-send-reverse-search-history)
-;;     ("M-," . term-send-input)
-;;     ("M-." . comint-dynamic-complete))
-;;   "The key alist that will need to be bind.
-;; If you do not like default setup, modify it, with (KEY . COMMAND) format."
-;;   :type 'alist
-;;   :group 'multi-term)
+  ;; (defcustom term-bind-key-alist
+  ;;   '(
+  ;;     ("C-c C-c" . term-interrupt-subjob)
+  ;;     ("C-p" . previous-line)
+  ;;     ("C-n" . next-line)
+  ;;     ("C-s" . isearch-forward)
+  ;;     ("C-r" . isearch-backward)
+  ;;     ("C-m" . term-send-raw)
+  ;;     ("M-f" . term-send-forward-word)
+  ;;     ("M-b" . term-send-backward-word)
+  ;;     ("M-o" . term-send-backspace)
+  ;;     ("M-p" . term-send-up)
+  ;;     ("M-n" . term-send-down)
+  ;;     ("M-M" . term-send-forward-kill-word)
+  ;;     ("M-N" . term-send-backward-kill-word)
+  ;;     ("M-r" . term-send-reverse-search-history)
+  ;;     ("M-," . term-send-input)
+  ;;     ("M-." . comint-dynamic-complete))
+  ;;   "The key alist that will need to be bind.
+  ;; If you do not like default setup, modify it, with (KEY . COMMAND) format."
+  ;;   :type 'alist
+  ;;   :group 'multi-term)
 
-(add-hook 'term-mode-hook
-          (lambda ()
-            (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
-            (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))))
+  (add-hook 'term-mode-hook
+            (lambda ()
+              (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
+              (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))))
 
-(add-hook 'term-mode-hook
-          (lambda ()
-            (define-key term-raw-map (kbd "C-y") 'term-paste)) ))
+  (add-hook 'term-mode-hook
+            (lambda ()
+              (define-key term-raw-map (kbd "C-y") 'term-paste)) ))
 
 ;; Bind launch multi-term to C-`, the same as VSCode
 ;; (global-set-key (kbd "C-`") (kbd "M-x multi-term RET"))
@@ -560,46 +568,46 @@ There are two things you can do about this warning:
   (setq turn-off-evil-mode nil)
   )
 
-  ;; (setq magit-status-margin
-  ;;   '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18))
-  ;;     (use-package git-gutter
-  ;;     :ensure t
-  ;;     :init
-  ;;     (global-git-gutter-mode +1))
+;; (setq magit-status-margin
+;;   '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18))
+;;     (use-package git-gutter
+;;     :ensure t
+;;     :init
+;;     (global-git-gutter-mode +1))
 
-  ;;     (global-set-key (kbd "M-g M-g") 'hydra-git-gutter/body)
+;;     (global-set-key (kbd "M-g M-g") 'hydra-git-gutter/body)
 
 
-  ;;     (use-package git-timemachine
-  ;;     :ensure t
-  ;;     )
-  ;;   (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
-  ;;                               :hint nil)
-  ;;     "
-  ;;   Git gutter:
-  ;;     _j_: next hunk        _s_tage hunk     _q_uit
-  ;;     _k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
-  ;;     ^ ^                   _p_opup hunk
-  ;;     _h_: first hunk
-  ;;     _l_: last hunk        set start _R_evision
-  ;;   "
-  ;;     ("j" git-gutter:next-hunk)
-  ;;     ("k" git-gutter:previous-hunk)
-  ;;     ("h" (progn (goto-char (point-min))
-  ;;                 (git-gutter:next-hunk 1)))
-  ;;     ("l" (progn (goto-char (point-min))
-  ;;                 (git-gutter:previous-hunk 1)))
-  ;;     ("s" git-gutter:stage-hunk)
-  ;;     ("r" git-gutter:revert-hunk)
-  ;;     ("p" git-gutter:popup-hunk)
-  ;;     ("R" git-gutter:set-start-revision)
-  ;;     ("q" nil :color blue)
-  ;;     ("Q" (progn (git-gutter-mode -1)
-  ;;                 ;; git-gutter-fringe doesn't seem to
-  ;;                 ;; clear the markup right away
-  ;;                 (sit-for 0.1)
-  ;;                 (git-gutter:clear))
-  ;;          :color blue))
+;;     (use-package git-timemachine
+;;     :ensure t
+;;     )
+;;   (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
+;;                               :hint nil)
+;;     "
+;;   Git gutter:
+;;     _j_: next hunk        _s_tage hunk     _q_uit
+;;     _k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
+;;     ^ ^                   _p_opup hunk
+;;     _h_: first hunk
+;;     _l_: last hunk        set start _R_evision
+;;   "
+;;     ("j" git-gutter:next-hunk)
+;;     ("k" git-gutter:previous-hunk)
+;;     ("h" (progn (goto-char (point-min))
+;;                 (git-gutter:next-hunk 1)))
+;;     ("l" (progn (goto-char (point-min))
+;;                 (git-gutter:previous-hunk 1)))
+;;     ("s" git-gutter:stage-hunk)
+;;     ("r" git-gutter:revert-hunk)
+;;     ("p" git-gutter:popup-hunk)
+;;     ("R" git-gutter:set-start-revision)
+;;     ("q" nil :color blue)
+;;     ("Q" (progn (git-gutter-mode -1)
+;;                 ;; git-gutter-fringe doesn't seem to
+;;                 ;; clear the markup right away
+;;                 (sit-for 0.1)
+;;                 (git-gutter:clear))
+;;          :color blue))
 
 ;; (use-package undo-tree
 ;;   :ensure t
@@ -611,15 +619,15 @@ There are two things you can do about this warning:
 
 
 (use-package dashboard
- :ensure t
- :config
-(setq dashboard-banner-logo-title "I'm Batman")
-(setq dashboard-startup-banner 'logo)
+  :ensure t
+  :config
+  (setq dashboard-banner-logo-title "I'm Batman")
+  (setq dashboard-startup-banner 'logo)
 
-(setq dashboard-set-heading-icons t)
-(setq dashboard-set-file-icons t)
-(setq dashboard-set-footer nil)
- (dashboard-setup-startup-hook))
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-set-footer nil)
+  (dashboard-setup-startup-hook))
 
 (use-package exec-path-from-shell
   :ensure t
@@ -649,23 +657,77 @@ There are two things you can do about this warning:
         fzf/position-bottom t
         fzf/window-height 15)
 
-(defun fzf-example ()
-  (fzf-with-entries
-   (list "a" "b" "c")
-   'print))
-(defun fzf-find-notes (&optional directory)
-  (interactive)
-  (let ((d (fzf/resolve-directory directory)))
-    (fzf
-    (lambda (x)
-        (let ((f (expand-file-name x d)))
-        (when (file-exists-p f)
-            (find-file f))))
-    d)))
+  (defun fzf-example ()
+    (fzf-with-entries
+     (list "a" "b" "c")
+     'print))
+  (defun fzf-find-notes (&optional directory)
+    (interactive)
+    (let ((d (fzf/resolve-directory directory)))
+      (fzf
+       (lambda (x)
+         (let ((f (expand-file-name x d)))
+           (when (file-exists-p f)
+             (find-file f))))
+       d)))
   (defun my-notes ()
-  (interactive)
+    (interactive)
     (fzf/resolve-directory "~/Dropbox")))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Clojure
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package clojure-mode
+  :ensure t
+  :hook ((clojure-mode . subword-mode)
+         (clojure-mode . paredit-mode)
+         (clojure-mode . eglot-ensure)))
+
+(use-package cider
+  :ensure t
+  :bind (("C-c u" . cider-user-ns)
+         ("C-M-r" . cider-refresh))
+  (setq cider-show-error-buffer t
+        cider-auto-select-error-buffer t
+        cider-repl-history-file "~/.emacs.d/cider-history"
+        cider-repl-pop-to-buffer-on-connect t
+        cider-repl-wrap-history t))
+
+(add-hook 'cider-mode 'company-mode)
+(add-hook 'cider-mode 'cider-repl-mode)
+
+;; (use-package cider-hydra
+;; :config
+;; :hook (clojure-mode . cider-hydra-))  ;
+
+(use-package clj-refactor
+  :ensure t
+  :config (cljr-add-keybindings-with-prefix "C-c C-m")
+  :hook (clojure-mode . clj-refactor-mode))
+
+(use-package cider-repl-mode
+  :hook (paredit-mode . clojure-mode))
+
+(add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
+
+(defun cider-start-http-server ()
+  (interactive)
+  (cider-load-buffer)
+  (let ((ns (cider-current-ns)))
+    (cider-repl-set-ns ns)
+    (cider-interactive-eval (format "(println '(def server (%s/start))) (println 'server)" ns))
+    (cider-interactive-eval (format "(def server (%s/start)) (println server)" ns))))
+
+(defun cider-refresh ()
+  (interactive)
+  (cider-interactive-eval (format "(user/reset)")))
+
+(defun cider-user-ns ()
+  (interactive)
+  (cider-repl-set-ns "user"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -674,30 +736,30 @@ There are two things you can do about this warning:
 ;;(setq treesit-extra-load-path '("/usr/local/lib"))
 
 (setq treesit-language-source-alist
-   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-     (cmake "https://github.com/uyha/tree-sitter-cmake")
-     (css "https://github.com/tree-sitter/tree-sitter-css")
-     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-     (go "https://github.com/tree-sitter/tree-sitter-go")
-     (html "https://github.com/tree-sitter/tree-sitter-html")
-     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-     (json "https://github.com/tree-sitter/tree-sitter-json")
-     (make "https://github.com/alemuller/tree-sitter-make")
-     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-     (python "https://github.com/tree-sitter/tree-sitter-python")
-     (toml "https://github.com/tree-sitter/tree-sitter-toml")
-     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+      '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+        (cmake "https://github.com/uyha/tree-sitter-cmake")
+        (css "https://github.com/tree-sitter/tree-sitter-css")
+        (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+        (go "https://github.com/tree-sitter/tree-sitter-go")
+        (html "https://github.com/tree-sitter/tree-sitter-html")
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+        (json "https://github.com/tree-sitter/tree-sitter-json")
+        (make "https://github.com/alemuller/tree-sitter-make")
+        (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+        (python "https://github.com/tree-sitter/tree-sitter-python")
+        (toml "https://github.com/tree-sitter/tree-sitter-toml")
+        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
 (setq major-mode-remap-alist
- '((yaml-mode . yaml-ts-mode)
-   (bash-mode . bash-ts-mode)
-   (js2-mode . js-ts-mode)
-   (typescript-mode . typescript-ts-mode)
-   (json-mode . json-ts-mode)
-   (css-mode . css-ts-mode)
-   (python-mode . python-ts-mode)))
+      '((yaml-mode . yaml-ts-mode)
+        (bash-mode . bash-ts-mode)
+        (js2-mode . js-ts-mode)
+        (typescript-mode . typescript-ts-mode)
+        (json-mode . json-ts-mode)
+        (css-mode . css-ts-mode)
+        (python-mode . python-ts-mode)))
 
 
 (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
@@ -708,3 +770,17 @@ There are two things you can do about this warning:
 
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (add-hook 'python-ts-mode 'eglot)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(clj-refactor cider clojure-mode yasnippet-snippets yaml-mode which-key web-mode typescript-mode tsc try rjsx-mode rainbow-delimiters prettier-js php-mode org-bullets multi-term magit imenu-list highlight-indent-guides gruvbox-theme fzf flycheck-pos-tip flycheck-plantuml flycheck-color-mode-line exec-path-from-shell evil-escape evil-collection doom-themes doom-modeline dashboard counsel-projectile company-quickhelp beacon all-the-icons-ivy-rich))
+ '(warning-suppress-types '((use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
