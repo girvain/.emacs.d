@@ -716,22 +716,21 @@ There are two things you can do about this warning:
 (add-hook 'cider-mode 'company-mode)
 (add-hook 'cider-mode 'cider-repl-mode)
 
-;; (use-package cider-hydra
-;; :config
-;; :hook (clojure-mode . cider-hydra-))  ;
-
+;; CLJ Refactor
 (use-package clj-refactor
   :ensure t
   :config (cljr-add-keybindings-with-prefix "C-c C-m")
-  :hook (clojure-mode . clj-refactor-mode))
+  :hook (clojure-ts-mode . clj-refactor-mode))
 
-(use-package cider-repl-mode
-  :hook (paredit-mode . clojure-mode))
+;; Remove any extra mappings for `.clj` files
+(remove-hook 'auto-mode-alist '("\\.clj\\'" . clojure-mode))
 
-(add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
-(add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
-(add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
+;; Add .boot, .cljs, and .cljc files to clojure-ts-mode
+(add-to-list 'auto-mode-alist '("\\.boot$" . clojure-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.cljc$" . clojure-ts-mode))
 
+;; Cider commands (these should be fine with clojure-ts-mode)
 (defun cider-start-http-server ()
   (interactive)
   (cider-load-buffer)
@@ -748,11 +747,44 @@ There are two things you can do about this warning:
   (interactive)
   (cider-repl-set-ns "user"))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Treesitter config
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;(setq treesit-extra-load-path '("/usr/local/lib"))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Go
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package go-mode
+  :ensure t
+  :hook ((go-mode . eglot-ensure)   ;; Start LSP automatically
+         (go-mode . company-mode)  
+         (go-mode . flymake-mode))  ;; Show errors/warnings
+  :config
+  ;; Optional: format on save
+  (setq gofmt-command "gofumpt")
+  (add-hook 'before-save-hook 'gofmt-before-save nil t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Rust 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package rust-mode
+  :ensure t
+  :mode "\\.rs\\'"
+  :hook (rust-mode . eglot-ensure)
+  :config
+  ;; Optional: auto-format on save
+  (setq rust-format-on-save t))
+
+;; Ensure rust-analyzer is installed and on your PATH
+;; Eglot will automatically pick it up if available
+
+;; Optional: nicer completion integration with company
+(add-hook 'rust-mode-hook #'company-mode)
+
+
 
 (setq treesit-language-source-alist
       '((bash "https://github.com/tree-sitter/tree-sitter-bash")
@@ -775,6 +807,7 @@ There are two things you can do about this warning:
       '((yaml-mode . yaml-ts-mode)
         (bash-mode . bash-ts-mode)
         (js2-mode . js-ts-mode)
+        ;;        (go-mode . go-ts-mode)
         (typescript-mode . typescript-ts-mode)
         (json-mode . json-ts-mode)
         (css-mode . css-ts-mode)
@@ -794,8 +827,18 @@ There are two things you can do about this warning:
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(clj-refactor cider clojure-mode yasnippet-snippets yaml-mode which-key web-mode typescript-mode tsc try rjsx-mode rainbow-delimiters prettier-js php-mode org-bullets multi-term magit imenu-list highlight-indent-guides gruvbox-theme fzf flycheck-pos-tip flycheck-plantuml flycheck-color-mode-line exec-path-from-shell evil-escape evil-collection doom-themes doom-modeline dashboard counsel-projectile company-quickhelp beacon all-the-icons-ivy-rich))
+ '(custom-safe-themes
+   '("d445c7b530713eac282ecdeea07a8fa59692c83045bf84dd112dd738c7bcad1d"
+     "48042425e84cd92184837e01d0b4fe9f912d875c43021c3bcb7eeb51f1be5710"
+     "e8ceeba381ba723b59a9abc4961f41583112fc7dc0e886d9fc36fa1dc37b4079"
+     "da75eceab6bea9298e04ce5b4b07349f8c02da305734f7c0c8c6af7b5eaa9738"
+     "4990532659bb6a285fee01ede3dfa1b1bdf302c5c3c8de9fad9b6bc63a9252f7"
+     "a9eeab09d61fef94084a95f82557e147d9630fbbb82a837f971f83e66e21e5ad"
+     "8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098"
+     "456697e914823ee45365b843c89fbc79191fdbaff471b29aad9dcbe0ee1d5641"
+     "81f53ee9ddd3f8559f94c127c9327d578e264c574cda7c6d9daddaec226f87bb"
+     default))
+ '(package-selected-packages nil)
  '(warning-suppress-types '((use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
