@@ -663,27 +663,50 @@ There are two things you can do about this warning:
              (find-file f))))
        d)))
 
-(defun my-notes ()
-  (interactive)
-  (let ((default-directory (expand-file-name "~/Dropbox")))
-    (if (file-directory-p default-directory)
-        (fzf)
-      (message "Directory ~/Dropbox does not exist.")))))
+  (defun my-notes ()
+    (interactive)
+    (let ((default-directory (expand-file-name "~/Dropbox")))
+      (if (file-directory-p default-directory)
+          (fzf)
+        (message "Directory ~/Dropbox does not exist.")))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Scala
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package scala-mode
+  :ensure t
+  :mode "\\.s\\(cala\\|bt\\)$"
+  :hook (scala-mode . eglot-ensure))
+
+;; Metals for Scala
+(use-package lsp-metals
+  :ensure t
+  :after lsp-mode
+  :custom
+  (lsp-metals-server-command "metals-emacs"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Clojure
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package clojure-mode
+(use-package clojure-ts-mode
   :ensure t
-  :hook ((clojure-mode . subword-mode)
-         (clojure-mode . paredit-mode)
-         (clojure-mode . eglot-ensure)))
+  :config
+  (add-to-list 'auto-mode-alist '("\\.clj\\'" . clojure-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.cljs\\'" . clojure-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojure-ts-mode))
+  (add-hook 'clojure-ts-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'clojure-ts-mode-hook #'eglot-ensure))
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(clojure-ts-mode . ("clojure-lsp"))));; Cider - REPL support, no need for `clojure-mode`
 
 (use-package cider
   :ensure t
   :bind (("C-c u" . cider-user-ns)
          ("C-M-r" . cider-refresh))
+  :config
   (setq cider-show-error-buffer t
         cider-auto-select-error-buffer t
         cider-repl-history-file "~/.emacs.d/cider-history"
