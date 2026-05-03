@@ -271,38 +271,38 @@ There are two things you can do about this warning:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; evil mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  :config
-  ;; set leader key in all states
-  (evil-set-leader nil (kbd "C-SPC"))
-  (add-hook 'magit-mode-hook #'turn-off-evil-mode)
-  (add-hook 'magit-status-mode-hook #'turn-off-evil-mode)
+;; (use-package evil
+;;   :ensure t
+;;   :init
+;;   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+;;   (setq evil-want-keybinding nil)
+;;   :config
+;;   ;; set leader key in all states
+;;   (evil-set-leader nil (kbd "C-SPC"))
+;;   (add-hook 'magit-mode-hook #'turn-off-evil-mode)
+;;   (add-hook 'magit-status-mode-hook #'turn-off-evil-mode)
 
-  ;; set leader key in normal state
-  (evil-set-leader 'normal (kbd "SPC"))
+;;   ;; set leader key in normal state
+;;   (evil-set-leader 'normal (kbd "SPC"))
 
-  ;; set local leader
-  (evil-set-leader 'normal "," t)
-  (evil-mode 1))
+;;   ;; set local leader
+;;   (evil-set-leader 'normal "," t)
+;;   (evil-mode 1))
 
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  ;;(evil-collection-init
-  ;; only use bindings for these packages
-  (evil-collection-init '(calendar dired calc ediff eglot org)))
+;; (use-package evil-collection
+;;   :after evil
+;;   :ensure t
+;;   :config
+;;   ;;(evil-collection-init
+;;   ;; only use bindings for these packages
+;;   (evil-collection-init '(calendar dired calc ediff eglot org)))
 
-(use-package evil-escape
-  :ensure t
-  :config
-  (evil-escape-mode 1)
-  (setq-default evil-escape-delay 0.2)
-  (setq-default evil-escape-key-sequence "jk"))
+;; (use-package evil-escape
+;;   :ensure t
+                                        ;   :config
+;;   (evil-escape-mode 1)
+;;   (setq-default evil-escape-delay 0.2)
+;;   (setq-default evil-escape-key-sequence "jk"))
 
 
 
@@ -421,16 +421,18 @@ There are two things you can do about this warning:
   )
 
 
-;;(use-package pos-tip
-;;  :ensure t
-;;  :hook (company-mode . pos-tip)
+;; (use-package pos-tip
+;;   :ensure t
+;;   :hook (company-mode . pos-tip)
 ;;  :config)
 
+;; Enable company-quickhelp for floating docs
 (use-package company-quickhelp
   :ensure t
   :hook (company-mode . company-quickhelp-mode)
-  :config)
-
+  :config
+  ;; Optional: adjust delay before popup appears
+  (setq company-quickhelp-delay 0.3))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; web mode
@@ -485,22 +487,22 @@ There are two things you can do about this warning:
   :ensure t)
 
 
-;; Projectile
+;; ;; Projectile
 
-(use-package projectile
-  :ensure t
-  :config
-  (projectile-mode)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (setq projectile-enable-caching t) ;; Much better performance on large projects
-  (setq projectile-completion-system 'ivy))
+;; (use-package projectile
+;;   :ensure t
+;;   :config
+;;   (projectile-mode)
+;;   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+;;   (setq projectile-enable-caching t) ;; Much better performance on large projects
+;;   (setq projectile-completion-system 'ivy))
 
-(use-package counsel-projectile
-  :ensure t
-  :config
-  ;;  (counsel-projectile-on)
-  (counsel-projectile-mode 1)
-  )
+;; (use-package counsel-projectile
+;;   :ensure t
+;;   :config
+;;   ;;  (counsel-projectile-on)
+;;   (counsel-projectile-mode 1)
+;;   )
 
 
 (use-package multi-term
@@ -566,7 +568,11 @@ There are two things you can do about this warning:
     )
 
   (setq turn-off-evil-mode nil)
-  )
+
+  (add-hook 'git-commit-mode-hook
+            (lambda ()
+              (when (bound-and-true-p cider-mode)
+                (cider-mode -1)))))
 
 ;; (setq magit-status-margin
 ;;   '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18))
@@ -685,25 +691,27 @@ There are two things you can do about this warning:
   :custom
   (lsp-metals-server-command "metals-emacs"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Clojure
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Clojure (clean, no Tree-sitter, modern setup)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package clojure-ts-mode
+;; Core mode
+(use-package clojure-mode
   :ensure t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.clj\\'" . clojure-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.cljs\\'" . clojure-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojure-ts-mode))
-  (add-hook 'clojure-ts-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'clojure-ts-mode-hook #'eglot-ensure))
+  :mode ("\\.clj\\'" "\\.cljs\\'" "\\.cljc\\'" "\\.edn\\'")
+  :hook ((clojure-mode . eglot-ensure)
+         (clojure-mode . rainbow-delimiters-mode)))
 
+;; LSP via eglot + clojure-lsp
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
-               '(clojure-ts-mode . ("clojure-lsp"))));; Cider - REPL support, no need for `clojure-mode`
+               '(clojure-mode . ("clojure-lsp"))))
 
+;; REPL (CIDER)
 (use-package cider
   :ensure t
+  :hook ((cider-mode . company-mode)
+         (cider-repl-mode . company-mode))
   :bind (("C-c u" . cider-user-ns)
          ("C-M-r" . cider-refresh))
   :config
@@ -713,45 +721,44 @@ There are two things you can do about this warning:
         cider-repl-pop-to-buffer-on-connect t
         cider-repl-wrap-history t))
 
-(add-hook 'cider-mode 'company-mode)
-(add-hook 'cider-mode 'cider-repl-mode)
-
-;; CLJ Refactor
+;; Refactoring
 (use-package clj-refactor
   :ensure t
-  :config (cljr-add-keybindings-with-prefix "C-c C-m")
-  :hook (clojure-ts-mode . clj-refactor-mode))
+  :hook (clojure-mode . clj-refactor-mode)
+  :config
+  (cljr-add-keybindings-with-prefix "C-c C-m"))
 
-;; Remove any extra mappings for `.clj` files
-(remove-hook 'auto-mode-alist '("\\.clj\\'" . clojure-mode))
+;; Better completion with LSP
+(with-eval-after-load 'company
+  (add-to-list 'company-backends 'company-capf))
 
-;; Add .boot, .cljs, and .cljc files to clojure-ts-mode
-(add-to-list 'auto-mode-alist '("\\.boot$" . clojure-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.cljc$" . clojure-ts-mode))
+;; Format on save using clojure-lsp
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
 
-;; Cider commands (these should be fine with clojure-ts-mode)
-(defun cider-start-http-server ()
-  (interactive)
-  (cider-load-buffer)
-  (let ((ns (cider-current-ns)))
-    (cider-repl-set-ns ns)
-    (cider-interactive-eval (format "(println '(def server (%s/start))) (println 'server)" ns))
-    (cider-interactive-eval (format "(def server (%s/start)) (println server)" ns))))
+;; --- Optional helper commands (keep if you like your old ones) ---
 
 (defun cider-refresh ()
   (interactive)
-  (cider-interactive-eval (format "(user/reset)")))
+  (cider-interactive-eval "(user/reset)"))
 
 (defun cider-user-ns ()
   (interactive)
   (cider-repl-set-ns "user"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Treesitter config
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(setq treesit-extra-load-path '("/usr/local/lib"))
+;; --- paredit ---
+(use-package paredit
+  :ensure t)
 
+(add-hook 'clojure-mode-hook #'paredit-mode)
+(add-hook 'clojurescript-mode-hook #'paredit-mode)
+(add-hook 'clojurec-mode-hook #'paredit-mode)
+
+;; disable electric-pair in Lisp (avoid conflicts)
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (electric-pair-mode -1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Go
@@ -778,6 +785,14 @@ There are two things you can do about this warning:
   ;; Optional: auto-format on save
   (setq rust-format-on-save t))
 
+(use-package rustic
+  :ensure t
+  :hook ((rustic-mode . eglot-ensure)
+         (rustic-mode . company-mode))
+  :config
+  (setq rustic-format-on-save t))
+
+
 ;; Ensure rust-analyzer is installed and on your PATH
 ;; Eglot will automatically pick it up if available
 
@@ -785,6 +800,33 @@ There are two things you can do about this warning:
 (add-hook 'rust-mode-hook #'company-mode)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LLM
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (use-package gptel
+;;   :ensure t
+;;   :config
+;;   (setq gptel-api-key (getenv "OPENAI_API_KEY"))
+
+;;   ;; default model (you can change later)
+;;   (setq gptel-model "gpt-4.1-mini")
+
+;;   ;; optional nicer UI behaviour
+;;   (setq gptel-stream nil))
+
+;; (use-package copilot
+;;   :ensure t
+;;   :hook (prog-mode . copilot-mode)
+;;   :config
+;;   (setq copilot-idle-delay 0.3)
+
+;;   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+;;   (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Treesitter config
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;(setq treesit-extra-load-path '("/usr/local/lib"))
 
 (setq treesit-language-source-alist
       '((bash "https://github.com/tree-sitter/tree-sitter-bash")
@@ -801,6 +843,7 @@ There are two things you can do about this warning:
         (toml "https://github.com/tree-sitter/tree-sitter-toml")
         (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (rust "https://github.com/tree-sitter/tree-sitter-rust")
         (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
 (setq major-mode-remap-alist
@@ -808,6 +851,7 @@ There are two things you can do about this warning:
         (bash-mode . bash-ts-mode)
         (js2-mode . js-ts-mode)
         ;;        (go-mode . go-ts-mode)
+        ;; (rust-mode . rust-ts-mode)
         (typescript-mode . typescript-ts-mode)
         (json-mode . json-ts-mode)
         (css-mode . css-ts-mode)
