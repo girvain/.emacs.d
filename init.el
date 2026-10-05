@@ -271,38 +271,38 @@ There are two things you can do about this warning:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; evil mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package evil
-;;   :ensure t
-;;   :init
-;;   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-;;   (setq evil-want-keybinding nil)
-;;   :config
-;;   ;; set leader key in all states
-;;   (evil-set-leader nil (kbd "C-SPC"))
-;;   (add-hook 'magit-mode-hook #'turn-off-evil-mode)
-;;   (add-hook 'magit-status-mode-hook #'turn-off-evil-mode)
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  :config
+  ;; set leader key in all states
+  (evil-set-leader nil (kbd "C-SPC"))
+  (add-hook 'magit-mode-hook #'turn-off-evil-mode)
+  (add-hook 'magit-status-mode-hook #'turn-off-evil-mode)
 
-;;   ;; set leader key in normal state
-;;   (evil-set-leader 'normal (kbd "SPC"))
+  ;; set leader key in normal state
+  (evil-set-leader 'normal (kbd "SPC"))
 
-;;   ;; set local leader
-;;   (evil-set-leader 'normal "," t)
-;;   (evil-mode 1))
+  ;; set local leader
+  (evil-set-leader 'normal "," t)
+  (evil-mode 1))
 
-;; (use-package evil-collection
-;;   :after evil
-;;   :ensure t
-;;   :config
-;;   ;;(evil-collection-init
-;;   ;; only use bindings for these packages
-;;   (evil-collection-init '(calendar dired calc ediff eglot org)))
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  ;;(evil-collection-init
+  ;; only use bindings for these packages
+  (evil-collection-init '(calendar dired calc ediff eglot org)))
 
-;; (use-package evil-escape
-;;   :ensure t
-                                        ;   :config
-;;   (evil-escape-mode 1)
-;;   (setq-default evil-escape-delay 0.2)
-;;   (setq-default evil-escape-key-sequence "jk"))
+(use-package evil-escape
+  :ensure t
+  :config
+  (evil-escape-mode 1)
+  (setq-default evil-escape-delay 0.2)
+  (setq-default evil-escape-key-sequence "jk"))
 
 
 
@@ -615,13 +615,13 @@ There are two things you can do about this warning:
 ;;                 (git-gutter:clear))
 ;;          :color blue))
 
-;; (use-package undo-tree
-;;   :ensure t
-;;   :config
-;;   (progn
-;;     (global-undo-tree-mode)
-;;     (setq undo-tree-visualizer-timestamps t)
-;;     (setq undo-tree-visualizer-diff t)))
+(use-package undo-tree
+  :ensure t
+  :config
+  (progn
+    (global-undo-tree-mode)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-visualizer-diff t)))
 
 
 (use-package dashboard
@@ -675,21 +675,6 @@ There are two things you can do about this warning:
       (if (file-directory-p default-directory)
           (fzf)
         (message "Directory ~/Dropbox does not exist.")))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Scala
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package scala-mode
-  :ensure t
-  :mode "\\.s\\(cala\\|bt\\)$"
-  :hook (scala-mode . eglot-ensure))
-
-;; Metals for Scala
-(use-package lsp-metals
-  :ensure t
-  :after lsp-mode
-  :custom
-  (lsp-metals-server-command "metals-emacs"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Clojure (clean, no Tree-sitter, modern setup)
@@ -759,6 +744,17 @@ There are two things you can do about this warning:
 (add-hook 'clojure-mode-hook
           (lambda ()
             (electric-pair-mode -1)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CC-mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package cc-mode
+  :ensure nil                          ;; built in
+  :hook ((c-mode . eglot-ensure))       ;; clangd; Eglot turns Flymake on itself
+  :config
+  (setq c-default-style "k&r"
+        c-basic-offset 4)
+  (setq-default indent-tabs-mode nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Go
@@ -866,6 +862,19 @@ There are two things you can do about this warning:
 
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (add-hook 'python-ts-mode 'eglot)
+
+;; (use-package vterm
+;;   :ensure t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; AI
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package claude-code-ide
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+  :config
+  (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -882,7 +891,23 @@ There are two things you can do about this warning:
      "456697e914823ee45365b843c89fbc79191fdbaff471b29aad9dcbe0ee1d5641"
      "81f53ee9ddd3f8559f94c127c9327d578e264c574cda7c6d9daddaec226f87bb"
      default))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(all-the-icons-ivy-rich beacon claude-code clj-refactor
+                            company-quickhelp copilot
+                            counsel-projectile dashboard doom-modeline
+                            doom-themes eat evil-collection
+                            evil-escape exec-path-from-shell
+                            flycheck-clj-kondo
+                            flycheck-color-mode-line flycheck-plantuml
+                            flycheck-pos-tip fzf go-mode gptel
+                            gruvbox-theme highlight-indent-guides
+                            lsp-metals magit multi-term org-bullets
+                            prettier-js rainbow-delimiters rustic try
+                            undo-tree vterm web-mode
+                            yasnippet-snippets))
+ '(package-vc-selected-packages
+   '((claude-code-ide :url
+                      "https://github.com/manzaltu/claude-code-ide.el")))
  '(warning-suppress-types '((use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
